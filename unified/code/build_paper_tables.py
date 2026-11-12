@@ -8,9 +8,9 @@ is the wild cluster bootstrap, the bootstrap p-value follows in brackets and
 the stars are computed from it.
 
 Fragments and sources:
-  tab_md        income_dynamics/output/tables/m7_md_cellw_boot.csv, unified/output/u7_error_structures.csv, unified/output/u14_B_sample_facts.csv
+  tab_md        income_dynamics/output/tables/m7_md_cellw_boot.csv, m19_joint_models.csv, unified/output/u7_error_structures.csv, unified/output/u14_B_sample_facts.csv
   tab_ab        income_dynamics/output/tables/m10_abgmm_table3.csv
-  tab_summary   m7, m10, ws_05b_abb_stochasticEM_surface.csv, unified/output/u10_growth_gap.csv
+  tab_summary   m7, m10, m19_joint_tests.csv, m19_joint_gaps.csv, ws_05b_abb_stochasticEM_surface.csv, unified/output/u10_growth_gap.csv
   tab_cre       unified/output/u8_premium_specifications.csv, unified/output/u8_entropy_balancing.csv
   tab_markers   unified/output/u8_premium_specifications.csv
   tab_fs        unified/output/u9_B_main.csv, u12_returns_by_family_background.csv (rows at 30 and over), u14_C_first_stages_all_children.csv
@@ -82,23 +82,26 @@ def stacked(label, groups, ncol, extra=None, span=False):
     return lines
 
 L = {  # labels by language
- "en": dict(pooled="Pooled", adv="Advantaged, $H=1$", less="Less advantaged, $H=0$", fitted="Fitted total variance",
+ "en": dict(pooled="Pooled", adv="Advantaged, $H=1$", less="Less advantaged, $H=0$", fitted="Fitted total variance", joint="Both groups, one process",
             advc="Advantaged children", lessc="Less advantaged children", adv_s="Advantaged", less_s="Less advantaged",
             diff="Difference GMM", sys="System GMM", recon="2010--2022 (reconstructed)",
             md_head=["& & Permanent & Shock & Transitory & Permanent & \\\\",
                      "& $N$ & variance $\\hat\\sigma^2_\\eta$ & variance $\\hat\\sigma^2_\\varepsilon$ & persistence $\\hat\\rho_v$ & share & Criterion $J$ \\\\"],
             ab_head=["& & Less advantaged & Difference for & Hansen & \\\\",
                      "Panel & Estimator & children $\\hat\\rho_0$ & advantaged $\\hat\\rho_1$ & $J$ [$p$] & Instruments \\\\"],
-            sum_head=["Moment & Advantaged & Less advantaged & Gap \\\\"],
-            sum_joint="All fifteen variances and autocovariances, joint test of equality",
+            sum_head=["Moment & Advantaged & Less advantaged & Gap or test \\\\"],
+            sum_joint="Fifteen variances and autocovariances, joint test of equality",
             sum_rows=["Fitted total variance (minimum distance)", "Transitory persistence, Arellano--Bond",
                       "Nonlinear persistence, average over quantiles", "Differential growth per wave, fixed effects",
-                      "\\emph{Split of the common variance (weakly identified for advantaged children)}",
-                      "Permanent share (minimum distance)", "Transitory persistence $\\rho_v$ (minimum distance)"],
+                      "\\emph{One process for both groups?}",
+                      "Common parameters against separate fits (distance test)", "Three parameter gaps of the separate fits (Wald test)",
+                      "Scale of advantaged autocovariances, $\\kappa$",
+                      "Gap with one parameter free: permanent variance $\\sigma^2_\\eta$", "Gap with one parameter free: transitory persistence $\\rho_v$",
+                      "Gap with one parameter free: innovation variance $\\sigma^2_\\varepsilon$"],
             cre_head=["& (1) & (2) & (3) \\\\", "Estimator & Correlated & Correlated & Entropy \\\\",
                       "& random effects & random effects & balancing \\\\",
-                      "Income control & Family income & Parental labor income & Family income \\\\"],
-            cre_rows=["Advantaged, $H$ (parent in CSCO 1--2 at child age 14)", "Coefficient on parental income", "Children"],
+                      "Parental income measure & Family income & Parental labor income & Family income \\\\"],
+            cre_rows=["Advantaged, $H$ (parent in CSCO major groups 1 or 2 at child age 14)", "Coefficient on parental income", "Children"],
             mk_head=["& \\multicolumn{3}{c}{Coefficient on} \\\\", "\\cmidrule(lr){2-4}", "& & Party & State-sector \\\\",
                      "Regressors (with parental income and controls) & Advantaged, $H$ & membership & employment \\\\"],
             mk_panel1="\\emph{Parental party membership when the child was fourteen (N = NPARTY; NMISS children lack a report)}",
@@ -165,7 +168,11 @@ def build(lang):
                            6, extra={1: N[g], 6: half_up(J[g])}))
     sep = SEP[lang]
     fit_line = [[T["fitted"], "", f"\\multicolumn{{2}}{{c}}{{{T['adv_s']}{sep}{fitted('H'):.3f}}}", f"\\multicolumn{{2}}{{c}}{{{T['less_s']}{sep}{fitted('L'):.3f}}}", ""]]
-    frags["tab_md"] = tabular("@{}lcccccc@{}", T["md_head"], [blk, [fit_line]], pre="\\setlength{\\tabcolsep}{4pt}\n")
+    m19 = by(os.path.join(M, "output", "tables", "m19_joint_models.csv"), "model"); je = m19["all equal"]   # one process fitted to the moments of both groups (code/m19_joint_process_by_group.py)
+    joint = stacked(T["joint"], [(2, est(fl(je["eta2_H"]), fl(je["eta2_H_se"]), mark=False)), (3, est(fl(je["eps2_H"]), fl(je["eps2_H_se"]), mark=False)),
+                                 (4, est(fl(je["rho_H"]), fl(je["rho_H_se"]), d=2, mark=False)), (5, est(fl(je["share_H"]), fl(je["share_H_se"]), d=2, mark=False))],
+                    6, extra={1: N["pooled"], 6: half_up(fl(je["crit"]))})
+    frags["tab_md"] = tabular("@{}lcccccc@{}", T["md_head"], [blk, [fit_line], [joint]], pre="\\setlength{\\tabcolsep}{4pt}\n")
     # ---------------------------------------------------------------- tab_ab
     m10 = by(os.path.join(M, "output", "tables", "m10_abgmm_table3.csv"), "panel")
     blk = []
@@ -194,11 +201,17 @@ def build(lang):
     r4 = stacked(T["sum_rows"][3], [(3, [signed(gg, 3) + stars(fl(g10["p"])), f"({gs:.3f})"])], 3, extra={1: "\\multicolumn{2}{c}{---}", 2: None})
     r4 = [[c for c in line if c is not None] for line in r4]
     panel = [["\\multicolumn{4}{@{}l}{" + T["sum_rows"][4] + "}"]]
-    r5 = stacked(T["sum_rows"][5], [(1, est(fl(H["sperm"]), fl(H["sperm_se"]), d=2, mark=False)), (2, est(fl(Lr["sperm"]), fl(Lr["sperm_se"]), d=2, mark=False)),
-                                   (3, gapcell(fl(H["sperm"]), fl(Lr["sperm"]), fl(H["sperm_se"]), fl(Lr["sperm_se"]), 2))], 3)
-    r6 = stacked(T["sum_rows"][6], [(1, est(fl(H["rho"]), fl(H["rho_se"]), d=2, mark=False)), (2, est(fl(Lr["rho"]), fl(Lr["rho_se"]), d=2, mark=False)),
-                                   (3, gapcell(fl(H["rho"]), fl(Lr["rho"]), fl(H["rho_se"]), fl(Lr["rho_se"]), 2))], 3)
-    frags["tab_summary"] = tabular("@{}lccc@{}", T["sum_head"], [[r0, r1, r2, r3, r4], [panel, r5, r6]])
+    t19 = {(r["test"], r["restricted"], r["unrestricted"]): r for r in rows(os.path.join(M, "output", "tables", "m19_joint_tests.csv"))}
+    g19 = {(r["model"], r["quantity"]): r for r in rows(os.path.join(M, "output", "tables", "m19_joint_gaps.csv"))}
+    r5 = [[T["sum_rows"][5], "\\multicolumn{2}{c}{---}", f"$p = {fl(t19[('distance', 'all equal', 'free')]['p']):.2f}$"]]
+    r6 = [[T["sum_rows"][6], "\\multicolumn{2}{c}{---}", f"$p = {fl(t19[('Wald on the three gaps of the free model, chi-squared', 'all equal', 'free')]['p']):.2f}$"]]
+    k = g19[("scale", "kappa")]
+    r7 = [[T["sum_rows"][7], f"{fl(k['point']):.2f}", "1", f"$[{fl(k['ci90_lo']):.2f}, {fl(k['ci90_hi']):.2f}]$"], ["", f"({fl(k['se']):.2f})", "", ""]]
+    r8 = []
+    for i, (mdl, q) in enumerate([("eta2 differs", "eta2_gap"), ("rho differs", "rho_gap"), ("eps2 differs", "eps2_gap")]):
+        g_ = g19[(mdl, q)]; d_ = 2 if q == "rho_gap" else 3
+        r8 += [[T["sum_rows"][8 + i], "\\multicolumn{2}{c}{---}", signed(fl(g_["point"]), d_)], ["", "", "", f"({fl(g_['se']):.{d_}f})"]]
+    frags["tab_summary"] = tabular("@{}lccc@{}", T["sum_head"], [[r0, r1, r2, r3, r4], [panel, r5, r6, r7, r8]])
     # ---------------------------------------------------------------- tab_cre
     S8 = by(os.path.join(OUT, "u8_premium_specifications.csv"), "specification")
     b, l = S8["baseline: family income of the parental household"], S8["parents' own labor income as the income control"]

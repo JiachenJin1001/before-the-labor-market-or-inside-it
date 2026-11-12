@@ -111,7 +111,7 @@ _m10 = pd.read_csv(os.path.join(M, "output", "tables", "m10_abgmm_table3.csv")).
 _py, _mata, _xt = (_sp.loc[("difference GMM, five waves", k)] for k in ("Python", "Mata", "xtabond2"))
 check("Stata parity: the Python row of the parity file is the row of Table 4", abs(_py.rho0 - _m10.loc["diff GMM, 2014-2022", "rho0"]) < 1e-9 and abs(_py.hansen_J - _m10.loc["diff GMM, 2014-2022", "J"]) < 1e-9)
 check("Stata parity: Python and Mata agree to four decimals", all(abs(_py[k] - _mata[k]) < 5e-5 for k in ("rho0", "rho0_se", "rho1", "rho1_se", "hansen_J")))
-text("Stata parity: xtabond2 difference GMM", f"\\texttt{{xtabond2}} gives {_xt.rho0:.3f} (SE {_xt.rho0_se:.3f}) and {_xt.rho1:.3f} (SE {_xt.rho1_se:.3f}) for the two coefficients of Table~\\ref{{P-tab:ab}} of the paper, and a Hansen statistic of {_xt.hansen_J:.2f} against {_py.hansen_J:.2f}.")
+text("Stata parity: xtabond2 difference GMM", f"\\texttt{{xtabond2}} gives {_xt.rho0:.3f} (SE {_xt.rho0_se:.3f}) and {_xt.rho1:.3f} (SE {_xt.rho1_se:.3f}) for the two coefficients of Table~\\ref{{oatab:ab}}, and a Hansen statistic of {_xt.hansen_J:.2f} against {_py.hansen_J:.2f}.")
 _pys, _xts = _sp.loc[("system GMM, five waves", "Python")], _sp.loc[("system GMM, five waves", "xtabond2")]
 text("Stata parity: system GMM", f"Python and \\texttt{{xtabond2}} give persistence of {_pys.rho0:.3f} and {_xts.rho0:.3f}, and the Hansen test rejects in both ({_pys.hansen_J:.2f} and {_xts.hansen_J:.2f} on four degrees of freedom)")
 check("Stata parity: both system GMM Hansen tests reject at 1 percent", _pys.hansen_p < 0.01 and _xts.hansen_p < 0.01 and int(_pys.df) == 4 and int(_xts.df) == 4)
@@ -138,12 +138,12 @@ _pt = C9.loc["province-specific linear cohort trends"]
 text("checks: linear cohort trend for each province", f"the earnings reduced form is {_pt['coef']:.3f} (SE {_pt['se']:.3f}), and the return to college is {_pt['iv']:.2f}.")
 _g3 = pd.read_csv(os.path.join(U, "output", "u9_G_three_year_completion.csv")).set_index("outcome")
 _a, _b, _c = (_g3.loc[k] for k in ("exactly 15 years of schooling (three-year degree)", "15 or more years of schooling", "16 or more years of schooling (college completion)"))
-text("three-year completion on the instrument", f"is $-{abs(_a['coef']):.3f}$ (SE {_a['se']:.3f}, wild-cluster $p = {_a['p_wild']:.2f}$) when the outcome is exactly fifteen years of schooling, the three-year degree, {_b['coef']:.3f} (SE {_b['se']:.3f}) when it is fifteen or more years, and {_c['coef']:.3f} (SE {_c['se']:.3f}) for the completion indicator of the paper")
+text("three-year completion on the instrument", f"is $-{abs(_a['coef']):.3f}$ (SE {_a['se']:.3f}, wild cluster $p = {_a['p_wild']:.2f}$) when the outcome is exactly fifteen years of schooling, the three-year degree, {_b['coef']:.3f} (SE {_b['se']:.3f}) when it is fifteen or more years, and {_c['coef']:.3f} (SE {_c['se']:.3f}) for the completion indicator of the paper")
 _v = pd.read_csv(os.path.join(U, "output", "u17_income_variance_by_wave.csv")); _v = _v[_v.respondents.str.startswith("all respondents")].set_index("wave").variance_of_log_income
 text("variance of log income by wave", f"is {_v[2010]:.2f} in the 2010 wave and {_v[2012]:.2f} in the 2012 wave, against {_v[2014]:.2f}, {_v[2016]:.2f}, {_v[2018]:.2f}, {_v[2020]:.2f}, and {_v[2022]:.2f} in the five waves from 2014 to 2022")
 _i = pd.read_csv(os.path.join(U, "output", "u16_identity_in_balanced_comparison.csv")).set_index("item")["value"]
 text("three parts inside the balanced comparison", f"by {_i['return, advantaged children (graduates minus children without a degree)']:.3f} log points among advantaged children and by {_i['return, less advantaged children (reweighted)']:.3f} among reweighted less advantaged children; {100 * _i['completion, advantaged children']:.2f} percent of the former and {100 * _i['completion, less advantaged children (reweighted)']:.2f} percent of the latter hold a degree.")
-text("three parts, values", f"account for {_i['part 1: college channel (return of advantaged children x completion gap)']:.3f}; the degrees held in both groups, worth {_i['return, advantaged children (graduates minus children without a degree)'] - _i['return, less advantaged children (reweighted)']:.3f} more to advantaged children, account for {_i['part 2: same degrees worth more (completion of less advantaged children x difference in returns)']:.3f}; and the earnings gap between the two groups among children without a degree is {_i['part 3: gap between the children without a degree']:.3f}.")
+text("three parts, values", f"account for {_i['part 1: college channel (return of advantaged children x completion gap)']:.3f} (95 percent bootstrap interval $[0.04, 0.09]$); the degrees held in both groups, worth {_i['return, advantaged children (graduates minus children without a degree)'] - _i['return, less advantaged children (reweighted)']:.3f} more to advantaged children, account for {_i['part 2: same degrees worth more (completion of less advantaged children x difference in returns)']:.3f} ($[-0.02, 0.04]$); and the earnings gap between the two groups among children without a degree is {_i['part 3: gap between the children without a degree']:.3f} ($[-0.08, 0.07]$).")
 _F14 = pd.read_csv(os.path.join(U, "output", "u14_B_sample_facts.csv")).set_index("item")["value"]
 text("children born before the admissions series", f"the {int(_F14['children born before 1964'])} children of the sample born before it are assigned the mean ratio of the cohorts born 1964 to 1980")
 _r15 = pd.read_csv(os.path.join(U, "output", "u15_nonlinear_persistence_summary.csv")).set_index("sample")
@@ -156,6 +156,22 @@ text("children with a level of earnings, notes", f"The {int(F14['level at 30 and
 text("child-waves at 30 and over, notes", f"the same {int(F14['level at 30 and over: child-waves']):,} child-wave observations at ages 30 and over")
 text("provinces", f"The {int(F14['all children: provinces'])} provinces of the sample"); text("clusters", f"inference rests on {int(F14['all children: provinces'])} clusters")
 _eb = pd.read_csv(os.path.join(U, "output", "u8_entropy_balancing.csv")).iloc[0]; text("completion gap in the notes", f"gap in college completion of {_eb.gap_hat:.3f}")
+
+# 3c. the material moved from the paper
+_jt = pd.read_csv(os.path.join(M, "output", "tables", "m19_joint_tests.csv")); _d = _jt[(_jt.test == "distance") & (_jt.restricted == "all equal") & (_jt.unrestricted == "free")].iloc[0]
+check("joint fits: one process not rejected (distance p above 0.1)", _d.p > 0.1 and "\\input{tables/oa_jointsummary}" in TEX, f"p = {_d.p}")
+_m7 = pd.read_csv(os.path.join(M, "output", "tables", "m7_md_cellw_boot.csv")).set_index("group")
+text("separate fits: permanent shares and persistence", f"(a permanent share of {_m7.loc['H', 'sperm']:.2f} against {_m7.loc['L', 'sperm']:.2f}, and transitory persistence of {_m7.loc['H', 'rho']:.2f} against {_m7.loc['L', 'rho']:.2f})")
+_le = pd.read_csv(os.path.join(M, "data", "intermediate", "ws", "ws_m3_strict_exogeneity.csv")).iloc[0]
+check("strict exogeneity: the lead is small and insignificant", abs(_le.lead_t) < 1 and abs(_le.gamma_no_lead - _le.gamma_with_lead) < 0.002 and "\\input{tables/oa_lead}" in TEX)
+_mw = pd.read_csv(os.path.join(M, "output", "tables", "m5_weighted_md.csv")).set_index("group")
+check("parametric bootstrap: rejects pooled and less advantaged, not advantaged", _mw.loc["pooled", "J_p_calibrated"] < 0.05 and _mw.loc["L", "J_p_calibrated"] < 0.05 and _mw.loc["H", "J_p_calibrated"] > 0.1 and "\\input{tables/oa_reweight}" in TEX)
+_rc = pd.read_csv(os.path.join(U, "output", "u2_recovery_by_process.csv")).set_index("process")
+check("published study: the children's range contains the preferred estimates", _rc.loc["children", "implied_lo"] < 0.390 and _rc.loc["children", "implied_hi"] > 0.442 and int(_rc.loc["children", "waves_lo"]) == 2 and int(_rc.loc["children", "waves_hi"]) == 4 and "0.166 for the cohort born 1970 to 1980 and 0.176 for the cohort born 1981 to 1988" in TEXN)
+_c14 = pd.read_csv(os.path.join(U, "output", "u14_C_first_stages_all_children.csv")).set_index("row"); _e13 = pd.read_csv(os.path.join(U, "output", "u13_E_added_degrees.csv")).set_index("item").loc["difference (advantaged minus less advantaged)"]
+check("first stages by group: difference within two standard errors; minimum detectable difference under half the first stage", abs(_e13.value) < 2 * _e13.se and 2.8 * _e13.se / _c14.loc["less advantaged children, instrument entering once for each group", "fs"] < 0.5 and "\\input{tables/oa_fsmde}" in TEX)
+for _f in ("oa_ridge.png", "oa_spec_curve.png"):
+    check(f"figure file present: {_f}", os.path.exists(os.path.join(OA, "figures", _f)))
 
 # 4. language
 for name, src in [("online_appendix.tex", TEX), ("part3_replication.tex", PART3)]:

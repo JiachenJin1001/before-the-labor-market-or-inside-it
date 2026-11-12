@@ -19,7 +19,7 @@ process: the exact adjustment for serial correlation, the number of waves
 needed to reach a target share of the coefficient, and a closed form for
 the simulated rank-rank factors. Section~\ref{fr:sec:md} treats the
 minimum-distance estimator of Section~\ref{P-sec:md} of the paper:
-identification, the ridge of Figure~\ref{P-fig:ridge} of the paper, the
+identification, the ridge of Figure~\ref{oafig:ridge}, the
 distribution of the criterion under fixed weights, and a decomposition of
 the criterion into a stationarity component and a shape component.
 Section~\ref{fr:sec:identity} writes the accounting identity of
@@ -203,8 +203,8 @@ reliability of the averaged outcome, and $\lambda_T$ does not enter.
 
 Section~\ref{P-sec:measurement} of the paper accordingly takes the
 relevant $T$ in an intergenerational elasticity regression to be the
-number of parental income observations, and panel B of Table~\ref{P-tab:eta} of
-the paper recomputes the correction at the earnings process of linked
+number of parental income observations, and Table~\ref{oatab:recovery}
+recomputes the correction at the earnings process of linked
 parents, whose permanent share is 0.43 against the children's 0.27
 (Table~\ref{oatab:parent}).
 
@@ -355,7 +355,7 @@ and $f_T'(\rho) = 2\sum_{k=1}^{T-1}k(1-k/T)\rho^{k-1}$. The delta-method
 variance is $\nabla\lambda_T' \,\hat V_\theta\, \nabla\lambda_T$. The
 minimum-distance estimator imposes $\sigma^2_\eta \ge 0$, and the estimate
 for advantaged children lies close to that boundary
-(Table~\ref{P-tab:md} and Figure~\ref{P-fig:ridge} of the paper). Near that boundary neither the expansion nor the percentile bootstrap applies (Remark~\ref{fr:prop:boundary}), so Table~\ref{fr:tab:etaboot} reports the pooled sample only.
+(Table~\ref{P-tab:md} of the paper and Figure~\ref{oafig:ridge}). Near that boundary neither the expansion nor the percentile bootstrap applies (Remark~\ref{fr:prop:boundary}), so Table~\ref{fr:tab:etaboot} reports the pooled sample only.
 
 \section{The minimum-distance estimator}
 \label{fr:sec:md}
@@ -400,7 +400,7 @@ $\pi_{ts}$ is the probability that a child is observed in both waves $t$
 and $s$, and $\pi_{ts,t's'}$ is the probability that a child is observed
 in all of the waves $t$, $s$, $t'$, and $s'$. The independence part of the
 assumption is what lets pairwise deletion estimate population
-autocovariances. It is a missing-at-random condition on wave participation. The screens that define the sample pass 45.5 percent of advantaged and 42.0 percent of less advantaged children (Table~\ref{oatab:screens}); the assumption concerns which waves a child in the sample is observed in, which the screens do not test.
+autocovariances. It is a missing-completely-at-random condition on wave participation. The screens that define the sample pass 45.5 percent of advantaged and 42.0 percent of less advantaged children (Table~\ref{oatab:screens}); the assumption concerns which waves a child in the sample is observed in, which the screens do not test.
 
 \subsection{Identification}
 
@@ -441,7 +441,13 @@ The Jacobian $G = \partial\omega(\theta)/\partial\theta'$ has rows
 $\big(1,\ \rho^k/(1-\rho^2),\ \sigma^2_\varepsilon\,\partial_\rho[\rho^k/(1-\rho^2)]\big)$.
 The determinant of its three rows at lags 0, 1, and 2 is
 $\sigma^2_\varepsilon/(1+\rho)^2$, so $G$ has full column rank whenever
-$\sigma^2_\varepsilon > 0$ and $|\rho| < 1$. The rank condition holds at
+$\sigma^2_\varepsilon > 0$ and $|\rho| < 1$. In the parameterization
+$(\sigma^2_\eta, \sigma^2_v, \rho)$, which holds the variance of the
+transitory component fixed, the same three rows have determinant
+$\sigma^2_v(1-\rho)^2 = \omega_0 - 2\omega_1 + \omega_2$, the second
+difference of the autocovariance function, which vanishes at the same
+quadratic rate as the leverage of Proposition~\ref{fr:prop:ridge}
+below. The rank condition holds at
 every estimate in Table~\ref{P-tab:md} of the paper, and the ridge of
 Section~\ref{P-sec:md} of the paper is a matter of the conditioning of $G$
 and not of its rank. The next result quantifies the conditioning.
@@ -451,7 +457,7 @@ and not of its rank. The next result quantifies the conditioning.
 Section~\ref{P-sec:md} of the paper reports that $\sigma^2_\eta$ and
 $\rho$ trade off along a ridge of the criterion, and that the bootstrap
 draws for advantaged children spread along it
-(Figure~\ref{P-fig:ridge} of the paper). The following result describes
+(Figure~\ref{oafig:ridge}). The following result describes
 that curve and shows why it flattens as persistence rises.
 
 \begin{proposition}[Leverage of the higher-order autocorrelations along the level set of the first-order autocorrelation]
@@ -492,7 +498,7 @@ $\hat\rho = 0.33$, $h_2 = 0.45$ and $h_3 = 0.75$. The leverage of the second-ord
 420 children instead of 2,103, whose standard errors are larger by a
 factor of about 2.2 on sample size alone. Weaker leverage and noisier
 moments together produce the elongated cloud of bootstrap draws in
-Figure~\ref{P-fig:ridge} of the paper. Proposition~\ref{fr:prop:ridge}
+Figure~\ref{oafig:ridge}. Proposition~\ref{fr:prop:ridge}
 shows that the elongation is a property of the model at high $\rho$ and
 not of the estimator: any method that identifies the permanent share
 from the decay of the autocovariance function faces the same
@@ -645,7 +651,7 @@ $\hat\theta$ and not at $\theta_0$.
 \end{remark}
 
 The row of draws for advantaged children at a permanent share of zero in
-Figure~\ref{P-fig:ridge} of the paper is this boundary. With
+Figure~\ref{oafig:ridge} is this boundary. With
 $\hat\sigma^2_\eta = 0.083$ and a bootstrap standard error of 0.028, the
 estimate for advantaged children is about three standard errors from the
 boundary, and the bootstrap draws reach it; this is the situation of
@@ -675,7 +681,7 @@ It is the probability limit of the pooled least squares coefficient of
 $\tilde y_{it}$ on $\tilde y_{i,t-1}$ without individual effects, which converges
 to the ratio of these two moments, and it exceeds $\rho$ whenever $s > 0$.
 
-Equation~\eqref{P-eq:rhoobs} of the paper states \eqref{fr:eq:rhoobs} under stationarity. In the population it is exact; applied to a pooled regression on an unbalanced panel whose waves have unequal variances (Table~\ref{oatab:autocov}) it holds approximately. At the
+Section~\ref{P-sec:abgmm} of the paper states \eqref{fr:eq:rhoobs} in words, under stationarity. In the population it is exact; applied to a pooled regression on an unbalanced panel whose waves have unequal variances (Table~\ref{oatab:autocov}) it holds approximately. At the
 pooled estimates, $\rho_{\mathrm{obs}} = 0.27 + 0.73 \times 0.16 = 0.39$,
 the value in Section~\ref{P-sec:abgmm} of the paper.
 
@@ -762,7 +768,7 @@ children the expansion moved into college, 1.14, with a 90 percent
 Anderson--Rubin set that excludes every return between $-3.20$ and 0.60
 (Table~\ref{P-tab:groups} of the paper), and an estimate for all children,
 0.68, with a 95 percent Anderson--Rubin set that starts at 0.50
-(Table~\ref{P-tab:mature} of the paper). The paper evaluates the identity
+(Section~\ref{P-sec:earnings} of the paper). The paper evaluates the identity
 over this range of returns.
 
 At the least squares return, 0.449, the remainder is

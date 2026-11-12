@@ -5,7 +5,8 @@ u8_premium_specifications.py (the rows marked as belonging to the figure).
 The upper panel plots the coefficient on the indicator for advantaged
 children, sorted by size; the lower panel marks how each specification
 differs from the baseline.
-Output: paper/figures/fig_spec_curve.png
+Output: paper/figures/fig_spec_curve.png (all fifteen, used by the Online Appendix); with SPEC_PAPER=1,
+paper/figures/fig_spec_curve_paper.png (the thirteen of the paper, without the urban and rural subsamples).
 """
 import os
 import pandas as pd
@@ -46,6 +47,10 @@ FEATS = [("Baseline specification", "base"),
 d = pd.read_csv(os.path.join(ROOT, "output", "u8_premium_specifications.csv"))
 d = d[d.in_figure_2].copy()
 assert set(d.specification) == set(CHANGES), set(d.specification) ^ set(CHANGES)
+PAPER = os.environ.get("SPEC_PAPER") == "1"
+if PAPER:
+    d = d[~d.specification.isin(["children recorded as rural in most of their waves", "children recorded as urban in most of their waves"])].copy()
+    FEATS = [("Parent-still-working subsample", k) if k == "subsample" else (l, k) for l, k in FEATS]
 for _, key in FEATS:
     d[key] = d.specification.map(lambda s: int(key in CHANGES[s].split("+")))
 d = d.sort_values(["estimate", "base"]).reset_index(drop=True)
@@ -65,14 +70,14 @@ a1.set_ylabel(tr("Premium (log points)"))
 a1.set_xticks([])
 a1.legend(handles=[plt.Line2D([], [], marker=marks[k], ls="", color=c, label=tr(k)) for k, c in colors.items()],
           fontsize=10, loc="upper left", framealpha=0.95)
-lo_, hi_ = a1.get_ylim(); a1.set_ylim(lo_, hi_ + 0.35 * (hi_ - lo_))   # room for the legend above the estimates
+lo_, hi_ = a1.get_ylim(); a1.set_ylim(lo_, hi_ + 0.62 * (hi_ - lo_))   # room for the legend above the estimates
 for j, (nm, key) in enumerate(FEATS):
     on = d.index[d[key] == 1]
     a2.plot(on, [j] * len(on), "o", ms=3.2, color="#333")
 a2.set_yticks(range(len(FEATS))); a2.set_yticklabels([tr(f[0]) for f in FEATS], fontsize=9.5, linespacing=0.95)
 a2.set_ylim(-.7, len(FEATS) - .3); a2.invert_yaxis(); a2.set_xlim(a1.get_xlim())
 a2.set_xticks([]); a2.set_xlabel(tr("Specifications, sorted by point estimate")); a2.grid(axis="x", alpha=.2)
-out = outpath("fig_spec_curve.png")
+out = outpath("fig_spec_curve_paper.png" if PAPER else "fig_spec_curve.png")
 from fig_style import save
 out = save(fig, os.path.basename(out)); print("wrote", out, "specifications:", len(d))
 print(d[["specification", "estimate", "lo", "hi"]].round(3).to_string())

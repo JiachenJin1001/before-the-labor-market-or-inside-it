@@ -23,6 +23,7 @@ if [ "$1" != "--checks" ]; then
   # earnings process and measurement (Sections 3 and 4 of the paper)
   run income_dynamics/code 04_method1_md 05_method2_abgmm 06_mini_method3_randcoef m5_md_weighted_and_ridge \
       m7_md_cellweighted_boot m10_abgmm_table3 m13_mde_group_null m16_joint_moment_test m17_ab_diagnostics \
+      m19_joint_process_by_group \
       m8_rank_attenuation_sim ws_methods_7wave ws_m3_strict_exogeneity_test ws_method1_arma11 ws_p1_6_ma1_rw \
       ws_05b_abb_stochastic_em
   run formal_results/code appendix_theory_computations
@@ -36,8 +37,14 @@ if [ "$1" != "--checks" ]; then
   # the same three scripts with the rows weighted by the precision that the earnings process of Section 3 implies
   E_WEIGHTS=process run unified/code u9_mature_age_earnings u12_returns_by_family_background u13_decomposition_mature_age
   E_WEIGHTS=process U9_BLOCKS=G run unified/code u9_mature_age_earnings
-  run unified/code u2_recovery_by_process u15_nonlinear_persistence_runs u3_online_appendix u4_premium_age_controls u7_error_structures \
-      fig_ridge fig_autocov fig_spec_curve u10_growth_gap fig_first_stage build_paper_tables
+  run unified/code u2_recovery_by_process u15_nonlinear_persistence_runs u3_online_appendix u4_premium_age_controls u7_error_structures
+  # occupation by family background, the return without each province in turn, first-stage magnitudes, the gap among graduates
+  run unified/code u18_occupation_by_family_background u19_province_and_identity_intervals u20_first_stage_magnitudes \
+      u21_earnings_gap_by_degree u22_occupation_share_by_degree
+  run unified/code fig_ridge fig_autocov fig_spec_curve
+  # the figure of the paper shows thirteen of the fifteen specifications
+  SPEC_PAPER=1 run unified/code fig_spec_curve
+  run unified/code u10_growth_gap fig_first_stage build_paper_tables
   run online_appendix/build build_tables
 fi
 

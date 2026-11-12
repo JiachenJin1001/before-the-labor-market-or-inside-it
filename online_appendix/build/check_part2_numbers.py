@@ -100,6 +100,11 @@ import glob as _glob   # the paper's tables of estimates are generated fragments
 for _f in sorted(_glob.glob(os.path.join(UNIFIED, "paper", "tables", "en", "*.tex"))):
     PAPER_RAW += "\n" + open(_f, encoding="utf-8").read()
 PAPER = norm(strip_comments(PAPER_RAW))
+# sentences that moved from the paper to this appendix are checked in the appendix's own text, with its table fragments expanded in place
+HOST_RAW = open(os.path.join(os.path.dirname(PART2_PATH), "online_appendix.tex"), encoding="utf-8").read()
+HOST_RAW = re.sub(r"\\input\{tables/(oa_[a-z]+)\}", lambda m_: open(os.path.join(os.path.dirname(PART2_PATH), "tables", m_.group(1) + ".tex"), encoding="utf-8").read().rstrip("%\n"), HOST_RAW)
+HOST = norm(strip_comments(HOST_RAW))
+
 
 NUMBER = re.compile(r"(?<![\w.])(?:\d{1,3}(?:,\d{3})+|\d+\.\d+|\d{3,})(?![\w]|\.\d)")
 
@@ -133,6 +138,22 @@ def check_paper(label, snippet):
         ok(label, f"{s!r} (paper)")
     else:
         fail(label, f"{s!r} not found in the paper's main.tex")
+
+
+def check_host(label, snippet):
+    """Assert that the snippet is printed in the appendix's Part I (table fragments expanded)."""
+    s = norm(snippet)
+    if s in HOST:
+        ok(label, f"{s!r} (appendix)")
+    else:
+        fail(label, f"{s!r} not found in online_appendix.tex")
+
+
+def check_host_re(label, pattern):
+    if re.search(pattern, HOST):
+        ok(label, f"/{pattern}/ (appendix)")
+    else:
+        fail(label, f"/{pattern}/ does not match online_appendix.tex")
 
 
 def check_paper_re(label, pattern):
@@ -284,14 +305,13 @@ check("number of waves in the paper's section", f"$T^{{\\circ *}} = {t_approx}$,
 check_paper_re("paper: waves to reach two thirds, with the span of the panel",
                rf"{WORDS[t_approx]} biennial waves \({WORDS[t_exact]} under the exact calculation\), " + ("a decade or more" if 2 * (t_approx - 1) == 10 else WORDS[2 * (t_approx - 1)] + " years or more") + " of panel coverage")
 check_paper("paper: panel years 2010 to 2022", "2010--2022")
-check_paper_re("paper: seven waves between 2010 and 2022", r"seven-wave panel")
 
 # ------------------------------------------------ which side
 _m14 = pd.read_csv(os.path.join(inc, "output", "tables", "m14_parent_process.csv")).iloc[0] if "inc" in dir() else pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES), "output", "tables", "m14_parent_process.csv")).iloc[0]
 check("parent and child permanent shares", f"permanent share is {_m14['share']:.2f} against the children's {share:.2f}")
 check_paper("paper: parents' and children's permanent shares",
-            f"permanent share of {_m14['share']:.2f} (bootstrap interval $[{_m14['share_lo']:.2f}, {_m14['share_hi']:.2f}]$) against {share:.2f}")
-check_paper("paper: row of the linked parents' process", f"permanent share {_m14['share']:.2f})")
+            f"permanent share of {_m14['share']:.2f} against {share:.2f}")
+check_host("appendix: row of the linked parents' process", f"permanent share {_m14['share']:.2f})")
 
 # ------------------------------------------------ rank-rank
 r_true = 0.30
@@ -329,16 +349,16 @@ assert abs(dev_eta) < 0.0005, dev_eta
 check("eta used in the simulation against the exact column", "to three decimals")
 check("simulated one-wave factor", f"recovers {rk.loc[0, 'sim_one_sided']:.2f} of the true rank-rank slope")
 check("simulated one-wave factor, child with three waves", f"and {rk.loc[0, 'sim_two_sided']:.2f} once")
-check_paper_re("paper: simulated one-wave factor",
+check_host_re("appendix: simulated one-wave factor",
                rf"rank-rank slope at {rk.loc[0, 'sim_one_sided']:.2f}\b".replace(".", r"\.", 1))
-check_paper_re("paper: simulated factor, child with three waves",
+check_host_re("appendix: simulated factor, child with three waves",
                rf"and at {rk.loc[0, 'sim_two_sided']:.2f} (once|when) the child's rank".replace(".", r"\.", 1))
 check_true("single-wave rank factor is about one half", abs(rk.loc[0, "arcsin_one_sided"] - 0.5) < 0.02)
 
 # design constants of the simulation (script of the income-dynamics package)
 check("simulation design", "(400,000 Gaussian draws, $r = 0.30$)")
-check_paper("simulated factors agree with the two-decimal values in the paper, one-sided", f"rank-rank slope at {rk.loc[0, 'sim_one_sided']:.2f}, roughly")
-check_paper("simulated factors agree with the two-decimal values in the paper, two-sided", f"and at {rk.loc[0, 'sim_two_sided']:.2f} when the child's rank is measured from three waves")
+check_host("simulated factors agree with the two-decimal values in the appendix, one-sided", f"rank-rank slope at {rk.loc[0, 'sim_one_sided']:.2f}, roughly")
+check_host("simulated factors agree with the two-decimal values in the appendix, two-sided", f"and at {rk.loc[0, 'sim_two_sided']:.2f} when the child's rank is measured from three waves")
 inc = first_existing(ROOT, INCOME_DYNAMICS_NAMES)
 sim_script = os.path.join(inc, "code", "m8_rank_attenuation_sim.py") if inc else None
 if sim_script and os.path.isfile(sim_script):
@@ -385,7 +405,7 @@ check_paper("paper: bootstrap replications", "1,000-replication bootstrap")
 _f14 = pd.read_csv(os.path.join(UNIFIED, "output", "u14_B_sample_facts.csv")).set_index("item")["value"]
 _pa, _pl = 100 * _f14["share of them in the sample, advantaged"], 100 * _f14["share of them in the sample, less advantaged"]
 check("sample screens", f"pass {_pa:.1f} percent of advantaged and {_pl:.1f} percent of less advantaged children")
-check_paper("paper: sample screens", f"{_pa:.0f} percent satisfy every screen and enter the sample; among less advantaged children the figure is {_pl:.0f} percent")
+check_paper("paper: sample screens", f"{_pa:.0f} percent of advantaged children satisfy every screen and enter the sample, against {_pl:.0f} percent of less advantaged children")
 
 # identification and the Jacobian
 ident_gap, det_gap = 0.0, 0.0
@@ -441,7 +461,7 @@ check_paper("paper: row for less advantaged children",
 # weights
 _m5w = pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES), "output", "tables", "m5_weighted_md.csv")).set_index("group")
 check("reweighting", f"from {share:.3f} to {_m5w.loc['pooled', 'sperm_w']:.3f}")
-check_paper("paper: reweighting", f"permanent share from {share:.3f} to {_m5w.loc['pooled', 'sperm_w']:.3f}")
+check_paper("paper: reweighting", f"permanent share only from {share:.3f} to {_m5w.loc['pooled', 'sperm_w']:.3f}")
 
 # decomposition of the criterion
 for g, lab in [("pooled", "Pooled"), ("H", "Advantaged children"), ("L", "Less advantaged children")]:
@@ -490,7 +510,7 @@ check("consistency by Newey and McFadden", "their Theorem 2.1")
 # observed and transitory persistence
 rho_obs = round(share, 2) + (1 - round(share, 2)) * r2
 check("rho_obs", f"$\\rho_{{\\mathrm{{obs}}}} = {share:.2f} + {1 - round(share, 2):.2f} \\times {r2:.2f} = {rho_obs:.2f}$")
-check_paper("paper: rho_obs", f"\\approx {rho_obs:.2f}$")
+check_paper("paper: rho_obs", f"is near {round(rho_obs, 1):.1f} at the pooled estimates, more than twice the transitory parameter")
 check_true("rho_obs at unrounded parameters", f"{share + (1 - share) * rho_hat:.2f}" == f"{rho_obs:.2f}")
 check("two estimates of persistence", "gap between the minimum-distance estimate and the Arellano--Bond estimate")
 _m10 = pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES), "output", "tables", "m10_abgmm_table3.csv")).set_index("panel")
@@ -548,8 +568,7 @@ check_true("balanced comparison: the three parts add up to the premium", abs(_u1
 check_paper("paper: the three parts", f"{_u16['part 1: college channel (return of advantaged children x completion gap)']:.3f}")
 check("Arellano-Bond interval for less advantaged children", "for less advantaged children, 0.12, lies inside the 95 percent interval of the Arellano--Bond estimate for that group, $[-0.01, 0.13]$")
 check_paper("paper: Arellano-Bond interval for less advantaged children", "0.12, lies inside the 95 percent interval of the Arellano--Bond estimate, $[-0.01, 0.13]$")
-check_paper("paper: least squares returns by group",
-            f"{float(_lh['coef']):.3f} (SE {float(_lh['se']):.3f}) for advantaged children against {float(_ll['coef']):.3f} (SE {float(_ll['se']):.3f}) for less advantaged children")
+# the least squares returns by group are printed only in the tables of the paper
 rng = np.random.default_rng(20260928)
 id_gap = 0.0
 for _ in range(200):
@@ -574,7 +593,7 @@ else:
 # ------------------------------------------------ cross-references
 paper_labels = set(re.findall(r"\\label\{([^}]+)\}", PAPER_RAW))
 own_labels = re.findall(r"\\label\{([^}]+)\}", RAW)
-HOST_LABELS = {"oa:errorstructures", "oatab:rank", "oatab:parent", "oatab:mde", "oa:jointtest", "oatab:autocov", "oatab:screens"}
+HOST_LABELS = {"oatab:recovery", "oafig:ridge", "oa:errorstructures", "oatab:rank", "oatab:parent", "oatab:mde", "oa:jointtest", "oatab:autocov", "oatab:screens"}
 refs = set()
 for group in re.findall(r"\\(?:eq)?ref\{([^}]+)\}", strip_comments(RAW)):
     refs.update(x.strip() for x in group.split(","))

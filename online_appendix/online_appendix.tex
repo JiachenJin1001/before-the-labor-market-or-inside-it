@@ -10,6 +10,8 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{multirow}
+
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[section]{placeins}
@@ -57,15 +59,15 @@
 of the paper are cited as ``Table~\ref{P-tab:md} of the paper''; objects
 numbered A1, A2, \ldots\ belong to this appendix. Every link in blue
 opens the file it names in the public repository.}}
-\date{October 2026}
+\date{November 2026}
 
 \begin{document}
 \maketitle
 \thispagestyle{empty}
 
 \noindent This appendix has three parts. Part I reports supplementary
-results in the order of the paper: the data, the earnings process, the
-attenuation schedule, the premium, the expansion design, and the
+results in the order of the paper: the data, the premium, the earnings process and the
+attenuation schedule it implies, the expansion design, and the
 decomposition. Part II states and proves the formal results the paper
 uses. Part III is a guide to the replication files: which script
 produces each table and figure, how to run the pipeline, and how to
@@ -81,12 +83,12 @@ checks that compare every number printed in \paperpdf\ and in this appendix with
 \toprule
 Section of the paper & Supplementary results & Formal results \\
 \midrule
-\ref{P-sec:data}. Data & Section~\ref{oa:data} & \\
-\ref{P-sec:process}. The earnings process and family background &
+\ref{P-sec:data}. Data (with the 1999 expansion and provincial intensity) & Sections~\ref{oa:data} and \ref{oa:expansion} & \\
+\ref{P-sec:premium}. The premium & Section~\ref{oa:premium} & \\
+\ref{P-sec:process}. Is the advantage built inside the labor market? &
 Section~\ref{oa:process} & Part II, minimum-distance estimator \\
 \ref{P-sec:measurement}. What the process implies for measurement &
 Section~\ref{oa:measurement} & Part II, attenuation schedule \\
-\ref{P-sec:premium}. The level premium & Section~\ref{oa:premium} & \\
 \ref{P-sec:expansion}. The college channel: the 1999 expansion &
 Section~\ref{oa:expansion} & \\
 \ref{P-sec:mediation}. Decomposing the premium &
@@ -188,7 +190,7 @@ all observed waves; a second version uses the linked parents' own labor
 income. \\
 $Z_{i}$ & Provincial intensity of the expansion multiplied by the
 exposure ratio of the child's birth cohort; the province and the birth year are those recorded in the first wave in which the child is observed at ages 22 to 55. \\
-Professional occupation & The child's own occupation in CSCO major
+Advantaged occupation & The child's own occupation in CSCO major
 group 1 or 2; the outcome of the paper is the share of the child's
 waves at ages 30 and over in such an occupation. \\
 Controls of the expansion design & $H_i$, $\pinc_i$, gender, urban
@@ -198,8 +200,86 @@ for the row at 30 and over, and its product with $H_i$. \\
 \end{tabular}
 \end{table}
 
+\section{The premium}
+\label{oa:premium}
+
+\subsection{The premium in fifteen specifications}
+\label{oa:spec}
+
+Figure~\ref{oafig:spec} adds the urban and rural subsamples to the thirteen specifications of Section~\ref{P-sec:premrobust} of the paper, in a single sorted plot with the analytic choices marked underneath, and Table~\ref{oatab:grid} lists them with their intervals and sample sizes.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/oa_spec_curve.png}
+\caption{The premium in fifteen specifications. The premium is the earnings gap between advantaged and less advantaged children with parental income held fixed; specifications are sorted by point estimate. Vertical bars are 95 percent confidence intervals; the diamond marks the baseline; the lower panel marks the analytic choices in each specification. Source: \code{unified/code/fig_spec_curve.py}.}
+\label{oafig:spec}
+\end{figure}
+
+
+\begin{table}[H]
+\centering
+\small
+\caption{The premium across fifteen specifications.}
+\label{oatab:grid}
+\input{tables/oa_grid}
+\par\smallskip
+\begin{minipage}{0.94\textwidth}
+\footnotesize\emph{Notes:} Coefficient on the indicator for
+advantaged children. No specification controls for parental education.
+Children with a level of earnings at ages 30 and over (2,774 in the baseline). Correlated random-effects rows: child-wave observations at those ages, standard errors
+clustered on child. Cross-section rows: one observation per child; controls are gender, urban residence, age at first observation and its
+square, province effects, and parental income;
+heteroskedasticity-robust standard errors; the state-sector row is
+estimated on children with a parent working in 2012. Entropy balancing:
+bootstrap percentile interval. Source:
+\code{unified/code/u8_premium_specifications.py}.
+\end{minipage}
+\end{table}
+
+\subsection{Competing markers of social position}
+\label{oa:markers}
+
+Section~\ref{P-sec:class} of the paper enters parental party membership and parental state-sector employment, two markers of social position, with and without the occupation indicator in regressions of the level of earnings. Table~\ref{oatab:markers} reports the six regressions. On its own each marker carries a coefficient a little over half that of the occupation indicator on the same children, and once the occupation indicator enters, neither marker adds to it.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Party membership and state-sector employment as competing markers.}
+\label{oatab:markers}
+\input{tables/oa_markers}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Each column is one regression of the level of earnings (mean log labor income net of survey-year effects over the waves at ages 30 and over) on the regressors shown, one observation per child. Controls: parental income, gender, urban residence, age at first observation and its square, and province effects. Heteroskedasticity-robust standard errors in parentheses. Columns 1 to 3: children with a report of parental party membership (8 children lack one); party membership is either parent a member of the Communist Party, a democratic party, or the Youth League when the child was fourteen (retrospective report). Columns 4 to 6: children with a parent working in 2012; state-sector employment is either linked parent working in a government, party, or military unit, a public institution, or a state-owned enterprise in that year. *, **, and *** denote significance at the 10, 5, and 1 percent levels. Source: \code{unified/code/u8_premium_specifications.py}.
+\end{minipage}
+\end{table}
+
+\subsection{Age controls}
+
+\begin{table}[H]
+\centering
+\small
+\caption{The premium under alternative age controls.}
+\label{oatab:age}
+\input{tables/oa_age}
+\par\smallskip
+\begin{minipage}{0.9\textwidth}
+\footnotesize\emph{Notes:} Correlated random-effects regression of
+Section~\ref{P-sec:cre} of the paper with the family-income control, on
+the same 7,512 child-wave observations at ages 30 and over in
+every row; standard errors clustered on child. No row differs from the
+linear specification by more than 0.002. Source:
+\code{unified/code/u4_premium_age_controls.py}.
+\end{minipage}
+\end{table}
+
 \section{The earnings process}
 \label{oa:process}
+
+\subsection{Residual earnings and the weighting of the minimum-distance fit}
+
+All dynamic estimation in Section~\ref{P-sec:process} of the paper uses residual log earnings: the residual from a pooled regression of log labor income on year fixed effects, a quartic in age, gender and its interactions with the age quartic, urban status, and province fixed effects, winsorized at the first and ninety-ninth percentiles within each wave. Year effects are common rather than group-specific, so between-group differences survive into the residual, and the growth regression of Section~\ref{P-sec:abb} of the paper uses them; the second-moment estimation additionally demeans within group and year, so that group means do not mechanically enter the autocovariances. The level regressions of Section~\ref{P-sec:premium} of the paper do not use these residuals; they include the controls directly.
+
+The minimum-distance fit weights each autocovariance by the number of pairs of observations behind it. The weighting matrix is fixed a priori rather than estimated: with 420 children in the smaller group, an estimated optimal weighting matrix would introduce the small-sample bias that \citet{AltonjiSegal1996} document, so the minimized criterion is not asymptotically chi-squared and the paper reports it as a fit statistic. The comparison between groups rests on the distance test and the scale model of the next sections, not on the criterion values themselves.
 
 \subsection{Variances and first-order autocovariances by wave}
 \label{oa:autocov}
@@ -235,7 +315,47 @@ from a bootstrap that resamples children within each group, and computes the qua
 \input{tables/oa_jointtest}. Source:
 \code{income_dynamics/code/m16_joint_moment_test.py}.
 
+\subsection{Separate and joint fits by family background}
+\label{oa:jointfit}
+
+Table~\ref{P-tab:md} of the paper fits the permanent--transitory model to each group and, in its last row, to both groups together. The separate fits split a common total variance differently (a permanent share of 0.19 against 0.28, and transitory persistence of 0.33 against 0.12), and the paper reads the two rows as two points on a ridge of the criterion rather than as a difference between the groups. Figure~\ref{oafig:ridge} shows the ridge: the bootstrap draws of each group spread along a curve on which the permanent variance and the transitory persistence trade off while the fit barely changes, the draws for advantaged children extend toward those for less advantaged children, and a row of draws for advantaged children sits at a permanent share of zero, the boundary of the parameter space.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.56\textwidth]{figures/oa_ridge.png}
+\caption{The identification ridge. Bootstrap draws and point estimates of the fitted pair (transitory persistence, permanent share) for advantaged and less advantaged children, 1,000 clustered replications of the cell-weighted estimator. The row of draws for advantaged children at a share of zero reflects the boundary constraint $\sigma^2_\eta \ge 0$, not a separate mode. Source: \code{unified/code/fig_ridge.py}.}
+\label{oafig:ridge}
+\end{figure}
+
+Table~\ref{oatab:jointmodels} reports the joint fits on the thirty moments of the two groups: the free model, which reproduces the separate fits; the model in which every parameter is common to the groups; the scale model, in which every autocovariance of advantaged children is $\kappa$ times that of less advantaged children; the three models that let one parameter differ at a time; and the model with a common innovation variance. Table~\ref{oatab:jointtests} tests the restricted models against the less restricted ones with the distance between their criteria, referred to a bootstrap in which each group's moments are recentered on the restricted fit, and reports the Wald test on the three parameter gaps of the free model with their bootstrap covariance. \input{tables/oa_jointsummary}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Joint minimum-distance fits of the two groups under cross-group restrictions.}
+\label{oatab:jointmodels}
+\footnotesize\setlength{\tabcolsep}{3pt}
+\input{tables/oa_jointmodels}
+\par\smallskip
+\begin{minipage}{0.94\textwidth}
+\footnotesize\emph{Notes:} Minimum distance with cell-count weights on the thirty variances and autocovariances of the two groups (fifteen each; residuals demeaned within group and year), children with at least three waves of the 2014 to 2022 panel. Bootstrap standard errors in parentheses (1,000 replications that resample children within each group and re-solve the fit). The criterion is comparable across rows; the free model reproduces the separate fits of Table~\ref{P-tab:md} of the paper. Source: \code{income_dynamics/code/m19_joint_process_by_group.py}.
+\end{minipage}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tests between the joint fits.}
+\label{oatab:jointtests}
+\input{tables/oa_jointtests}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Distance tests: the increase in the criterion from the less restricted to the more restricted model, with a $p$-value from 500 bootstrap replications in which each group's moments are recentered on the restricted fit. Wald test: the quadratic form of the three parameter gaps of the free model (advantaged minus less advantaged children) in the inverse of their bootstrap covariance, referred to the chi-squared distribution with three degrees of freedom and to the bootstrap percentile distribution. Source: \code{income_dynamics/code/m19_joint_process_by_group.py}.
+\end{minipage}
+\end{table}
+
 \subsection{What the design could have detected}
+
 
 \begin{table}[H]
 \centering
@@ -248,7 +368,7 @@ from a bootstrap that resamples children within each group, and computes the qua
 \footnotesize\emph{Notes:} Standard errors of the gaps from the
 bootstrap of Table~\ref{P-tab:md} of the paper; the last row uses the
 two-step sandwich standard error of the interaction in
-Table~\ref{P-tab:ab} of the paper. The minimum detectable difference at
+Table~\ref{oatab:ab}. The minimum detectable difference at
 80 percent power and the 5 percent level is 2.8 times the standard
 error. Source: \code{income_dynamics/code/m13_mde_group_null.py}.
 \end{minipage}
@@ -262,7 +382,8 @@ Table~\ref{oatab:criterion} reports the minimized criterion when the
 transitory component is instead ARMA(1,1) or MA(1), and when the
 permanent effect is replaced by a random walk. The richer transitory
 structures leave the criterion where it was, and the random walk fits
-worse in every sample.
+worse in every sample. \input{tables/oa_reweight}
+
 
 \begin{table}[H]
 \centering
@@ -279,10 +400,27 @@ comparable within a row. Source:
 \end{minipage}
 \end{table}
 
+\subsection{Arellano--Bond estimates}
+\label{oa:ab}
+
+Section~\ref{P-sec:abgmm} of the paper reports the Arellano--Bond estimate of transitory persistence for less advantaged children and the interaction that lets persistence differ for advantaged children. Table~\ref{oatab:ab} gives the estimates on the five-wave panel by difference and by system GMM, and on the reconstructed seven-wave panel.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Arellano--Bond estimates of the persistence of transitory earnings shocks.}
+\label{oatab:ab}
+\input{tables/oa_ab}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Two-step GMM, cluster-robust two-step sandwich standard errors in parentheses, clustered on child. The system row adds level equations instrumented by the collapsed lagged first difference. \input{tables/oa_abnote} Collapsed instruments, lags 2--3 (lags 2--4 on the seven-wave panel). *, **, and *** denote significance at the 10, 5, and 1 percent levels; Hansen $J$ $p$-values in brackets. Source: \code{income_dynamics/code/m10_abgmm_table3.py}.
+\end{minipage}
+\end{table}
+
 \subsection{Diagnostics for the dynamic-panel estimate}
 
 Table~\ref{oatab:abdiag} reports the serial-correlation tests behind
-Table~\ref{P-tab:ab} of the paper. On either panel, the test of second-order serial correlation does not reject the absence of second-order correlation on which instruments dated two waves back rely. The five-wave estimates are computed three times: in Python, in a Mata implementation that builds the same moments, and in Stata's \texttt{xtabond2} under the same collapsed instrument layout with Windmeijer-corrected standard errors. Python and Mata agree to four decimals on both coefficients, their standard errors, and the Hansen statistic; \texttt{xtabond2} gives 0.058 (SE 0.036) and 0.010 (SE 0.096) for the two coefficients of Table~\ref{P-tab:ab} of the paper, and a Hansen statistic of 2.34 against 2.38. For the system GMM row, Python and \texttt{xtabond2} give persistence of 0.109 and 0.111, and the Hansen test rejects in both (20.86 and 20.49 on four degrees of freedom). The Stata files are in \folder{income_dynamics/code/stata}, and \code{income_dynamics/output/tables/stata_abgmm_parity.csv} collects the three sets of estimates.
+Table~\ref{oatab:ab}. On either panel, the test of second-order serial correlation does not reject the absence of second-order correlation on which instruments dated two waves back rely. The five-wave estimates are computed three times: in Python, in a Mata implementation that builds the same moments, and in Stata's \texttt{xtabond2} under the same collapsed instrument layout with Windmeijer-corrected standard errors. Python and Mata agree to four decimals on both coefficients, their standard errors, and the Hansen statistic; \texttt{xtabond2} gives 0.058 (SE 0.036) and 0.010 (SE 0.096) for the two coefficients of Table~\ref{oatab:ab}, and a Hansen statistic of 2.34 against 2.38. For the system GMM row, Python and \texttt{xtabond2} give persistence of 0.109 and 0.111, and the Hansen test rejects in both (20.86 and 20.49 on four degrees of freedom). The Stata files are in \folder{income_dynamics/code/stata}, and \code{income_dynamics/output/tables/stata_abgmm_parity.csv} collects the three sets of estimates.
 
 \begin{table}[H]
 \centering
@@ -294,7 +432,7 @@ Table~\ref{P-tab:ab} of the paper. On either panel, the test of second-order ser
 \par\smallskip
 \begin{minipage}{0.94\textwidth}
 \footnotesize\emph{Notes:} Two-step difference GMM as in
-Table~\ref{P-tab:ab} of the paper. $m_1$ and $m_2$ are cluster-robust
+Table~\ref{oatab:ab}. $m_1$ and $m_2$ are cluster-robust
 statistics for first- and second-order serial correlation of the
 differenced residuals; $m_1$ is negative by construction. The last column re-estimates with instruments dated three waves back and earlier; with persistence near 0.06, lagged levels three or more waves back carry little of the variation in the lagged difference, and the standard errors are correspondingly larger. Source:
 \code{income_dynamics/code/m17_ab_diagnostics.py}.
@@ -304,7 +442,7 @@ differenced residuals; $m_1$ is negative by construction. The last column re-est
 \subsection{Nonlinear persistence across runs of the estimator}
 \label{oa:nonlinear}
 
-The nonlinear state equation of Section~\ref{P-sec:abb} of the paper is estimated by stochastic EM, so its estimates vary with the random draws. Table~\ref{oatab:nonlinear} sets the average persistence reported in the paper beside the mean and the range over ten further runs with different seeds. In every one of the ten runs the average persistence of advantaged children is above that of less advantaged children.
+The nonlinear state equation of Section~\ref{P-sec:abb} of the paper, $s_{it} = Q(s_{i,t-1}, U_{it})$, takes $Q$ as a sieve in Hermite polynomials of the state (order two) and Bernstein polynomials of the shock rank (order three), and is estimated by stochastic EM, so its estimates vary with the random draws. Table~\ref{oatab:nonlinear} sets the average persistence reported in the paper beside the mean and the range over ten further runs with different seeds. In every one of the ten runs the average persistence of advantaged children is above that of less advantaged children.
 
 \begin{table}[H]
 \centering
@@ -317,6 +455,11 @@ The nonlinear state equation of Section~\ref{P-sec:abb} of the paper is estimate
 \footnotesize\emph{Notes:} Persistence $\partial Q(s, u)/\partial s$ averaged uniformly over a $5 \times 5$ lattice of quantiles of the state and of the shock rank, 2014 to 2022 panel. Sources: \code{income_dynamics/code/ws_05b_abb_stochastic_em.py} (the run reported in the paper) and \code{unified/code/u15_nonlinear_persistence_runs.py} (ten runs).
 \end{minipage}
 \end{table}
+
+\subsection{Strict exogeneity in the growth regression}
+\label{oa:strict}
+
+The fixed-effects growth regression of Section~\ref{P-sec:abb} of the paper (equation~\eqref{P-eq:fe}) rests on strict exogeneity of its time-varying covariates. The restriction is testable by adding the next observed wave's value of a time-varying covariate \citep[Section~10.7.1]{Wooldridge2010}. Applied to the urban indicator, the only substantive time-varying control, \input{tables/oa_lead} Source: \code{income_dynamics/code/ws_m3_strict_exogeneity_test.py}.
 
 \section{Attenuation: the schedule, rank-rank slopes, and the linked parents}
 \label{oa:measurement}
@@ -335,7 +478,30 @@ Table~\ref{P-tab:md} of the paper.}
 \label{oafig:attenuation}
 \end{figure}
 
+\subsection{A published study corrected with the schedule}
+\label{oa:recovery}
+
+Section~\ref{P-sec:measurement} of the paper applies the schedule to the raw least squares estimates of \citet{FanYiZhang2021}, 0.166 for the cohort born 1970 to 1980 and 0.176 for the cohort born 1981 to 1988, with income averaged over two to four of the 2010 to 2016 waves. Table~\ref{oatab:recovery} gives the calculation under the children's process and under the process of the linked parents (Table~\ref{oatab:parent}).
+
+\begin{table}[H]
+\centering
+\small
+\caption{Raw estimates of \citet{FanYiZhang2021} divided by the share of the coefficient recovered.}
+\label{oatab:recovery}
+\setlength{\tabcolsep}{3pt}
+\input{tables/oa_recovery}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Share recovered is the fraction of a true coefficient that a two-wave and a four-wave average recover under each process (exact calculation; the transitory persistence of the linked parents is \input{tables/oa_parentrho} so for them the exact and the approximate schedules coincide). Implied coefficient is the published range, 0.166 to 0.176, with the smaller estimate divided by the largest share recovered and the larger by the smallest. The authors' preferred estimates, one for each cohort, use income predicted from education and demographics and are not attenuated by design. Source: \code{unified/code/u2_recovery_by_process.py}.
+\end{minipage}
+\end{table}
+
+The attenuation schedule describes incomes earned between 2014 and 2022. Parents who earned under the administered wages of the urban sector in the 1980s and 1990s probably had a much smaller transitory share than the three quarters the paper estimates for their children, and for studies that average their incomes the schedule over-corrects.
+
 \subsection{Rank-rank slopes}
+
+Rank-based measures \citep{Chetty2014} reduce attenuation without removing it. Simulation from the fitted process puts the single-wave recovery of the rank-rank slope at \input{tables/oa_rankone} because rank noise attenuates from both sides of the regression, unlike the levels case. Table~\ref{oatab:rank} gives the schedule by number of waves averaged.
+
 
 \begin{table}[H]
 \centering
@@ -371,50 +537,6 @@ the autocovariance at longer lags relative to the variance; the
 interval is from a bootstrap that resamples parents. This is the parents' earnings process used in the second row of panel B of
 Table~\ref{P-tab:eta} of the paper. Source:
 \code{income_dynamics/code/m14_parent_process.py}.
-\end{minipage}
-\end{table}
-
-\section{The premium}
-\label{oa:premium}
-
-\subsection{The specifications behind Figure~\ref{P-fig:spec} of the paper}
-
-\begin{table}[H]
-\centering
-\small
-\caption{The premium across fifteen specifications.}
-\label{oatab:grid}
-\input{tables/oa_grid}
-\par\smallskip
-\begin{minipage}{0.94\textwidth}
-\footnotesize\emph{Notes:} Coefficient on the indicator for
-advantaged children. No specification controls for parental education.
-Children with a level of earnings at ages 30 and over (2,774 in the baseline). Correlated random-effects rows: child-wave observations at those ages, standard errors
-clustered on child. Cross-section rows: one observation per child; controls are gender, urban residence, age at first observation and its
-square, province effects, and parental income;
-heteroskedasticity-robust standard errors; the state-sector row is
-estimated on children with a parent working in 2012. Entropy balancing:
-bootstrap percentile interval. Source:
-\code{unified/code/u8_premium_specifications.py}.
-\end{minipage}
-\end{table}
-
-\subsection{Age controls}
-
-\begin{table}[H]
-\centering
-\small
-\caption{The premium under alternative age controls.}
-\label{oatab:age}
-\input{tables/oa_age}
-\par\smallskip
-\begin{minipage}{0.9\textwidth}
-\footnotesize\emph{Notes:} Correlated random-effects regression of
-Section~\ref{P-sec:cre} of the paper with the family-income control, on
-the same 7,512 child-wave observations at ages 30 and over in
-every row; standard errors clustered on child. No row differs from the
-linear specification by more than 0.002. Source:
-\code{unified/code/u4_premium_age_controls.py}.
 \end{minipage}
 \end{table}
 
@@ -481,7 +603,7 @@ ordered by the main measure (first column). Sources:
 \subsection{Definitions of the occupation outcome}
 
 Section~\ref{P-sec:occupation} of the paper measures the child's
-professional occupation as the share of the child's waves at ages 30
+advantaged occupation as the share of the child's waves at ages 30
 and over in which the reported occupation is professional.
 Table~\ref{oatab:occdefs} compares that definition with four others,
 each measured on the same waves, in the regression on the rows at 30
@@ -552,7 +674,36 @@ child. Source: \code{unified/code/u14_sample_facts.py}.
 \end{minipage}
 \end{table}
 
+\subsection{Four measures of provincial intensity: first stages, reduced forms, and returns}
+\label{oa:mature}
+
+Table~\ref{oatab:mature} reports, for each of the four measures of provincial intensity listed in Table~\ref{oatab:intensity}, the first stage, the earnings reduced form, the instrumented return to college with its Anderson--Rubin set, and the occupation reduced form, in the two-row regression of Section~\ref{P-sec:design} of the paper; the first row is the main measure, whose estimates the paper reports in its text. The last column gives the first-stage $F$ of the regression with one observation per child.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Earnings and occupation at ages 30 and over: first stages, reduced forms, and instrumented returns across measures of provincial intensity.}
+\label{oatab:mature}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{\input{tables/oa_mature}}
+\par\smallskip
+\begin{minipage}{0.96\textwidth}
+\footnotesize\emph{Notes:} \input{tables/oa_maturenote} Dependent variables: the level of earnings; the share of the child's waves at those ages in which the reported occupation is official, managerial, or professional (CSCO major groups 1 or 2). Province-clustered standard errors in parentheses and wild cluster bootstrap $p$-values in brackets (9,999 Rademacher replications by province, null imposed). The instrumented return is the two-stage least squares estimate, and the bracket under the return in the first row is its 95 percent wild cluster Anderson--Rubin set. Reduced forms are per unit of each measure and are not comparable across rows. *, **, and *** denote significance at the 10, 5, and 1 percent levels according to the wild cluster bootstrap $p$-values. Sources: \code{unified/code/u9_mature_age_earnings.py}, \code{unified/code/u14_sample_facts.py}.
+\end{minipage}
+\end{table}
+
+\subsection{The first stage by family background: details}
+
+Section~\ref{P-sec:firststage} of the paper estimates the first stage separately for the two groups in one regression. Three details are collected here.
+
+\emph{Completion across cohorts.} Advantaged children complete college at a rate of 17.3 percent in the cohorts born in 1980 or earlier and 50.5 percent in those born later; less advantaged children start at 4.6 percent and reach 24.2 percent. Completion therefore rose by about 33 percentage points among advantaged children and by 20 among less advantaged children, so the gap in percentage points widened from 13 to 26 while the ratio of the two completion rates fell from 3.7 to 2.1. These are changes across cohorts with the national expansion included.
+
+\emph{Province effects common to the groups.} Birth-year effects are specific to each group, so each group's national rise in completion is removed separately. Province effects are common to the groups because the advantaged children, 755 in all and 453 with a level of earnings (fewer than 20 in 23 of the 29 provinces), are too few to estimate a separate set of province effects for them. On all 4,536 children the group first stages are 0.137 (less advantaged) and 0.118 (advantaged), a difference of $-0.019$ with a standard error of 0.019. On the rows at 30 and over, which the returns of Section~\ref{P-sec:earnings} of the paper use, the group first stages are 0.182 and 0.189 (Table~\ref{P-tab:groups} of the paper), again not distinguishable from each other; the paper's statement about equal access rests on the estimates for all children, which use every cohort.
+
+\emph{The arithmetic of equal additions.} The first stage identifies the allocation of the seats that provinces added beyond the national path, not that of the national expansion itself, which the birth-year effects absorb. An equal addition of $x$ percentage points to starting rates of 17 and 5 percent leaves the gap in percentage points unchanged at 12 and lowers the ratio from $17/5$ to $(17 + x)/(5 + x)$. The equal group first stages therefore imply that the gap in percentage points widened by about as much in provinces that added few seats as in those that added many, while the ratio fell everywhere. Across cohorts, with the national expansion included, the ratio fell from 3.7 to 2.1 and the gap in percentage points widened from 13 to 26: both changes lie in the national rise in admissions, in which completion rose by more points among advantaged children.
+
 \subsection{Earnings at ages 30 and over: variants of the specification and checks}
+
 
 Section~\ref{P-sec:earnings} of the paper estimates the return to
 college in a regression with two rows per child, the mean of earnings
@@ -565,7 +716,7 @@ below 30 is kept only if it averages two or more waves, and the same
 regressions with each row weighted by the precision that the earnings
 process of Section~\ref{P-sec:process} of the paper implies for a mean
 of that many waves (equation~\eqref{P-eq:weights}). The return lies
-between 0.63 and 0.70 in every row, and the wild-cluster $p$-value of
+between 0.63 and 0.70 in every row, and the wild cluster $p$-value of
 the reduced form is below 0.005.
 
 Table~\ref{oatab:maturechecks} reports the checks of the earnings
@@ -573,14 +724,14 @@ result, with unweighted and with weighted rows: neither the earnings nor the occ
 the assignment of the instrument by the province at age twelve,
 and cohort exposure taken at age seventeen or nineteen instead of eighteen
 leave the reduced form in place. The last row leaves out the cohorts born 1973 to 1976, the pre-reform cohorts whose college completion has the largest gradient on provincial intensity in the event study of Figure~\ref{P-fig:mature} of the paper. With a linear cohort trend for each province, the first stage has $F = \input{tables/oa_maturetrendF}$, the earnings reduced form is 0.100 (SE 0.065), and the return to college is 0.77. Among the cohorts born before the reform, the
-interaction of provincial intensity with birth year has a wild-cluster
+interaction of provincial intensity with birth year has a wild cluster
 $p$-value of \input{tables/oa_pretrendp}. Leaving out one
 province at a time keeps the return within
-\input{tables/oa_matureloo}. Table~\ref{oatab:groups} repeats the
+\input{tables/oa_matureloo}. The upper end is the return without Shanghai, the province with the highest intensity and 209 of the 2,774 rows at 30 and over: the earnings reduced form stays at 0.125 (SE 0.031, wild cluster $p = 0.001$), the first stage falls to 0.112 ($F = 8.1$), and the 95 percent Anderson--Rubin set starts at 0.55; leaving out any other province gives a return between 0.65 and 0.73 (\code{unified/code/u19_province_and_identity_intervals.py}). Table~\ref{oatab:groups} repeats the
 estimates by family background of Table~\ref{P-tab:groups} of the paper
 with weighted rows.
 
-The completion indicator counts sixteen or more years of schooling. In the same two-row regression, the coefficient on the instrument is $-0.060$ (SE 0.030, wild-cluster $p = 0.29$) when the outcome is exactly fifteen years of schooling, the three-year degree, 0.127 (SE 0.035) when it is fifteen or more years, and 0.186 (SE 0.044) for the completion indicator of the paper (\code{unified/output/u9_G_three_year_completion.csv}).
+The completion indicator counts sixteen or more years of schooling. In the same two-row regression, the coefficient on the instrument is $-0.060$ (SE 0.030, wild cluster $p = 0.29$) when the outcome is exactly fifteen years of schooling, the three-year degree, 0.127 (SE 0.035) when it is fifteen or more years, and 0.186 (SE 0.044) for the completion indicator of the paper (\code{unified/output/u9_G_three_year_completion.csv}).
 
 \begin{table}[H]
 \centering
@@ -613,9 +764,9 @@ Province-clustered standard errors; wild cluster bootstrap $p$-values
 \par\smallskip
 \begin{minipage}{0.96\textwidth}
 \footnotesize\emph{Notes:} Two-row specification of
-Table~\ref{P-tab:mature} of the paper, main intensity measure; every
+Table~\ref{oatab:mature}, main intensity measure; every
 entry is the estimate for the row at 30 and over. The first four rows
-restrict the regression to children with the stated schooling; the outcome is earnings in the first two and, in the next two, the share of the child's waves at ages 30 and over in a professional occupation.
+restrict the regression to children with the stated schooling; the outcome is earnings in the first two and, in the next two, the share of the child's waves at ages 30 and over in an advantaged occupation.
 Province-clustered standard errors; wild cluster bootstrap $p$-values
 (9,999 replications). The return to college is the two-stage least
 squares estimate of the same regression. Source:
@@ -634,8 +785,8 @@ with weighted rows.}
 \par\smallskip
 \begin{minipage}{0.94\textwidth}
 \footnotesize\emph{Notes:} Specification of Table~\ref{P-tab:groups} of
-the paper; every entry is the estimate for the row at 30 and over. The rows for all children come from the regression of Table~\ref{P-tab:mature} of the paper under the main intensity measure; for all children the inference on the return is the Anderson--Rubin set, and no standard error is printed.
-Anderson--Rubin sets over a grid from $-6$ to 6 with step 0.05; a set is unbounded when the wild-cluster test does not reject, at that level, a zero coefficient on the group's instrument in the first stage for the group's own college completion, and a set made of two rays is printed as their union. Sources: \code{unified/code/u9_mature_age_earnings.py} (all children) and \code{unified/code/u12_returns_by_family_background.py}.
+the paper; every entry is the estimate for the row at 30 and over. The rows for all children come from the regression of Table~\ref{oatab:mature} under the main intensity measure; for all children the inference on the return is the Anderson--Rubin set, and no standard error is printed.
+Anderson--Rubin sets over a grid from $-6$ to 6 with step 0.05; a set is unbounded when the wild cluster test does not reject, at that level, a zero coefficient on the group's instrument in the first stage for the group's own college completion, and a set made of two rays is printed as their union. Sources: \code{unified/code/u9_mature_age_earnings.py} (all children) and \code{unified/code/u12_returns_by_family_background.py}.
 \end{minipage}
 \end{table}
 
@@ -679,9 +830,11 @@ group, and the indicator for the row at 30 and over and its product
 with family background are among the controls. The return of each group is estimated by two-stage least squares
 with four endogenous regressors, the college completion of each group in each row,
 and the four instruments. The Anderson--Rubin set of a group collects
-the values $b_0$ at which the wild-cluster test does not reject a zero
+the values $b_0$ at which the wild cluster test does not reject a zero
 coefficient on that group's instrument at 30 and over, over a grid from $-6$ to 6 with step
 0.05. As $b_0$ grows without bound this test becomes the test of a zero coefficient on the group's instrument in the first stage for the group's own college completion, so the set of a group is unbounded when that test does not reject at that level. The first stages printed in Table~\ref{P-tab:groups} of the paper are the coefficients on each group's instrument in the first stage whose dependent variable is the college completion of all children. Source: \code{unified/code/u12_returns_by_family_background.py}.
+
+Section~\ref{P-sec:firststage} of the paper reads the first stages by family background on all children as a child's chance of being moved into college by the added seats being similar in both groups. \input{tables/oa_fsmde} Sources: \code{unified/code/u14_sample_facts.py}, \code{unified/code/u13_decomposition_mature_age.py}.
 
 \section{The decomposition}
 \label{oa:decomposition}
@@ -716,7 +869,7 @@ exceeds the premium. Source: \code{unified/code/u3_online_appendix.py}.
 
 \subsection{Inside the entropy-balanced comparison}
 
-Inside the comparison of advantaged children with reweighted less advantaged children, every term of the identity is a directly measured mean, and the premium of 0.072 splits exactly into three parts (Section~\ref{P-sec:mediation} of the paper). Graduates out-earn children without a degree by 0.541 log points among advantaged children and by 0.517 among reweighted less advantaged children; 33.55 percent of the former and 21.30 percent of the latter hold a degree. The additional degrees of advantaged children, valued at the return among advantaged graduates, account for 0.066; the degrees held in both groups, worth 0.024 more to advantaged children, account for 0.005; and the earnings gap between the two groups among children without a degree is 0.001. Source: \code{unified/code/u16_identity_in_balanced_comparison.py}.
+Inside the comparison of advantaged children with reweighted less advantaged children, every term of the identity is a directly measured mean, and the premium of 0.072 splits exactly into three parts (Section~\ref{P-sec:mediation} of the paper). Graduates out-earn children without a degree by 0.541 log points among advantaged children and by 0.517 among reweighted less advantaged children; 33.55 percent of the former and 21.30 percent of the latter hold a degree. The additional degrees of advantaged children, valued at the return among advantaged graduates, account for 0.066 (95 percent bootstrap interval $[0.04, 0.09]$); the degrees held in both groups, worth 0.024 more to advantaged children, account for 0.005 ($[-0.02, 0.04]$); and the earnings gap between the two groups among children without a degree is 0.001 ($[-0.08, 0.07]$). The intervals come from 1,000 replications that resample children within group and solve the weights again. Sources: \code{unified/code/u16_identity_in_balanced_comparison.py}, \code{unified/code/u19_province_and_identity_intervals.py}.
 
 \input{part2_formal_results}
 

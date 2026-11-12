@@ -510,6 +510,7 @@ check("consistency by Newey and McFadden", "their Theorem 2.1")
 # observed and transitory persistence
 rho_obs = round(share, 2) + (1 - round(share, 2)) * r2
 check("rho_obs", f"$\\rho_{{\\mathrm{{obs}}}} = {share:.2f} + {1 - round(share, 2):.2f} \\times {r2:.2f} = {rho_obs:.2f}$")
+check("rho_obs in words", f"the value near {round(rho_obs, 1):.1f} in Section")
 check_paper("paper: rho_obs", f"is near {round(rho_obs, 1):.1f} at the pooled estimates, more than twice the transitory parameter")
 check_true("rho_obs at unrounded parameters", f"{share + (1 - share) * rho_hat:.2f}" == f"{rho_obs:.2f}")
 check("two estimates of persistence", "gap between the minimum-distance estimate and the Arellano--Bond estimate")
@@ -593,7 +594,7 @@ else:
 # ------------------------------------------------ cross-references
 paper_labels = set(re.findall(r"\\label\{([^}]+)\}", PAPER_RAW))
 own_labels = re.findall(r"\\label\{([^}]+)\}", RAW)
-HOST_LABELS = {"oatab:recovery", "oafig:ridge", "oa:errorstructures", "oatab:rank", "oatab:parent", "oatab:mde", "oa:jointtest", "oatab:autocov", "oatab:screens"}
+HOST_LABELS = {"oatab:recovery", "oafig:ridge", "oa:errorstructures", "oatab:rank", "oatab:parent", "oatab:mde", "oa:jointtest", "oatab:autocov", "oatab:screens", "oa:jointfit", "oa:rank"}
 refs = set()
 for group in re.findall(r"\\(?:eq)?ref\{([^}]+)\}", strip_comments(RAW)):
     refs.update(x.strip() for x in group.split(","))

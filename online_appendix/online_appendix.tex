@@ -113,8 +113,7 @@ The survey's measure of personal labor income changed definition in 2014
 (Section~\ref{P-sec:income} of the paper). Table~\ref{oatab:income}
 lists the variable used in each wave. The earnings outcomes of the
 paper use the waves in which the variable covers jobs only, 2014 to
-2022. For the two estimates that use a seven-wave
-panel, a measure that covers jobs only is reconstructed for 2010 and
+2022. For the estimates that use a seven-wave panel (the growth regression of Section~\ref{P-sec:abb} of the paper and the Arellano--Bond estimate of Section~\ref{oa:ab}), a measure that covers jobs only is reconstructed for 2010 and
 2012 from the components that the questionnaire records. For 2010 these
 are the monthly wage of the main job (annualized), the annual bonus,
 self-employment income, and income from secondary jobs; for 2012, the
@@ -146,7 +145,7 @@ report of parental occupation through the screens of
 Section~\ref{P-sec:sample} of the paper. The screens pass advantaged
 and less advantaged children at nearly the same rate, so selection into the sample is unlikely to account for the difference between the two groups. Before
 any earnings screen, positive labor income appears in
-\input{tables/oa_employment} at ages 22 to 55.
+\input{tables/oa_employment} at ages 22 to 55. \input{tables/oa_oneparent}
 
 \begin{table}[H]
 \centering
@@ -203,6 +202,8 @@ for the row at 30 and over, and its product with $H_i$. \\
 \section{The premium}
 \label{oa:premium}
 
+\input{tables/oa_incomewaves}
+
 \subsection{The premium in fifteen specifications}
 \label{oa:spec}
 
@@ -239,7 +240,7 @@ bootstrap percentile interval. Source:
 \subsection{Competing markers of social position}
 \label{oa:markers}
 
-Section~\ref{P-sec:class} of the paper enters parental party membership and parental state-sector employment, two markers of social position, with and without the occupation indicator in regressions of the level of earnings. Table~\ref{oatab:markers} reports the six regressions. On its own each marker carries a coefficient a little over half that of the occupation indicator on the same children, and once the occupation indicator enters, neither marker adds to it.
+Section~\ref{P-sec:class} of the paper enters parental party membership and parental state-sector employment, two markers of social position, with and without the occupation indicator in regressions of the level of earnings. Table~\ref{oatab:markers} reports the six regressions. On its own each marker carries a coefficient a little over half that of the occupation indicator on the same children. \input{tables/oa_markerbounds}
 
 \begin{table}[H]
 \centering
@@ -499,6 +500,7 @@ Section~\ref{P-sec:measurement} of the paper applies the schedule to the raw lea
 The attenuation schedule describes incomes earned between 2014 and 2022. Parents who earned under the administered wages of the urban sector in the 1980s and 1990s probably had a much smaller transitory share than the three quarters the paper estimates for their children, and for studies that average their incomes the schedule over-corrects.
 
 \subsection{Rank-rank slopes}
+\label{oa:rank}
 
 Rank-based measures \citep{Chetty2014} reduce attenuation without removing it. Simulation from the fitted process puts the single-wave recovery of the rank-rank slope at \input{tables/oa_rankone} because rank noise attenuates from both sides of the regression, unlike the levels case. Table~\ref{oatab:rank} gives the schedule by number of waves averaged.
 
@@ -534,8 +536,7 @@ reproduces the third column to within 0.004. Source:
 \footnotesize\emph{Notes:} Linked parents aged sixty or younger with
 three or more waves of positive labor income over 2014 to 2022; log income is residualized as for the children. The permanent share is
 the autocovariance at longer lags relative to the variance; the
-interval is from a bootstrap that resamples parents. This is the parents' earnings process used in the second row of panel B of
-Table~\ref{P-tab:eta} of the paper. Source:
+interval is from a bootstrap that resamples parents. This is the parents' earnings process used in the second row of Table~\ref{oatab:recovery} and in Section~\ref{P-sec:measurement} of the paper. Source:
 \code{income_dynamics/code/m14_parent_process.py}.
 \end{minipage}
 \end{table}
@@ -604,7 +605,7 @@ ordered by the main measure (first column). Sources:
 
 Section~\ref{P-sec:occupation} of the paper measures the child's
 advantaged occupation as the share of the child's waves at ages 30
-and over in which the reported occupation is professional.
+and over in which the reported occupation belongs to CSCO major groups 1 or 2.
 Table~\ref{oatab:occdefs} compares that definition with four others,
 each measured on the same waves, in the regression on the rows at 30
 and over only (equation~\eqref{P-eq:oldonly} of the paper). The reduced
@@ -694,13 +695,28 @@ Table~\ref{oatab:mature} reports, for each of the four measures of provincial in
 
 \subsection{The first stage by family background: details}
 
-Section~\ref{P-sec:firststage} of the paper estimates the first stage separately for the two groups in one regression. Three details are collected here.
+Section~\ref{P-sec:firststage} of the paper estimates the first stage separately for the two groups in one regression. Four details are collected here.
 
 \emph{Completion across cohorts.} Advantaged children complete college at a rate of 17.3 percent in the cohorts born in 1980 or earlier and 50.5 percent in those born later; less advantaged children start at 4.6 percent and reach 24.2 percent. Completion therefore rose by about 33 percentage points among advantaged children and by 20 among less advantaged children, so the gap in percentage points widened from 13 to 26 while the ratio of the two completion rates fell from 3.7 to 2.1. These are changes across cohorts with the national expansion included.
 
-\emph{Province effects common to the groups.} Birth-year effects are specific to each group, so each group's national rise in completion is removed separately. Province effects are common to the groups because the advantaged children, 755 in all and 453 with a level of earnings (fewer than 20 in 23 of the 29 provinces), are too few to estimate a separate set of province effects for them. On all 4,536 children the group first stages are 0.137 (less advantaged) and 0.118 (advantaged), a difference of $-0.019$ with a standard error of 0.019. On the rows at 30 and over, which the returns of Section~\ref{P-sec:earnings} of the paper use, the group first stages are 0.182 and 0.189 (Table~\ref{P-tab:groups} of the paper), again not distinguishable from each other; the paper's statement about equal access rests on the estimates for all children, which use every cohort.
+\emph{Province effects common to the groups.} Birth-year effects are specific to each group, so each group's national rise in completion is removed separately. Province effects are common to the groups because the advantaged children, 755 in all and 453 with a level of earnings (fewer than 20 in 23 of the 29 provinces), are too few to estimate a separate set of province effects for them. On all 4,536 children the group first stages are 0.137 (less advantaged) and 0.118 (advantaged), a difference of $-0.019$ with a standard error of 0.019. On the rows at 30 and over, which the returns of Section~\ref{P-sec:earnings} of the paper use, the group first stages are 0.182 and 0.189 (Table~\ref{P-tab:groups} of the paper), again not distinguishable from each other; the paper's statement that the chance of being moved into college was similar in both groups rests on the estimates for all children, which use every cohort.
 
-\emph{The arithmetic of equal additions.} The first stage identifies the allocation of the seats that provinces added beyond the national path, not that of the national expansion itself, which the birth-year effects absorb. An equal addition of $x$ percentage points to starting rates of 17 and 5 percent leaves the gap in percentage points unchanged at 12 and lowers the ratio from $17/5$ to $(17 + x)/(5 + x)$. The equal group first stages therefore imply that the gap in percentage points widened by about as much in provinces that added few seats as in those that added many, while the ratio fell everywhere. Across cohorts, with the national expansion included, the ratio fell from 3.7 to 2.1 and the gap in percentage points widened from 13 to 26: both changes lie in the national rise in admissions, in which completion rose by more points among advantaged children.
+\emph{The arithmetic of equal additions.} The first stage identifies the allocation of the seats that provinces added beyond the national path, not that of the national expansion itself, which the birth-year effects absorb. An equal addition of $x$ percentage points to starting rates of 17 and 5 percent leaves the gap in percentage points unchanged at 12 and lowers the ratio from $17/5$ to $(17 + x)/(5 + x)$. The similar group first stages therefore imply that the gap in percentage points widened by about as much in provinces that added few seats as in those that added many, while the ratio fell everywhere. Across cohorts, with the national expansion included, the ratio fell from 3.7 to 2.1 and the gap in percentage points widened from 13 to 26: both changes lie in the national rise in admissions, in which completion rose by more points among advantaged children.
+
+\emph{The first stage in percentage points.} Table~\ref{oatab:fsmag} converts the first-stage coefficients on all children into percentage points of college completion for four contrasts of provincial intensity. Each contrast is multiplied by the rise in the exposure ratio from the cohorts born in 1980 or earlier to those born in 1989 or later, so an entry is the difference in completion that the reform created between the most exposed cohorts of two provinces. The paper quotes the contrast between the 10th and the 90th percentiles.
+
+\begin{table}[H]
+\centering
+\small
+\caption{The first stage in percentage points of college completion, for four contrasts of provincial intensity.}
+\label{oatab:fsmag}
+\setlength{\tabcolsep}{4pt}
+\input{tables/oa_fsmag}
+\par\smallskip
+\begin{minipage}{0.94\textwidth}
+\footnotesize\emph{Notes:} Percentiles of the main intensity measure among the 4,536 children of the sample. Each entry is 100 times the first-stage coefficient on all children (0.136 for all children, 0.137 for less advantaged and 0.118 for advantaged children) times the difference in intensity times the rise in the mean exposure ratio between the cohorts born in 1980 or earlier and those born in 1989 or later. Source: \code{unified/code/u20_first_stage_magnitudes.py}.
+\end{minipage}
+\end{table}
 
 \subsection{Earnings at ages 30 and over: variants of the specification and checks}
 
@@ -790,6 +806,39 @@ Anderson--Rubin sets over a grid from $-6$ to 6 with step 0.05; a set is unbound
 \end{minipage}
 \end{table}
 
+\subsection{Occupation by family background and by degree}
+\label{oa:occgroup}
+
+Section~\ref{P-sec:occupation} of the paper reports the effect of college on the share of the child's waves at ages 30 and over in an advantaged occupation for each group, and compares that share between the groups among graduates and among children without a degree. Table~\ref{oatab:occgroup} gives the estimates by family background, from the regression of Table~\ref{P-tab:groups} of the paper with the occupation share as the outcome. \input{tables/oa_occgroupgap}
+
+\begin{table}[H]
+\centering
+\small
+\caption{The effect of college on the share of waves in an advantaged occupation, by family background.}
+\label{oatab:occgroup}
+\setlength{\tabcolsep}{4pt}
+\input{tables/oa_occgroup}
+\par\smallskip
+\begin{minipage}{0.94\textwidth}
+\footnotesize\emph{Notes:} Specification of Table~\ref{P-tab:groups} of the paper with the share of the child's waves at ages 30 and over in an advantaged occupation (CSCO major groups 1 or 2) as the outcome and the share below 30 as the second row; every entry is the estimate for the row at 30 and over. Province-clustered standard errors in parentheses; wild cluster bootstrap $p$-values in brackets (9,999 replications). Source: \code{unified/code/u18_occupation_by_family_background.py}.
+\end{minipage}
+\end{table}
+
+Table~\ref{oatab:occdegree} gives the shares themselves. \input{tables/oa_occdegreetext}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Share of waves at ages 30 and over in an advantaged occupation, by family background and degree.}
+\label{oatab:occdegree}
+\setlength{\tabcolsep}{4pt}
+\input{tables/oa_occdegree}
+\par\smallskip
+\begin{minipage}{0.94\textwidth}
+\footnotesize\emph{Notes:} \input{tables/oa_occdegreenote} The reweighted column applies entropy-balancing weights that match the first two moments of parental income, gender, age, urban status, five-year birth cohort, and province (the fifteen largest separately) to those of advantaged children. Brackets are 95 percent bootstrap percentile intervals of the gap (1,000 replications that resample children within group and solve the weights again). Gaps are computed from unrounded shares. Source: \code{unified/code/u22_occupation_share_by_degree.py}.
+\end{minipage}
+\end{table}
+
 \subsection{Inference}
 
 Intensity varies by province, so inference rests on 29 clusters. The
@@ -870,6 +919,21 @@ exceeds the premium. Source: \code{unified/code/u3_online_appendix.py}.
 \subsection{Inside the entropy-balanced comparison}
 
 Inside the comparison of advantaged children with reweighted less advantaged children, every term of the identity is a directly measured mean, and the premium of 0.072 splits exactly into three parts (Section~\ref{P-sec:mediation} of the paper). Graduates out-earn children without a degree by 0.541 log points among advantaged children and by 0.517 among reweighted less advantaged children; 33.55 percent of the former and 21.30 percent of the latter hold a degree. The additional degrees of advantaged children, valued at the return among advantaged graduates, account for 0.066 (95 percent bootstrap interval $[0.04, 0.09]$); the degrees held in both groups, worth 0.024 more to advantaged children, account for 0.005 ($[-0.02, 0.04]$); and the earnings gap between the two groups among children without a degree is 0.001 ($[-0.08, 0.07]$). The intervals come from 1,000 replications that resample children within group and solve the weights again. Sources: \code{unified/code/u16_identity_in_balanced_comparison.py}, \code{unified/code/u19_province_and_identity_intervals.py}.
+
+Table~\ref{oatab:gapdegree} compares the earnings of the two groups at the same schooling in three ways: without any adjustment, inside the balanced comparison, and by a least squares regression with the controls. \input{tables/oa_gapdegreetext}
+
+\begin{table}[H]
+\centering
+\small
+\caption{The gap in the level of earnings between advantaged and less advantaged children, by degree.}
+\label{oatab:gapdegree}
+\setlength{\tabcolsep}{4pt}
+\input{tables/oa_gapdegree}
+\par\smallskip
+\begin{minipage}{0.94\textwidth}
+\footnotesize\emph{Notes:} The 2,774 children with a level of earnings; gaps are advantaged minus less advantaged children, in log points. Balanced comparison: less advantaged children reweighted as in Section~\ref{P-sec:ebal} of the paper, with the weights solved on all less advantaged children; brackets are 95 percent bootstrap percentile intervals (1,000 replications that resample children within group and solve the weights again). Least squares: regression of the level of earnings on family background, college completion and their product, parental income, age at first observation, gender, urban residence, five-year birth cohort, and province effects; heteroskedasticity-robust standard errors in parentheses. Source: \code{unified/code/u21_earnings_gap_by_degree.py}.
+\end{minipage}
+\end{table}
 
 \input{part2_formal_results}
 

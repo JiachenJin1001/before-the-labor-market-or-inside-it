@@ -173,6 +173,18 @@ check("first stages by group: difference within two standard errors; minimum det
 for _f in ("oa_ridge.png", "oa_spec_curve.png"):
     check(f"figure file present: {_f}", os.path.exists(os.path.join(OA, "figures", _f)))
 
+# the first stage in percentage points, occupation and earnings by degree: numbers typed in notes
+_c14 = pd.read_csv(os.path.join(U, "output", "u14_C_first_stages_all_children.csv")).set_index("row")
+text("first-stage coefficients in the note on percentage points", f"({[v for k, v in _c14.fs.items() if k.startswith('all children')][0]:.3f} for all children, {_c14.loc['less advantaged children, instrument entering once for each group', 'fs']:.3f} for less advantaged and {_c14.loc['advantaged children, instrument entering once for each group', 'fs']:.3f} for advantaged children)")
+_m20 = pd.read_csv(os.path.join(U, "output", "u20_first_stage_magnitudes.csv")).set_index("contrast")
+check("first stage in percentage points: the contrast the paper quotes is 18, 18 and 15", [round(_m20.loc["10th to 90th", k]) for k in ("pp_all", "pp_less advantaged", "pp_advantaged")] == [18, 18, 15])
+_g21 = pd.read_csv(os.path.join(U, "output", "u21_earnings_gap_by_degree.csv")).set_index("item")
+check("earnings gap by degree: both balanced intervals contain zero", all(_g21.loc[k, "ci_lo"] < 0 < _g21.loc[k, "ci_hi"] for k in ("gap_without_degree", "gap_among_graduates")))
+check("earnings gap by degree: children add up to those with a level of earnings", int(sum(_g21.loc[k, "estimate"] for k in _g21.index if k.startswith("children, "))) == int(F14["level at 30 and over: children"]) and "The 2,774 children with a level of earnings; gaps are" in TEXN)
+_o18 = pd.read_csv(os.path.join(U, "output", "u18_occupation_by_family_background.csv")).set_index("group")
+check("occupation by family background: the difference between the instrumented effects is within two standard errors", abs(_o18.iloc[0].equal_effects_z) < 1.96)
+check("the paper has no panel B in its attenuation table", "panel B of" not in TEX)
+
 # 4. language
 for name, src in [("online_appendix.tex", TEX), ("part3_replication.tex", PART3)]:
     check(f"no Chinese character in {name}", re.search(r"[\u4e00-\u9fff]", src) is None)

@@ -78,8 +78,8 @@ n3 = {adv: F14["three waves: advantaged children"], less: F14["three waves: chil
 n4 = {adv: F14["level at 30 and over: advantaged children"], less: F14["level at 30 and over: children"] - F14["level at 30 and over: advantaged children"]}
 rows = [f"Retrospective report, family income of the parental household, observed at ages 22--55 in a 2014--2022 wave & {intc(n1[adv])} & {intc(n1[less])} & 100.0 & 100.0",
         f"Trimming and at least two waves of positive labor income at ages 22--55 (the sample of the paper) & {intc(n2[adv])} & {intc(n2[less])} & {100 * F14[f'share of them in the sample, {adv}']:.1f} & {100 * F14[f'share of them in the sample, {less}']:.1f}",
-        f"Of these, at least three waves (Sections 3 and 4 of the paper) & {intc(n3[adv])} & {intc(n3[less])} & {100 * F14[f'share of them with three waves, {adv}']:.1f} & {100 * F14[f'share of them with three waves, {less}']:.1f}",
-        f"Of the sample, at least two waves at ages 30 and over (level of earnings, Sections 5 to 7 of the paper) & {intc(n4[adv])} & {intc(n4[less])} & {100 * n4[adv] / n1[adv]:.1f} & {100 * n4[less] / n1[less]:.1f}"]
+        f"Of these, at least three waves (Section~\\ref{{P-sec:process}} of the paper) & {intc(n3[adv])} & {intc(n3[less])} & {100 * F14[f'share of them with three waves, {adv}']:.1f} & {100 * F14[f'share of them with three waves, {less}']:.1f}",
+        f"Of the sample, at least two waves at ages 30 and over (level of earnings, Sections~\\ref{{P-sec:premium}}, \\ref{{P-sec:expansion}} and \\ref{{P-sec:mediation}} of the paper) & {intc(n4[adv])} & {intc(n4[less])} & {100 * n4[adv] / n1[adv]:.1f} & {100 * n4[less] / n1[less]:.1f}"]
 write("oa_screens", " & \\multicolumn{2}{c}{Children} & \\multicolumn{2}{c}{Percent of first row} \\\\\n\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\nScreen & Advantaged & Less advantaged & Advantaged & Less advantaged",
       rows, "@{}p{6.0cm}cccc@{}")
 frag("oa_employment",
@@ -388,4 +388,53 @@ B9m = u("u9_B_main.csv").set_index("intensity").loc["predicted provincial growth
 frag("oa_maturenote", f"All {intc(F14['all children: children'])} children in the sample ({intc(F14['all children: advantaged children'])} advantaged), two-row specification of the paper; every entry except the column headed One observation per child is the estimate for the row at 30 and over ({intc(F14['level at 30 and over: children'])} rows). That column is the first-stage $F$ of the regression of college completion on the instrument with one observation per child. The instrumented effect of college on the occupation share under the main measure is {B9m.occ_maj_iv:.2f}.")
 C14 = u("u14_C_first_stages_all_children.csv").set_index("row"); fL, fH = C14.loc["less advantaged children, instrument entering once for each group"], C14.loc["advantaged children, instrument entering once for each group"]
 E13 = u("u13_E_added_degrees.csv").set_index("item").loc["difference (advantaged minus less advantaged)"]
-frag("oa_fsmde", f"The two first stages, {fL.fs:.3f} (SE {fL.fs_se:.3f}) for less advantaged and {fH.fs:.3f} (SE {fH.fs_se:.3f}) for advantaged children, differ by {num(E13.value)} (SE {E13.se:.3f}). The smallest difference the design detects with 80 percent power at the 5 percent level is {2.8 * E13.se:.3f}, about {100 * 2.8 * E13.se / fL.fs:.0f} percent of the first stage of less advantaged children, so the equality of the two first stages is established up to differences of that size.")
+frag("oa_fsmde", f"The two first stages, {fL.fs:.3f} (SE {fL.fs_se:.3f}) for less advantaged and {fH.fs:.3f} (SE {fH.fs_se:.3f}) for advantaged children, differ by {num(E13.value)} (SE {E13.se:.3f}). The smallest difference the design detects with 80 percent power at the 5 percent level is {2.8 * E13.se:.3f}, about {100 * 2.8 * E13.se / fL.fs:.0f} percent of the first stage of less advantaged children, so the two first stages are shown to be similar up to differences of that size.")
+
+
+# ------------------------------------------------------------ material behind statements of the paper that its text gives in words
+_F = u("u14_B_sample_facts.csv"); _F = dict(zip(_F.iloc[:, 0], _F.iloc[:, 1]))
+frag("oa_oneparent", f"For {intc(float(_F['all children: retrospective report for one parent only']))} children of the sample only one parent's occupation is reported; the indicator codes them by the reported parent, which treats a missing second parent as not advantaged and, if anything, attenuates the contrast between the groups.")
+_W = u("u8_income_measure_waves.csv").set_index("measure"); _nin = S8.loc["no income control (not in Figure 2)"]
+frag("oa_incomewaves", f"Section~\\ref{{P-sec:cre}} of the paper brackets the premium between two measures of parental income. Before either enters, the coefficient on the indicator for advantaged children is {_nin.estimate:.3f} (SE {_nin.se:.3f}). The parents' own labor income is observed in {_W.loc[chr(112) + 'arents' + chr(39) + ' own labor income', 'mean_waves_per_parent']:.1f} waves per parent on average, against {_W.loc['family income of the parental household', 'mean_waves_per_parent']:.1f} for family income, which is why its coefficient is the more attenuated of the two.")
+_pc, _sc = S8.loc["party membership coefficient with occupation and income (not in Figure 2)"], S8.loc["state-sector employment coefficient with occupation and income (not in Figure 2)"]
+_p0, _s0 = S8.loc["parental party membership in place of the occupation indicator (not in Figure 2)"], S8.loc["parental state-sector employment alone (not in Figure 2)"]
+assert 0.2 < 1 - _pc.estimate / _p0.estimate < 0.45 and 0.2 < 1 - _sc.estimate / _s0.estimate < 0.45   # "roughly a third"
+frag("oa_markerbounds", f"Once the occupation indicator enters, the marker coefficients fall by roughly a third while the occupation coefficient barely moves; the 95 percent intervals of the conditional marker coefficients reach {_pc.hi:.2f} for party membership and {_sc.hi:.2f} for state-sector employment, which bounds any independent effect of either marker.")
+
+_M = u("u20_first_stage_magnitudes.csv")
+_lab = {"25th to 75th": "25th to 75th percentile", "10th to 90th": "10th to 90th percentile", "5th to 95th": "5th to 95th percentile", "lowest to highest": "Lowest to highest province"}
+write("oa_fsmag", " & \\multicolumn{2}{c}{Provincial intensity} & \\multicolumn{3}{c}{Percentage points of completion} \\\\\n\\cmidrule(lr){2-3}\\cmidrule(lr){4-6}\nContrast & Lower & Higher & All & Less advantaged & Advantaged",
+      [f"{_lab[r.contrast]} & {r.intensity_low:.2f} & {r.intensity_high:.2f} & {r.pp_all:.0f} & {r['pp_less advantaged']:.0f} & {r.pp_advantaged:.0f}" for _, r in _M.iterrows()], "@{}lccccc@{}")
+
+_O = u("u18_occupation_by_family_background.csv").set_index("group")
+write("oa_occgroup", " & Rows at 30 & First & Reduced & Instrumented & Least \\\\\nFamily background & and over & stage & form & effect & squares",
+      [x for g, lab in [("less advantaged", "Less advantaged children"), ("advantaged", "Advantaged children")] for x in
+       (f"{lab} & {intc(_O.loc[g, 'rows_at_30_and_over'])} & {_O.loc[g, 'fs']:.3f} & {_O.loc[g, 'rf']:.3f} & {_O.loc[g, 'iv']:.2f} & {_O.loc[g, 'ls']:.2f}",
+        f" & & ({_O.loc[g, 'fs_se']:.3f}) & ({_O.loc[g, 'rf_se']:.3f}) & ({_O.loc[g, 'iv_se']:.2f}) & ({_O.loc[g, 'ls_se']:.2f})",
+        f" & & & [{_O.loc[g, 'rf_p_wild']:.3f}] & &")], "@{}lccccc@{}")
+_o = _O.iloc[0]
+frag("oa_occgroupgap", f"The two instrumented effects differ by {num(_o.iv_gap_advantaged_minus_less, 2)} (SE {_o.iv_gap_se:.2f}, $z = {num(_o.equal_effects_z, 2).replace('$', '')}$), so the larger rise for less advantaged children is suggestive.")
+
+_D = u("u22_occupation_share_by_degree.csv").set_index("item")
+def _ci(k): return f"[{num(_D.loc[k, 'ci_lo'], 2)}, {num(_D.loc[k, 'ci_hi'], 2)}]"
+write("oa_occdegree", " & \\multicolumn{3}{c}{Without adjustment} & \\multicolumn{2}{c}{Reweighted} \\\\\n\\cmidrule(lr){2-4}\\cmidrule(lr){5-6}\n & Advantaged & Less advantaged & Gap & Less advantaged & Gap",
+      [f"Graduates & {_D.loc['raw share, advantaged, graduates', 'estimate']:.2f} & {_D.loc['raw share, less advantaged, graduates', 'estimate']:.2f} & {num(_D.loc['raw_gap_graduates', 'estimate'], 2)} & {_D.loc['balanced_less_graduates', 'estimate']:.2f} & {num(_D.loc['balanced_gap_graduates', 'estimate'], 2)}",
+       f" & & & {_ci('raw_gap_graduates')} & & {_ci('balanced_gap_graduates')}",
+       f"Children without a degree & {_D.loc['raw share, advantaged, no degree', 'estimate']:.2f} & {_D.loc['raw share, less advantaged, no degree', 'estimate']:.2f} & {num(_D.loc['raw_gap_no_degree', 'estimate'], 2)} & {_D.loc['balanced_less_no_degree', 'estimate']:.2f} & {num(_D.loc['balanced_gap_no_degree', 'estimate'], 2)}",
+       f" & & & {_ci('raw_gap_no_degree')} & & {_ci('balanced_gap_no_degree')}",
+       f"All children & {_D.loc['raw share, advantaged, all', 'estimate']:.2f} & {_D.loc['raw share, less advantaged, all', 'estimate']:.2f} & {num(_D.loc['raw share, advantaged, all', 'estimate'] - _D.loc['raw share, less advantaged, all', 'estimate'], 2)} & &"], "@{}lccccc@{}")
+_n = {k: int(_D.loc[f"children, {k}", "estimate"]) for k in ("advantaged, graduates", "advantaged, no degree", "less advantaged, graduates", "less advantaged, no degree")}
+frag("oa_occdegreenote", f"The {intc(sum(_n.values()))} children of the sample with at least two waves at ages 30 and over that report an occupation: {_n['advantaged, graduates']} advantaged and {_n['less advantaged, graduates']} less advantaged graduates, {_n['advantaged, no degree']} advantaged and {intc(_n['less advantaged, no degree'])} less advantaged children without a degree. The share is the mean over those waves of an indicator for an occupation in CSCO major groups 1 or 2, without adjustment for survey year.")
+assert _D.loc["balanced_gap_graduates", "ci_lo"] < 0 < _D.loc["balanced_gap_graduates", "ci_hi"] and _D.loc["balanced_gap_no_degree", "ci_lo"] > 0
+frag("oa_occdegreetext", f"Among graduates the two groups hold advantaged occupations at the same rate with and without the balancing weights. Among children without a degree the gap narrows from {_D.loc['raw_gap_no_degree', 'estimate']:.2f} to {_D.loc['balanced_gap_no_degree', 'estimate']:.2f} under the weights, and its interval excludes zero: parental occupation is still associated with the child's occupation where there is no degree, although not with the child's earnings (Table~\\ref{{oatab:gapdegree}}).")
+
+_G = u("u21_earnings_gap_by_degree.csv").set_index("item")
+def _g(k, c="estimate", d=3): return num(_G.loc[k, c], d)
+write("oa_gapdegree", " & \\multicolumn{2}{c}{Children} & Without & Balanced & Least squares \\\\\n\\cmidrule(lr){2-3}\n & Advantaged & Less advantaged & adjustment & comparison & with controls",
+      [f"Children without a degree & {intc(_G.loc['children, advantaged, without a degree', 'estimate'])} & {intc(_G.loc['children, less advantaged, without a degree', 'estimate'])} & {_g('raw gap without a degree')} & {_g('gap_without_degree')} & {_g('least squares with controls: gap without a degree')}",
+       f" & & & & [{_g('gap_without_degree', 'ci_lo', 2)}, {_g('gap_without_degree', 'ci_hi', 2)}] & ({_g('least squares with controls: gap without a degree', 'se')})",
+       f"Graduates & {intc(_G.loc['children, advantaged, graduates', 'estimate'])} & {intc(_G.loc['children, less advantaged, graduates', 'estimate'])} & {_g('raw gap among graduates')} & {_g('gap_among_graduates')} & {_g('least squares with controls: gap among graduates')}",
+       f" & & & & [{_g('gap_among_graduates', 'ci_lo', 2)}, {_g('gap_among_graduates', 'ci_hi', 2)}] & ({_g('least squares with controls: gap among graduates', 'se')})"], "@{}lccccc@{}")
+frag("oa_gapdegreetext", f"Without adjustment advantaged children out-earn less advantaged children at either level of schooling, by {_g('raw gap without a degree', d=2)} and {_g('raw gap among graduates', d=2)} log points. With parental income and the demographic controls held fixed the gaps are small under both methods, and the two least squares gaps differ by {_g('least squares with controls: difference between the two gaps')} (SE {_g('least squares with controls: difference between the two gaps', 'se')}).")
+print("done, second block")
+

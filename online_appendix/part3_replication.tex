@@ -111,7 +111,7 @@ These steps need the licensed files. The sample of the paper (children observed 
 \code{unified/code/u13_decomposition_mature_age.py}, each run with unweighted rows and with rows weighted by the precision the earnings process implies. The first of these is also run for two blocks that are computed only on request: block G (the Anderson--Rubin $p$-value of the return for all children at every point of the grid, and the first stage of three-year completion) and block R (randomization inference).
 \code{unified/code/u14_sample_facts.py} describes the sample and
 supplies the first stages on all children; \code{unified/code/u16_identity_in_balanced_comparison.py} splits the premium inside the balanced comparison; \code{college_expansion/code/p16_census_pretrend.py} runs the census check; then the other scripts of
-\folder{unified/code}, among them \code{unified/code/u17_income_variance_by_wave.py} and \code{unified/code/u15_nonlinear_persistence_runs.py}.
+\folder{unified/code}, among them \code{unified/code/u17_income_variance_by_wave.py}, \code{unified/code/u15_nonlinear_persistence_runs.py}, and the five scripts from \code{unified/code/u18_occupation_by_family_background.py} to \code{unified/code/u22_occupation_share_by_degree.py} (occupation by family background, the return without each province, the first stage in percentage points, and the comparisons of earnings and occupation by degree).
 \item \emph{Checks and documents.}
 \code{unified/code/check_paper_numbers.py} checks the numbers printed in the paper against the estimation output;
 \code{online_appendix/build/build_tables.py} writes the tables of Part I
@@ -143,9 +143,28 @@ Exhibit of the paper & Script & Output \\
 Table~\ref{P-tab:desc}. The sample &
 \code{unified/code/u14_sample_facts.py} &
 \code{unified/output/u14_A_sample_means.csv} \\
+Table~\ref{P-tab:cre}. The premium &
+\code{unified/code/u8_premium_specifications.py},
+\code{college_expansion/code/ws_07b_entropy_balance.py} &
+\code{unified/output/u8_premium_specifications.csv},
+\code{unified/output/u8_entropy_balancing.csv} \\
+Figure~\ref{P-fig:spec}. The premium in thirteen specifications &
+\code{unified/code/u8_premium_specifications.py},
+\code{unified/code/fig_spec_curve.py} (run with \texttt{SPEC\_PAPER=1}) &
+\code{unified/output/u8_premium_specifications.csv},
+\code{unified/paper/figures/fig_spec_curve_paper.png} \\
+Online Appendix Table~\ref{oatab:markers}. Competing markers &
+\code{unified/code/u8_premium_specifications.py} &
+\code{unified/output/u8_premium_specifications.csv} \\
+Online Appendix Figure~\ref{oafig:spec}. The premium in fifteen specifications &
+\code{unified/code/u8_premium_specifications.py},
+\code{unified/code/fig_spec_curve.py} &
+\code{unified/output/u8_premium_specifications.csv} \\
 Table~\ref{P-tab:md}. Permanent and transitory components &
-\code{income_dynamics/code/m7_md_cellweighted_boot.py} &
-\code{income_dynamics/output/tables/m7_md_cellw_boot.csv} \\
+\code{income_dynamics/code/m7_md_cellweighted_boot.py},
+\code{income_dynamics/code/m19_joint_process_by_group.py} (last row) &
+\code{income_dynamics/output/tables/m7_md_cellw_boot.csv},
+\code{income_dynamics/output/tables/m19_joint_models.csv} \\
 Figure~\ref{P-fig:autocov}. Variances and autocovariances by group &
 \code{unified/code/fig_autocov.py} &
 \code{unified/paper/figures/fig_autocov.png} \\
@@ -163,8 +182,11 @@ Table~\ref{P-tab:summary}. Comparison of groups &
 \code{income_dynamics/code/m16_joint_moment_test.py},
 \code{income_dynamics/code/m10_abgmm_table3.py},
 \code{income_dynamics/code/ws_05b_abb_stochastic_em.py},
+\code{income_dynamics/code/m19_joint_process_by_group.py},
 \code{unified/code/u10_growth_gap.py} &
 \code{income_dynamics/output/tables/m13_mde.csv},
+\code{income_dynamics/output/tables/m19_joint_gaps.csv},
+\code{income_dynamics/output/tables/m19_joint_tests.csv},
 \code{unified/output/u10_growth_gap.csv} \\
 Table~\ref{P-tab:eta}. Attenuation schedule &
 \code{formal_results/code/appendix_theory_computations.py} &
@@ -172,18 +194,6 @@ Table~\ref{P-tab:eta}. Attenuation schedule &
 Online Appendix Table~\ref{oatab:recovery}. Corrected published estimates &
 \code{unified/code/u2_recovery_by_process.py} &
 \code{unified/output/u2_recovery_by_process.csv} \\
-Table~\ref{P-tab:cre}. The premium &
-\code{unified/code/u8_premium_specifications.py},
-\code{college_expansion/code/ws_07b_entropy_balance.py} &
-\code{unified/output/u8_premium_specifications.csv},
-\code{unified/output/u8_entropy_balancing.csv} \\
-Online Appendix Table~\ref{oatab:markers}. Competing markers &
-\code{unified/code/u8_premium_specifications.py} &
-\code{unified/output/u8_premium_specifications.csv} \\
-Online Appendix Figure~\ref{oafig:spec}. Fifteen specifications &
-\code{unified/code/u8_premium_specifications.py},
-\code{unified/code/fig_spec_curve.py} &
-\code{unified/output/u8_premium_specifications.csv} \\
 Table~\ref{P-tab:threats}. Assumptions, threats, and diagnostics &
 \code{unified/code/u9_mature_age_earnings.py},
 \code{unified/code/u12_returns_by_family_background.py},
@@ -219,7 +229,7 @@ Table~\ref{P-tab:bounds}. The direct effect; the three parts of the premium insi
 \code{unified/output/u16_identity_in_balanced_comparison.csv} \\
 \midrule
 \multicolumn{3}{@{}l}{\emph{Numbers reported in the text of the paper and not in a table or figure}} \\
-Section~\ref{P-sec:income}. Variance of log income by wave &
+Online Appendix Section~\ref{oa:data}. Variance of log income by wave &
 \code{unified/code/u17_income_variance_by_wave.py} &
 \code{unified/output/u17_income_variance_by_wave.csv} \\
 Sections~\ref{P-sec:earnings} and \ref{P-sec:mediation}. Provinces left out one at a time; intervals for the three parts of the identity &
@@ -227,6 +237,17 @@ Sections~\ref{P-sec:earnings} and \ref{P-sec:mediation}. Provinces left out one 
 \code{unified/output/u19_A_leave_one_province_out.csv},
 \code{unified/output/u19_A2_without_shanghai.csv},
 \code{unified/output/u19_B_identity_intervals.csv} \\
+Sections~\ref{P-sec:firststage} and \ref{P-sec:earnings}. The first stage in percentage points of completion &
+\code{unified/code/u20_first_stage_magnitudes.py} &
+\code{unified/output/u20_first_stage_magnitudes.csv} \\
+Section~\ref{P-sec:earnings}. Occupation by family background; shares in advantaged occupations by family background and degree &
+\code{unified/code/u18_occupation_by_family_background.py},
+\code{unified/code/u22_occupation_share_by_degree.py} &
+\code{unified/output/u18_occupation_by_family_background.csv},
+\code{unified/output/u22_occupation_share_by_degree.csv} \\
+Section~\ref{P-sec:mediation}. Earnings gap between the groups among graduates &
+\code{unified/code/u21_earnings_gap_by_degree.py} &
+\code{unified/output/u21_earnings_gap_by_degree.csv} \\
 Section~\ref{P-sec:sample}. Screens, employment, least squares return by age &
 \code{unified/code/u14_sample_facts.py} &
 \code{unified/output/u14_B_sample_facts.csv},
@@ -253,13 +274,13 @@ Section~\ref{P-sec:earnings}. Three-year completion; set from randomization infe
 \code{unified/output/u9_R_randomization_within_region.csv} \\
 \end{longtable}}
 
-\noindent The thirteen-specification figure of Section~\ref{P-sec:premrobust} comes from \code{unified/code/fig_spec_curve.py} with \texttt{SPEC\_PAPER=1}. The first-stage magnitudes for the contrast from the 10th to the 90th percentile of intensity in Sections~\ref{P-sec:firststage} and \ref{P-sec:earnings} come from \code{unified/code/u20_first_stage_magnitudes.py} (\code{unified/output/u20_first_stage_magnitudes.csv}), and the gap among graduates in Section~\ref{P-sec:mediation} from \code{unified/code/u21_earnings_gap_by_degree.py} (\code{unified/output/u21_earnings_gap_by_degree.csv}), and the shares of working years in advantaged occupations by family background and degree in Section~\ref{P-sec:earnings} from \code{unified/code/u22_occupation_share_by_degree.py} (\code{unified/output/u22_occupation_share_by_degree.csv}). The tables of this appendix name their scripts in their notes.
+\noindent The tables of this appendix name their scripts in their notes.
 
 \subsection{How the tables of estimates are produced}
 
 The five tables of the paper that report means or estimates with standard errors
-(Tables~\ref{P-tab:desc}, \ref{P-tab:md}, \ref{P-tab:summary},
-\ref{P-tab:cre} and \ref{P-tab:groups}), and Tables~\ref{oatab:ab}, \ref{oatab:markers} and \ref{oatab:mature} of this appendix, are generated rather than typed. The script
+(Tables~\ref{P-tab:desc}, \ref{P-tab:cre}, \ref{P-tab:md},
+\ref{P-tab:summary} and \ref{P-tab:groups}), and Tables~\ref{oatab:ab}, \ref{oatab:markers} and \ref{oatab:mature} of this appendix, are generated rather than typed. The script
 \code{unified/code/build_paper_tables.py} reads the files of estimates
 named in its header, formats each coefficient with its significance stars
 and standard error, and writes the body of each table to

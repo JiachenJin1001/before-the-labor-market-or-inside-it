@@ -1,17 +1,14 @@
-"""Shared style of the five figures of the paper.
+"""Shared style of the figures of the paper and of the Online Appendix.
 
 The figures are drawn close to the size at which they are printed, so that the text inside them prints at about 7 to 9
 points. The text is set in Latin Modern Roman, the typeface of the paper, and each figure is saved as a PNG and
 as a vector PDF; the paper includes the PDF. The two family-background groups are drawn in an orange and a dark blue that differ in lightness, so
 that they remain distinguishable in a black-and-white print, and they also differ in marker shape.
-
-FIG_LANG=cn draws the same figure with Chinese text and writes it to paper/figures/cn/, when the module _cn_labels
-(the labels of the Chinese version of the paper) is present.
 """
 import os
 import matplotlib
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, ".."))
-LANG = os.environ.get("FIG_LANG", "en")
+LANG = "en"
 ADV, LESS = "#d95f02", "#08519c"        # advantaged children (orange), less advantaged children (dark blue)
 SHRINK = 0.64                           # canvas size in inches as a fraction of the nominal size
 
@@ -31,20 +28,11 @@ def setup():
         matplotlib.rcParams.update({"font.family": "serif", "font.serif": ["Latin Modern Roman", "CMU Serif", "Times New Roman", "DejaVu Serif"]})
     else:
         matplotlib.rcParams.update({"font.family": "serif", "font.serif": ["CMU Serif", "Times New Roman", "DejaVu Serif"]})
-    if LANG == "cn":
-        matplotlib.rcParams.update({"font.family": ["Songti SC", "Heiti TC", "Arial Unicode MS"], "axes.unicode_minus": False, "mathtext.fontset": "stix",
-                                    "font.weight": "regular", "axes.titleweight": "regular", "axes.labelweight": "regular"})
-
-
-try:
-    from _cn_labels import FIG_CN as CN
-except ImportError:
-    CN = {}
 
 
 def tr(s):
-    """The Chinese text of a label when FIG_LANG=cn; the label itself otherwise."""
-    return CN.get(s, s) if LANG == "cn" else s
+    """The label as drawn (every figure script passes its labels through this function)."""
+    return s
 
 
 def _latin_modern():
@@ -68,6 +56,6 @@ def save(fig, name):
 
 
 def outpath(name):
-    d = os.path.join(ROOT, "paper", "figures") if LANG == "en" else os.path.join(ROOT, "paper", "figures", "cn")
+    d = os.path.join(ROOT, "paper", "figures")
     os.makedirs(d, exist_ok=True)
     return os.path.join(d, name)

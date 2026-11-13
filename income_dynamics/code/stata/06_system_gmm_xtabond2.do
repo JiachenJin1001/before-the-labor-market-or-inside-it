@@ -9,7 +9,8 @@
 *   HighParentOcc14 (children aged 22 to 55, waves 2014 to 2022, at
 *   least three waves with positive income).
 * Reads : data/intermediate/panel_resid.dta
-* Writes: 06_system_gmm_xtabond2.log (this folder)
+* Writes: 06_system_gmm_xtabond2.log (this folder), which parse_stata_logs.py
+*   reads to write output/tables/stata_abgmm_parity.csv
 * Requires: xtabond2 (ssc install xtabond2)
 *----------------------------------------------------------*
 version 17

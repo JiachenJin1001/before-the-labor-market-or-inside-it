@@ -1,12 +1,15 @@
-"""The identification ridge (Figure 1 of the paper), redrawn with the group
-labels used in the paper and with the two point estimates marked.
+"""The identification ridge (the ridge figure of the Online Appendix), drawn with
+the group labels of the paper and with the two point estimates marked.
 
-Repeats the bootstrap of the income-dynamics pipeline's
-m7_md_cellweighted_boot.py (same estimator, same seed, 1,000 replications that
-resample children, re-demean within year, and re-solve the minimum-distance
-problem with weights equal to the number of child pairs behind each moment),
-and saves the draws so the figure can be redrawn without rerunning it.
-Outputs: output/u5_ridge_draws.csv, paper/figures/fig_ridge.png
+The bootstrap draws come from output/u5_ridge_draws.csv when that file exists.
+When it does not, or when the script is run with U5_REDO=1, the bootstrap of
+the income-dynamics pipeline's m7_md_cellweighted_boot.py is repeated (same
+estimator, same seed, 1,000 replications that resample children, re-demean
+within year, and re-solve the minimum-distance problem with weights equal to
+the number of child pairs behind each moment) without overwriting that
+script's own outputs, and the draws and the two point estimates are saved.
+Outputs: output/u5_ridge_draws.csv and output/u5_ridge_points.csv (written only
+when the bootstrap is repeated), paper/figures/fig_ridge.png
 """
 import os, sys, runpy, io, contextlib
 import numpy as np, pandas as pd

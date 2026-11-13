@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Stochastic EM estimator of Arellano, Blundell and Bonhomme (2017) for the
 nonlinear persistence of residual log income.
@@ -47,7 +45,8 @@ Output: data/intermediate/ws/ws_05b_abb_stochasticEM_surface.csv, the local
 persistence rho(eta, tau), the derivative of Q_eta with respect to eta, by
 group.
 """
-
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os
 import math
 import numpy as np
@@ -55,9 +54,7 @@ import pandas as pd
 from scipy.special import eval_hermitenorm
 from scipy.optimize import minimize
 
-_MAC = _WSROOT + "/data/intermediate"
-_LIN = _WSROOT + "/data/intermediate"
-BASE_INT = _MAC if os.path.isdir(_MAC) else _LIN
+BASE_INT = _WSROOT + "/data/intermediate"
 WS_DIR = os.path.join(BASE_INT, "ws")
 os.makedirs(WS_DIR, exist_ok=True)
 

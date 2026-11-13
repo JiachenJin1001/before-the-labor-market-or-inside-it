@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Read the number of college entrance examination (CEE) registrants by province
 from five spreadsheets of the China Education Statistical Yearbook downloaded
@@ -18,15 +16,15 @@ Output:
     registrants by subject track (cee_science_eng, cee_literature) or by age
     group (cee_under18, cee_18to25, cee_over25)
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import io
 import os
 import msoffcrypto
 import numpy as np
 import pandas as pd
 
-_MAC = _WSROOT + ""
-_LIN = _WSROOT + ""
-BASE = _MAC if os.path.isdir(_MAC) else _LIN
+BASE = _WSROOT
 SRC  = os.path.join(BASE, "data/raw/CNKI_中国教育统计年鉴")
 OUT  = os.path.join(BASE, "data/external")
 

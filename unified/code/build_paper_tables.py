@@ -144,10 +144,6 @@ L = {  # labels by language
             grp_rows={"less advantaged": "Less advantaged children", "advantaged": "Advantaged children"}, unbounded="unbounded"),
 }
 SEP = {"en": ": "}
-try:   # the Chinese version of the paper (not part of the public package)
-    from _cn_labels import TABLES_CN, SEP_CN; L["cn"] = TABLES_CN; SEP["cn"] = SEP_CN
-except ImportError:
-    pass
 TAB = {lang: os.path.join(U, "paper", "tables", lang) for lang in L}
 
 def build(lang):
@@ -158,7 +154,7 @@ def build(lang):
     _u7 = by(os.path.join(OUT, "u7_error_structures.csv"), "sample")   # fit statistic of the permanent--AR(1) model (code/u7_error_structures.py)
     J = {"pooled": fl(_u7["pooled"]["criterion_ar1"]), "H": fl(_u7["advantaged children"]["criterion_ar1"]), "L": fl(_u7["ordinary children"]["criterion_ar1"])}
     FA = {r["item"]: fl(r["value"]) for r in rows(os.path.join(OUT, "u14_B_sample_facts.csv"))}
-    nD, nDH = int(FA["three waves: children"]), int(FA["three waves: advantaged children"])   # children with at least three waves (Sections 3 and 4)
+    nD, nDH = int(FA["three waves: children"]), int(FA["three waves: advantaged children"])   # children with at least three waves (Section 4)
     N = {"pooled": f"{nD:,}", "H": f"{nDH:,}", "L": f"{nD - nDH:,}"}
     blk = []
     for g, lab in [("pooled", T["pooled"]), ("H", T["adv"]), ("L", T["less"])]:
@@ -224,11 +220,11 @@ def build(lang):
     r3 = [[T["cre_rows"][2], f"{int(b['children']):,}", f"{int(l['children']):,}", f"{int(eb['N_treat']) + int(eb['N_ctrl']):,}"]]
     frags["tab_cre"] = tabular("@{}>{\\raggedright\\arraybackslash}p{5.6cm}ccc@{}", T["cre_head"], [[r1, r2, r3]])
     # ---------------------------------------------------------------- tab_markers
-    k = dict(p0="occupation indicator before party membership is added (not in Figure 2)", p1="parental party membership added (cross-section)",
-             pc="party membership coefficient with occupation and income (not in Figure 2)", pa="parental party membership in place of the occupation indicator (not in Figure 2)",
-             s0="parental state-sector employment alone (not in Figure 2)", s1="parental state-sector employment added (cross-section)",
-             sc="state-sector employment coefficient with occupation and income (not in Figure 2)",
-             so="occupation indicator alone, children with a parent working in 2012 (not in Figure 2)")
+    k = dict(p0="occupation indicator before party membership is added (not in the figures of specifications)", p1="parental party membership added (cross-section)",
+             pc="party membership coefficient with occupation and income (not in the figures of specifications)", pa="parental party membership in place of the occupation indicator (not in the figures of specifications)",
+             s0="parental state-sector employment alone (not in the figures of specifications)", s1="parental state-sector employment added (cross-section)",
+             sc="state-sector employment coefficient with occupation and income (not in the figures of specifications)",
+             so="occupation indicator alone, children with a parent working in 2012 (not in the figures of specifications)")
     e8 = {n: est(fl(S8[key]["estimate"]), fl(S8[key]["se"]), fl(S8[key]["p"])) for n, key in k.items()}
     n_party, n_state, n_all = int(fl(S8[k["p1"]]["children"])), int(fl(S8[k["s1"]]["children"])), int(fl(b["children"]))
     panel1 = T["mk_panel1"].replace("NPARTY", f"{n_party:,}").replace("NMISS", str(n_all - n_party)); panel2 = T["mk_panel2"].replace("NSTATE", f"{n_state:,}")
@@ -369,11 +365,11 @@ if __name__ == "__main__":
             path = os.path.join(TAB[lang], name + ".tex")
             if check:
                 if name in NOT_IN_PAPER and not os.path.exists(path):
-                    continue              # an earlier layout that the paper no longer reads; the public package does not carry its file
+                    continue              # a layout that neither the paper nor the online appendix prints; the public package does not carry its file
                 old = open(path, encoding="utf-8").read() if os.path.exists(path) else None
                 if old != text: bad += 1; print("DIFFERS:", path)
             else:
                 open(path, "w", encoding="utf-8").write(text)
     if check:
         print("all table fragments match the files of estimates" if not bad else f"{bad} fragment(s) differ"); sys.exit(1 if bad else 0)
-    print("wrote", len(build("en")) * 2, "fragments to", os.path.dirname(TAB["en"]))
+    print("wrote", len(build("en")) * len(L), "fragments to", os.path.dirname(TAB["en"]))

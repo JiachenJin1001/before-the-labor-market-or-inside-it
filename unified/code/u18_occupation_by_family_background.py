@@ -1,4 +1,4 @@
-"""The occupational effect of college by family background (Section 6.5 of the paper).
+"""The occupational effect of college by family background (Section 5.3 of the paper).
 
 The regression of u12_returns_by_family_background.py (two-row design; the instrument and college completion enter
 once per group and row; province effects common; birth-year effects specific to each group) with the occupation

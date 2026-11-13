@@ -33,6 +33,10 @@
 *           estimates, for the value of rho_1 implied by the variance shares)
 *   Writes: data/intermediate/method2_results_stata.dta
 *           data/intermediate/method2_results.dta
+*   Requires: Stata 17 or later, and the user-written commands distinct
+*             and xtabond2 (ssc install distinct, ssc install xtabond2).
+*   Run in batch mode from this folder (stata-mp -b do 05_method2_abgmm.do),
+*   which writes 05_method2_abgmm.log; parse_stata_logs.py reads that log.
 *----------------------------------------------------------*
 version 17
 clear all

@@ -1,4 +1,4 @@
-"""College completion and whom the reform moved (Figure 4 of the paper, two panels), on all children of the paper's
+"""College completion and whom the reform moved (Figure 3 of the paper, two panels), on all children of the paper's
 sample (sample_mature_age.py: ages 22 to 55, at least two waves of positive labor income), one observation per child.
 
 (a) College completion rate of each birth-cohort group, by family background:

@@ -1,4 +1,4 @@
-"""First stages and returns to college by family background (Section 6 of the paper), in the two-row design.
+"""First stages and returns to college by family background (Section 5.3 of the paper), in the two-row design.
 
 Rows of u9_mature_age_earnings.py (main run unweighted; E_WEIGHTS=process for the weighted run). The instrument and
 college completion enter once for each group and age band; province effects are common to the groups; birth-year
@@ -7,7 +7,7 @@ are controlled. Everything reported is for the rows at 30 and over: the first st
 coefficient on the group's instrument in the regression of the child's college completion x 1[30+] on the instruments
 and controls (with wild p; the same definition as the first stages on all children in u14_sample_facts.py); the
 coefficient on the group's instrument when the dependent variable is the group's own endogenous regressor, college x
-group x 1[30+] (columns fs_own_regressor and F_own_regressor, kept for the record, not printed in the paper); the
+group x 1[30+] (columns fs_own_regressor and F_own_regressor, not printed in the paper); the
 reduced form (wild p), the instrumented return with its clustered standard
 error, the least squares return, Anderson-Rubin sets at 95 and 90 percent (grid -6 to 6, step 0.05; a set that reaches the
 edge of the grid is unbounded on that side, which happens only when the first stage of the group does not reject zero), and the test that the two returns are equal.

@@ -26,9 +26,9 @@ def sibling(*names):
     raise FileNotFoundError(names)
 
 
-U = sibling("unified", "unified")
-M = sibling("income_dynamics", "income_dynamics")
-P = sibling("college_expansion", "college_expansion")
+U = sibling("unified")
+M = sibling("income_dynamics")
+P = sibling("college_expansion")
 TAB = os.environ.get("OA_TABLES_DIR", os.path.join(OA, "tables"))
 FIG = os.environ.get("OA_FIGURES_DIR", os.path.join(OA, "figures"))
 os.makedirs(TAB, exist_ok=True); os.makedirs(FIG, exist_ok=True)
@@ -49,7 +49,7 @@ def num(x, d=3):
 def intc(x): return f"{int(round(x)):,}"
 
 
-# fragments that the appendix no longer prints (their code is kept; nothing is written for them)
+# fragments the appendix does not print (their code is kept; nothing is written for them)
 NUMWORDS = {15: "fifteen"}   # small counts are spelled out in the text
 NOT_PRINTED = {"oa_maturedesc", "oa_selection"}
 
@@ -88,7 +88,7 @@ frag("oa_employment",
 # ------------------------------------------------------------ B. earnings process
 j = m("data", "intermediate", "m16_joint_moment_test.csv").iloc[0]
 frag("oa_jointtest",
-    f"The statistic is {j.chi2:.1f} on {NUMWORDS.get(int(j.df), str(int(j.df)))} degrees of freedom ($p = {j.p:.2f}$); a bootstrap-calibrated version that compares the statistic with the distribution of centered bootstrap draws gives $p = {j.p_boot:.3f}$ with {intc(j.B)} draws")
+    f"The statistic is {j.chi2:.1f} on {NUMWORDS.get(int(j.df), str(int(j.df)))} degrees of freedom ($p = {j.p:.2f}$); a bootstrap-calibrated version that compares the statistic with the distribution of centered bootstrap draws gives $p = {j.p_boot:.2f}$ with {intc(j.B)} draws")
 # variances and first-order autocovariances by wave (the table that the paper's figure of autocovariances stands for)
 m5 = m("output", "tables", "m5_moment_se.csv"); m5["t"] = m5.t.astype(int); m5["s"] = m5.s.astype(int)
 M5 = {(r.group, r.t, r.s): (r.omega, r.se) for r in m5.itertuples()}; yrs = [2014, 2016, 2018, 2020, 2022]
@@ -171,7 +171,7 @@ LABELS = [("baseline: family income of the parental household", "Correlated rand
           ("parental state-sector employment added (cross-section)", "Cross-section, parental state-sector employment added"),
           ("entropy balancing", "Entropy balancing")]
 S8 = u("u8_premium_specifications.csv").set_index("specification")
-assert set(S8.index[S8.in_figure_2]) == {k for k, _ in LABELS}
+assert set(S8.index[S8.in_figures_of_specifications]) == {k for k, _ in LABELS}
 rows = [f"{lab} & {num(S8.loc[k, 'estimate'])} & [{num(S8.loc[k, 'lo'])}, {num(S8.loc[k, 'hi'])}] & {intc(S8.loc[k, 'children'])}" for k, lab in LABELS]
 write("oa_grid", "Specification & Estimate & 95 percent interval & Children", rows, "@{}p{9.4cm}ccc@{}")
 
@@ -266,7 +266,7 @@ def ar(grid, grp, level):
     parts = [("(-\\infty" if lo <= bs[0] else f"[{lo:.2f}") + ", " + ("\\infty)" if hi >= bs[-1] else f"{hi:.2f}]") for lo, hi in segs]
     if len(parts) == 1 and segs[0][0] <= bs[0] and segs[0][1] >= bs[-1]: return "unbounded"
     return "$" + " \\cup ".join(parts) + "$"
-# the regression for all children (Table 10 of the paper, main measure), unweighted and weighted, with its grid of p-values
+# the regression for all children (Table 7 of the paper, main measure), unweighted and weighted, with its grid of p-values
 B9A = {"": u("u9_B_main.csv").set_index("intensity"), "w": u("u9_B_main_weighted.csv").set_index("intensity")}
 GRID9A = {"": u("u9_anderson_rubin_grid.csv"), "w": u("u9_anderson_rubin_grid_weighted.csv")}
 rows = []
@@ -312,7 +312,7 @@ write("oa_selection", " & Return to & & College share \\\\\nRegression & college
 print("done")
 
 
-# ------------------------------------------------------------ randomization inference (Section E.7)
+# ------------------------------------------------------------ randomization inference (the section on inference)
 _ra = u("u9_R_randomization_inference.csv").set_index("statistic"); _rw = u("u9_R_randomization_within_region.csv").iloc[0]
 _n = int(_ra.loc["first stage", "reassignments"]); _cnt = lambda pv: int(round(pv * (_n + 1))) - 1
 _pf = lambda pv: f"{pv:.4f}"
@@ -321,7 +321,7 @@ rows = [f"Among all {int(_ra.loc['first stage', 'provinces'])} provinces & {_cnt
 write("oa_randomization", " & \\multicolumn{2}{c}{Earnings reduced form} & \\multicolumn{2}{c}{First stage} & \\multicolumn{2}{c}{Set for the return to college} \\\\\n\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\\cmidrule(lr){6-7}\nReassignment of provincial intensity & As large as actual & $p$ & As large as actual & $p$ & 95 percent & 90 percent", rows, "@{}lcccccc@{}")
 
 
-# ------------------------------------------------------------ nonlinear persistence: the run of the paper and ten runs (Section B)
+# ------------------------------------------------------------ nonlinear persistence: the run of the paper and ten runs (the section on nonlinear persistence)
 _ab = m("data", "intermediate", "ws", "ws_05b_abb_stochasticEM_surface.csv"); _main = _ab.groupby("group").rho_local.mean()
 _r15 = u("u15_nonlinear_persistence_summary.csv").set_index("sample")
 rows = [f"{lab} & {_main[k]:.2f} & {_r15.loc[r, 'mean']:.2f} & {_r15.loc[r, 'min']:.2f} & {_r15.loc[r, 'max']:.2f}"
@@ -372,7 +372,7 @@ frag("oa_reweight", f"Reweighting the fifteen moments by the inverse of their bo
 
 # the strict-exogeneity lead test of the growth regression
 le = m("data", "intermediate", "ws", "ws_m3_strict_exogeneity.csv").iloc[0]
-frag("oa_lead", f"on the five-wave panel of {intc(le.n_pid)} children ({intc(le.n_obs)} child-waves), the lead enters with coefficient {le.lead_coef:.3f} and a $t$-statistic of {le.lead_t:.2f} ($p = {le.lead_p:.2f}$), and the coefficient on the group trend is {le.gamma_no_lead:.3f} without the lead and {le.gamma_with_lead:.3f} with it (this regression omits the other covariates, so the coefficient is not that of the paper).")
+frag("oa_lead", f"on the five-wave panel of {intc(le.n_pid)} children ({intc(le.n_obs)} child-waves whose following wave is observed), the lead enters with coefficient {le.lead_coef:.3f} and a $t$-statistic of {le.lead_t:.2f} ($p = {le.lead_p:.2f}$), and the coefficient on the group trend is {le.gamma_no_lead:.3f} without the lead and {le.gamma_with_lead:.3f} with it (this regression omits the other covariates, so the coefficient is not that of the paper).")
 
 # the published study corrected with the schedule (unified/code/u2_recovery_by_process.py)
 rc = u("u2_recovery_by_process.csv").set_index("process"); par = m("output", "tables", "m14_parent_process.csv").iloc[0]
@@ -388,16 +388,16 @@ B9m = u("u9_B_main.csv").set_index("intensity").loc["predicted provincial growth
 frag("oa_maturenote", f"All {intc(F14['all children: children'])} children in the sample ({intc(F14['all children: advantaged children'])} advantaged), two-row specification of the paper; every entry except the column headed One observation per child is the estimate for the row at 30 and over ({intc(F14['level at 30 and over: children'])} rows). That column is the first-stage $F$ of the regression of college completion on the instrument with one observation per child. The instrumented effect of college on the occupation share under the main measure is {B9m.occ_maj_iv:.2f}.")
 C14 = u("u14_C_first_stages_all_children.csv").set_index("row"); fL, fH = C14.loc["less advantaged children, instrument entering once for each group"], C14.loc["advantaged children, instrument entering once for each group"]
 E13 = u("u13_E_added_degrees.csv").set_index("item").loc["difference (advantaged minus less advantaged)"]
-frag("oa_fsmde", f"The two first stages, {fL.fs:.3f} (SE {fL.fs_se:.3f}) for less advantaged and {fH.fs:.3f} (SE {fH.fs_se:.3f}) for advantaged children, differ by {num(E13.value)} (SE {E13.se:.3f}). The smallest difference the design detects with 80 percent power at the 5 percent level is {2.8 * E13.se:.3f}, about {100 * 2.8 * E13.se / fL.fs:.0f} percent of the first stage of less advantaged children, so the two first stages are shown to be similar up to differences of that size.")
+frag("oa_fsmde", f"The two first stages, {fL.fs:.3f} (SE {fL.fs_se:.3f}) for less advantaged and {fH.fs:.3f} (SE {fH.fs_se:.3f}) for advantaged children, differ by {num(E13.value)} (SE {E13.se:.3f}). The smallest difference the design detects with 80 percent power at the 5 percent level is {2.8 * E13.se:.3f}, about {100 * 2.8 * E13.se / fL.fs:.0f} percent of the first stage of less advantaged children, so larger differences are ruled out.")
 
 
 # ------------------------------------------------------------ material behind statements of the paper that its text gives in words
 _F = u("u14_B_sample_facts.csv"); _F = dict(zip(_F.iloc[:, 0], _F.iloc[:, 1]))
 frag("oa_oneparent", f"For {intc(float(_F['all children: retrospective report for one parent only']))} children of the sample only one parent's occupation is reported; the indicator codes them by the reported parent, which treats a missing second parent as not advantaged and, if anything, attenuates the contrast between the groups.")
-_W = u("u8_income_measure_waves.csv").set_index("measure"); _nin = S8.loc["no income control (not in Figure 2)"]
-frag("oa_incomewaves", f"Section~\\ref{{P-sec:cre}} of the paper brackets the premium between two measures of parental income. Before either enters, the coefficient on the indicator for advantaged children is {_nin.estimate:.3f} (SE {_nin.se:.3f}). The parents' own labor income is observed in {_W.loc[chr(112) + 'arents' + chr(39) + ' own labor income', 'mean_waves_per_parent']:.1f} waves per parent on average, against {_W.loc['family income of the parental household', 'mean_waves_per_parent']:.1f} for family income, which is why its coefficient is the more attenuated of the two.")
-_pc, _sc = S8.loc["party membership coefficient with occupation and income (not in Figure 2)"], S8.loc["state-sector employment coefficient with occupation and income (not in Figure 2)"]
-_p0, _s0 = S8.loc["parental party membership in place of the occupation indicator (not in Figure 2)"], S8.loc["parental state-sector employment alone (not in Figure 2)"]
+_W = u("u8_income_measure_waves.csv").set_index("measure"); _nin = S8.loc["no income control (not in the figures of specifications)"]
+frag("oa_incomewaves", f"Section~\\ref{{P-sec:cre}} of the paper brackets the premium between two measures of parental income. Before either enters, the coefficient on the indicator for advantaged children is {_nin.estimate:.3f} (SE {_nin.se:.3f}). The parents' own labor income is observed in {_W.loc[chr(112) + 'arents' + chr(39) + ' own labor income', 'mean_waves_per_parent']:.1f} waves per parent on average, against {_W.loc['family income of the parental household', 'mean_waves_per_parent']:.1f} for family income, which is why the coefficient on parental labor income is the more attenuated of the two.")
+_pc, _sc = S8.loc["party membership coefficient with occupation and income (not in the figures of specifications)"], S8.loc["state-sector employment coefficient with occupation and income (not in the figures of specifications)"]
+_p0, _s0 = S8.loc["parental party membership in place of the occupation indicator (not in the figures of specifications)"], S8.loc["parental state-sector employment alone (not in the figures of specifications)"]
 assert 0.2 < 1 - _pc.estimate / _p0.estimate < 0.45 and 0.2 < 1 - _sc.estimate / _s0.estimate < 0.45   # "roughly a third"
 frag("oa_markerbounds", f"Once the occupation indicator enters, the marker coefficients fall by roughly a third while the occupation coefficient barely moves; the 95 percent intervals of the conditional marker coefficients reach {_pc.hi:.2f} for party membership and {_sc.hi:.2f} for state-sector employment, which bounds any independent effect of either marker.")
 
@@ -413,7 +413,7 @@ write("oa_occgroup", " & Rows at 30 & First & Reduced & Instrumented & Least \\\
         f" & & ({_O.loc[g, 'fs_se']:.3f}) & ({_O.loc[g, 'rf_se']:.3f}) & ({_O.loc[g, 'iv_se']:.2f}) & ({_O.loc[g, 'ls_se']:.2f})",
         f" & & & [{_O.loc[g, 'rf_p_wild']:.3f}] & &")], "@{}lccccc@{}")
 _o = _O.iloc[0]
-frag("oa_occgroupgap", f"The two instrumented effects differ by {num(_o.iv_gap_advantaged_minus_less, 2)} (SE {_o.iv_gap_se:.2f}, $z = {num(_o.equal_effects_z, 2).replace('$', '')}$), so the larger rise for less advantaged children is suggestive.")
+frag("oa_occgroupgap", f"The two instrumented effects differ by {num(_o.iv_gap_advantaged_minus_less, 2)} (SE {_o.iv_gap_se:.2f}, $z = {num(_o.equal_effects_z, 2).replace('$', '')}$), a difference within sampling error.")
 
 _D = u("u22_occupation_share_by_degree.csv").set_index("item")
 def _ci(k): return f"[{num(_D.loc[k, 'ci_lo'], 2)}, {num(_D.loc[k, 'ci_hi'], 2)}]"

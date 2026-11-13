@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Minimum-distance estimation of two alternative models of the income process.
 
@@ -22,14 +20,14 @@ number of children behind each autocovariance.
 
 Output: data/intermediate/ws/ws_p1_6_ma1_rw.csv
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
-_MAC = _WSROOT + ""
-_LIN = _WSROOT + ""
-BASE = _MAC if os.path.isdir(_MAC) else _LIN
+BASE = _WSROOT
 BASE_INT = os.path.join(BASE, "data/intermediate")
 WS_DIR   = os.path.join(BASE_INT, "ws")
 

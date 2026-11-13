@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Test of strict exogeneity by adding a lead of the regressor (Wooldridge 2010,
 Section 10.7.1), for the model of residual log income with child-specific
@@ -8,8 +6,9 @@ intercepts and a trend that differs by family background.
 Sample: child-year rows of panel_resid (children aged 22 to 55, waves 2014 to
 2022, at least three waves with positive income) of children with a valid
 retrospective report of the parents' occupation (has_qv14 = 1), restricted to
-rows with non-missing y_tilde_w and urban and with the child observed in the
-following wave.
+rows with non-missing y_tilde_w and urban and with urban observed in the
+following wave (two years later). A row whose next observation lies two or
+more waves ahead has no lead and is left out.
 
 Model:  y_it = alpha_i + gamma*(HP14_i x t) + delta*urban_it + e_it,
         estimated after demeaning within child, standard errors clustered by
@@ -24,8 +23,8 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 
-_MAC = _WSROOT + ""
-BASE = _MAC if os.path.isdir(_MAC) else os.environ.get("WS_BASE", _MAC)
+_WSROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+BASE = _WSROOT
 INT = os.path.join(BASE, "data/intermediate")
 
 
@@ -34,7 +33,9 @@ def main():
     d = d[d["has_qv14"] == 1].copy().sort_values(["pid", "year"])
     d["t"] = (d["year"] - 2014) // 2
     d["hp_t"] = d["HighParentOcc14"] * d["t"]
-    d["urban_lead"] = d.groupby("pid")["urban"].shift(-1)
+    # the lead is urban in the following wave (two years later); missing when that wave is not observed
+    nxt = d.groupby("pid")
+    d["urban_lead"] = nxt["urban"].shift(-1).where(nxt["year"].shift(-1) == d["year"] + 2)
     est = d.dropna(subset=["y_tilde_w", "urban", "urban_lead"]).copy()
     for c in ["y_tilde_w", "hp_t", "urban", "urban_lead"]:
         est[c + "_dm"] = est[c] - est.groupby("pid")[c].transform("mean")

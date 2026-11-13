@@ -1,30 +1,31 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 ws_build_canonical_intensity.py
 -------------------------------
-Build canonical expansion intensity from real CNKI CEE-registrant data
-(1997, 1998, 1999, 2000, 2002 by province).
+Provincial changes in registrations for the college entrance examination
+around the 1999 expansion, following Che and Zhang (2018).
 
-The canonical normalizations:
-  A. CEE response ratio (Che-Zhang style, registrant-based):
-       intensity_p = log(cee_2000 / cee_1998)        ← post-expansion change
-       intensity_p = log(cee_1999 / cee_1998)        ← onset-year change
-       intensity_p = log(cee_2002 / cee_1998)        ← medium-run change
+Input: data/external/cee_registrants_province.csv (registrations by province
+in 1997, 1998, 1999, 2000 and 2002, from the provincial yearbook tables that
+ws_extract_cnki_cee.py parses).
 
-  B. Pre-expansion baseline:
-       intensity_p = cee_1998_p / national_pop_19yr  (proxy)
+For each province with registrations observed in 1998 and 1999:
+  int_log_1999_1998          log(registrations 1999 / registrations 1998)
+  int_log_2000_1998          log(registrations 2000 / registrations 1998)
+  int_log_2002_1998          log(registrations 2002 / registrations 1998)
+  int_pct_2000_1998          registrations 2000 / registrations 1998 - 1
+  int_placebo_log_1998_1997  log(registrations 1998 / registrations 1997),
+                             the change before the expansion (placebo)
+  intensity_canonical        equal to int_log_2000_1998
 
-The output `expansion_intensity_canonical.csv` merges with provcd so it
-can be directly merged with our CFPS analysis at the child level.
+Output: data/external/expansion_intensity_canonical.csv, one row per province,
+keyed by provcd.
 """
 import os
 import numpy as np
 import pandas as pd
 
-_MAC = _WSROOT + ""
-_LIN = _WSROOT + ""
-BASE = _MAC if os.path.isdir(_MAC) else _LIN
+_WSROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+BASE = _WSROOT
 EXT = os.path.join(BASE, "data/external")
 
 
@@ -45,31 +46,31 @@ def main():
     wide_c = wide.loc[have_critical].copy()
     print(f"Provinces with 1998 + 1999 both observed: {len(wide_c)}")
 
-    # Build canonical intensity measures
-    # A1. log ratio 1999/1998 (onset year)
+    # Changes in registrations
+    # log ratio 1999/1998 (the year of the expansion)
     wide_c["int_log_1999_1998"] = np.log(wide_c["cee_1999"] / wide_c["cee_1998"])
-    # A2. log ratio 2000/1998 (1 year post)
+    # log ratio 2000/1998 (one year after)
     if "cee_2000" in wide_c.columns:
         m = wide_c["cee_2000"].notna()
         wide_c.loc[m, "int_log_2000_1998"] = np.log(wide_c.loc[m, "cee_2000"]
                                                     / wide_c.loc[m, "cee_1998"])
-    # A3. log ratio 2002/1998 (medium-run)
+    # log ratio 2002/1998 (three years after)
     if "cee_2002" in wide_c.columns:
         m = wide_c["cee_2002"].notna()
         wide_c.loc[m, "int_log_2002_1998"] = np.log(wide_c.loc[m, "cee_2002"]
                                                     / wide_c.loc[m, "cee_1998"])
-    # B1. Percent change 2000 vs 1998
+    # proportional change 2000/1998
     if "cee_2000" in wide_c.columns:
         m = wide_c["cee_2000"].notna()
         wide_c.loc[m, "int_pct_2000_1998"] = ((wide_c.loc[m, "cee_2000"]
                                                / wide_c.loc[m, "cee_1998"]) - 1)
-    # B2. Pre-expansion (1997-1998) change as placebo (should be near 0)
+    # change 1998/1997, before the expansion (placebo)
     if "cee_1997" in wide_c.columns:
         m = wide_c["cee_1997"].notna()
         wide_c.loc[m, "int_placebo_log_1998_1997"] = np.log(
             wide_c.loc[m, "cee_1998"] / wide_c.loc[m, "cee_1997"])
 
-    # Headline canonical intensity = log_2000_1998 (Che-Zhang style)
+    # the column intensity_canonical repeats the log ratio 2000/1998
     wide_c["intensity_canonical"] = wide_c["int_log_2000_1998"]
 
     print("\nIntensity summary statistics:")

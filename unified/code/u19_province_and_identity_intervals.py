@@ -1,4 +1,4 @@
-"""Two pieces of supporting evidence not recorded by the earlier runs.
+"""Supporting evidence for the expansion design and the decomposition.
 
 A  Leave-one-province-out by province: the earnings reduced form, the first stage and the instrumented return for the row at 30 and over
    with each province left out in turn, on all children of the sample, with the two-row regression of
@@ -6,7 +6,9 @@ A  Leave-one-province-out by province: the earnings reduced form, the first stag
 B  Bootstrap percentile intervals for the three parts of the identity inside the entropy-balanced comparison of
    u16_identity_in_balanced_comparison.py (the 2,774 children with a level of earnings), resampling children within
    group and solving the weights again in each draw, as u8_premium_specifications.py does for the premium. 1,000 draws.
-Outputs: output/u19_A_leave_one_province_out.csv, output/u19_B_identity_intervals.csv
+A2 The province whose omission gives the largest return in A (Shanghai): wild cluster p-values (9,999 draws) and the
+   95 percent Anderson-Rubin set (grid 0 to 6, step 0.05) without it.
+Outputs: output/u19_A_leave_one_province_out.csv, output/u19_B_identity_intervals.csv, output/u19_A2_without_shanghai.csv
 """
 import os, sys, warnings
 import numpy as np, pandas as pd
@@ -54,7 +56,7 @@ B = pd.DataFrame([dict(item=i, estimate=point[i], se=D[i].std(ddof=1), ci_lo=D[i
 # wild cluster p-values (9,999 draws) and the lower end of the 95 percent Anderson-Rubin set (step 0.05, as in u9), without Shanghai
 u9_ = {"__file__": os.path.join(HERE, "u9_mature_age_earnings.py"), "__name__": "u9"}; os.environ["U9_REPS"] = "9999"
 _s = open(os.path.join(HERE, "u9_mature_age_earnings.py"), encoding="utf-8").read(); exec(compile(_s[:_s.index("# ------------------------------------------------------------------ A. the sample")], "u9", "exec"), u9_)
-s_, TB_ = u9_["s"], u9_["TB"]; ss = s_[s_.pc != 31].reset_index(drop=True); T = TB_(ss, ss.Z.values, np.random.default_rng(20261032)); old = ss.old.values.astype(float)
+s_, TB_ = u9_["s"], u9_["TB"]; TOP = int(A.iloc[-1].province_code); ss = s_[s_.pc != TOP].reset_index(drop=True); T = TB_(ss, ss.Z.values, np.random.default_rng(20261032)); old = ss.old.values.astype(float)
 rf_, fs_ = T.rf(ss.y.values), T.fs(ss.college.values); grid = np.round(np.arange(0.0, 6.001, 0.05), 2); pv = np.array([T.rf(ss.y.values - b * ss.college.values * old)["p_wild"] for b in grid]); inside = grid[pv >= 0.05]
-pd.DataFrame([dict(left_out="Shanghai", reduced_form=rf_["coef"], reduced_form_se=rf_["se"], reduced_form_p_wild=rf_["p_wild"], first_stage=fs_["coef"], first_stage_se=fs_["se"], first_stage_F=fs_["t"] ** 2, first_stage_p_wild=fs_["p_wild"], instrumented_return=T.iv(ss.y.values, ss.college.values), ar95_lo=float(inside.min()), ar95_hi_on_grid_to_6=float(inside.max()))]).to_csv(os.path.join(OUT, "u19_A2_without_shanghai.csv"), index=False)
+pd.DataFrame([dict(left_out=names.get(TOP, str(TOP)), reduced_form=rf_["coef"], reduced_form_se=rf_["se"], reduced_form_p_wild=rf_["p_wild"], first_stage=fs_["coef"], first_stage_se=fs_["se"], first_stage_F=fs_["t"] ** 2, first_stage_p_wild=fs_["p_wild"], instrumented_return=T.iv(ss.y.values, ss.college.values), ar95_lo=float(inside.min()), ar95_hi_on_grid_to_6=float(inside.max()))]).to_csv(os.path.join(OUT, "u19_A2_without_shanghai.csv"), index=False)
 print(open(os.path.join(OUT, "u19_A2_without_shanghai.csv")).read())

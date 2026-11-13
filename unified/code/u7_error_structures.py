@@ -1,9 +1,10 @@
 """Minimum-distance criterion under alternative error structures.
 
-Sample: the 2,133 children of the analysis sample, waves 2014 to 2022, log
+Sample: the 2,523 children with at least three waves, waves 2014 to 2022, log
 labor income residualized and winsorized within year at the 1st and 99th
 percentiles, demeaned within year (pooled) or within family-background group
-and year (advantaged children, ordinary children).
+and year (advantaged children; less advantaged children, under the key
+`ordinary children` in the output files).
 Moments: the fifteen variances and autocovariances, each from the children
 observed in both waves of the pair.
 Weights: the number of children behind each moment.

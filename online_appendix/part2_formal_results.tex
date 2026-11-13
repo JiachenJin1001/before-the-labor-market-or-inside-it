@@ -1,5 +1,5 @@
 % part2_formal_results.tex
-% Part II of the online appendix. Includable file: no preamble.
+% Part II of the Online Appendix. Includable file: no preamble.
 % Requires part2_macros.tex in the preamble of the host document, natbib,
 % booktabs, and xr-hyper with \externaldocument[P-]{<path to the paper>/main}.
 % Labels defined here carry the prefix "fr:". Labels with the prefix "P-"
@@ -10,9 +10,9 @@
 \part*{Part II. Formal results}
 \addcontentsline{toc}{part}{Part II. Formal results}
 
-\noindent This part states and proves the results that
+\noindent This part restates the formal results of Appendix~\ref{P-app:formal} of the paper with fuller proofs and adds the results that
 Sections~\ref{P-sec:process}, \ref{P-sec:measurement},
-and~\ref{P-sec:mediation} of the paper use without proof.
+and~\ref{P-sec:mediation} of the paper use. Results 1 to 6 of the paper's appendix are Propositions~\ref{fr:prop:fT}, \ref{fr:prop:eta}, \ref{fr:prop:ident}, \ref{fr:prop:ridge}, \ref{fr:prop:asy}, and~\ref{fr:prop:rank} here.
 Section~\ref{fr:sec:atten} derives the attenuation schedule of
 Section~\ref{P-sec:measurement} of the paper from the estimated earnings
 process: the exact adjustment for serial correlation, the number of waves
@@ -76,7 +76,7 @@ $T \ge 2$, $f_T$ is strictly increasing in $\rho$.
 \end{proposition}
 
 \begin{proof}
-$\Var(\bar v_{iT}) = T^{-2}\sum_{s=1}^{T}\sum_{t=1}^{T}\gamma_{|s-t|}
+$\Var(\bar v_{iT}) = T^{-2}\sum_{u=1}^{T}\sum_{t=1}^{T}\gamma_{|u-t|}
 = T^{-2}\big[T\gamma_0 + 2\sum_{k=1}^{T-1}(T-k)\gamma_k\big]$, and
 substituting $\gamma_k = \rho^k\sigma^2_v$ gives the sum form of $f_T$.
 For the closed form, use $\sum_{k=1}^{T-1}\rho^k = \rho(1-\rho^{T-1})/(1-\rho)$
@@ -96,19 +96,19 @@ whose pairwise distances in time are at least those of $T$ consecutive
 terms, so with $\rho \in (0,1)$ its variance is at most
 $\Var(\bar v_{iT})$. The variance of an average of random variables is at
 most the largest of their variances, strictly so unless they are
-perfectly correlated, which the leave-one-out means are not. Hence
+perfectly positively correlated, which the leave-one-out means are not. Hence
 $\Var(\bar v_{i,T+1}) < \Var(\bar v_{iT})$.
 \end{proof}
 
 At the pooled estimate $\hat\rho = 0.16$, $f_2 = 1.16$, $f_5 = 1.29$,
-$f_9 = 1.33$, and $f_\infty = 1.38$. Because transitory components of consecutive waves are correlated, averaging removes their variance more slowly than the independence calculation implies; the variance of a long average is up to 38 percent larger.
+$f_9 = 1.33$, and $f_\infty = 1.38$. Because transitory components of consecutive waves are correlated, averaging removes their variance more slowly than the independence calculation implies, and long averages keep up to 38 percent more variance than under independence.
 
 \subsection{Attenuation}
 
 \begin{assumption}[Classical measurement structure]
 \label{fr:ass:cev}
 The outcome satisfies $c_i = a + b\,y^*_i + e_i$, where $y^*_i$ is
-permanent income with variance $\sigma^2_\eta$ and $b$ is the coefficient
+permanent income with variance $\sigma^2_\eta > 0$ and $b$ is the coefficient
 of the linear projection of $c_i$ on $y^*_i$, so that
 $\Cov(y^*_i, e_i) = 0$. The researcher observes
 $x_{iT} = y^*_i + \bar v_{iT}$, with $\bar v_{iT}$ as in
@@ -164,6 +164,7 @@ Waves $T$ & Point & 95 percent interval & Point & 95 percent interval & $1/\lamb
 5 & 0.651 & [0.60, 0.69] & 0.590 & [0.52, 0.65] & 1.69 \\
 6 & 0.691 & [0.64, 0.73] & 0.631 & [0.56, 0.69] & 1.58 \\
 7 & 0.723 & [0.68, 0.76] & 0.664 & [0.59, 0.72] & 1.51 \\
+8 & 0.749 & [0.70, 0.78] & 0.692 & [0.62, 0.75] & 1.45 \\
 9 & 0.770 & [0.73, 0.80] & 0.716 & [0.65, 0.77] & 1.40 \\
 \bottomrule
 \end{tabular}
@@ -183,7 +184,7 @@ to undo attenuation under the exact formula, were the parameters known.
 \end{table}
 
 Table~\ref{fr:tab:etaboot} attaches sampling uncertainty to the schedule
-of Table~\ref{P-tab:eta} of the paper. The single-wave factor is 0.27 with a 95 percent interval of $[0.23, 0.31]$: even at the top of the interval a single wave recovers less than a third of the coefficient on permanent income. At seven waves the exact factor is 0.66 with interval $[0.59, 0.72]$. The paper's statement that six biennial waves reach two thirds uses the independence approximation; under the exact formula the crossing is at eight waves, as Section~\ref{P-sec:measurement} of the paper states.
+of Table~\ref{P-tab:eta} of the paper. The single-wave factor is 0.27 with a 95 percent interval of $[0.23, 0.31]$: even at the top of the interval a single wave recovers less than a third of the coefficient on permanent income. At seven waves the exact factor is 0.66 with interval $[0.59, 0.72]$. The paper's statement that six biennial waves reach two thirds uses the independence approximation; under the exact formula the crossing is at eight waves (Section~\ref{P-sec:measurement} of the paper).
 
 \subsection{Which side of the regression}
 \label{fr:sec:side}
@@ -239,7 +240,7 @@ $T^{\circ *} = 6$, the number of waves in Section~\ref{P-sec:measurement}
 of the paper. The exact value is $T^* = 8$, because $f_8/8 = 0.166$ is the
 first value of $f_T/T$ at or below $0.186$. Carrying the bootstrap draws
 through the two thresholds gives 95 percent intervals of $[5, 7]$ waves
-under the approximation and $[6, 10]$ under the exact formula. Six biennial waves span a decade of panel coverage and eight span fourteen years, so the two-thirds benchmark that \citet{Mazumder2005} uses for the United States is reached in this population after a decade or more of biennial coverage, as the paper says.
+under the approximation and $[6, 10]$ under the exact formula. Six biennial waves span a decade of panel coverage and eight span fourteen years, so the two-thirds benchmark that \citet{Mazumder2005} uses for the United States is reached in this population after a decade or more of biennial coverage.
 
 \subsection{Rank-rank slopes}
 
@@ -325,11 +326,11 @@ row, which is the value the simulation uses. That value is computed from the unr
 \end{table}
 
 Table~\ref{fr:tab:rank} shows that the closed form reproduces the
-simulated factors to within 0.004. Under normality the square-root rule holds up to a correction, $R_T \le \sqrt{\lambda_T}$, of at most 0.002 at $r = 0.30$. Two consequences follow without
+simulated factors to within 0.004. Under normality $R_T \le \sqrt{\lambda_T}$, and at $r = 0.30$ the gap is at most 0.002. Two consequences follow without
 further simulation. First, ranks attenuate less than levels, since
 $\sqrt{\lambda_T} > \lambda_T$, but a single-wave rank design at
 $\lambda_1 = 0.27$ still recovers only half the slope. Second, the factor
-with both sides measured with error is a product, so transitory variation
+with both sides measured with error is symmetric in the two reliabilities, so transitory variation
 in the child's income lowers rank slopes as much as transitory variation
 in the parents' income does, whereas Section~\ref{fr:sec:side} shows
 that it leaves slopes in levels unchanged.
@@ -362,7 +363,7 @@ for advantaged children lies close to that boundary
 
 On the five waves of 2014 to 2022 the estimator uses the $K = 15$ pairwise
 autocovariances $\hat\omega_{ts}$, $t \le s$, where $t$ and $s$ index
-waves. Each is the sample mean of $\tilde y_{it}\tilde y_{is}$ over the
+waves (only here and in the moments that follow is $s$ a wave index; elsewhere it is the permanent share). Each is the sample mean of $\tilde y_{it}\tilde y_{is}$ over the
 $n_{ts}$ children observed in both waves, after demeaning within year
 (and within group for the fits by group). The model \eqref{fr:eq:omega}
 implies $\omega_{ts} = m_{s-t}(\theta)$ with
@@ -398,7 +399,7 @@ $\pi_{ts}$ is the probability that a child is observed in both waves $t$
 and $s$, and $\pi_{ts,t's'}$ is the probability that a child is observed
 in all of the waves $t$, $s$, $t'$, and $s'$. The independence part of the
 assumption is what lets pairwise deletion estimate population
-autocovariances. It is a missing-completely-at-random condition on wave participation. The screens that define the sample pass 45.5 percent of advantaged and 42.0 percent of less advantaged children (Table~\ref{oatab:screens}); the assumption concerns which waves a child in the sample is observed in, which the screens do not test.
+autocovariances. It is a missing-completely-at-random condition on wave participation. The sample restrictions keep 45.5 percent of advantaged and 42.0 percent of less advantaged children (Table~\ref{oatab:screens}); the assumption concerns which waves a child in the sample is observed in, which the restrictions do not test.
 
 \subsection{Identification}
 
@@ -440,8 +441,7 @@ $\big(1,\ \rho^k/(1-\rho^2),\ \sigma^2_\varepsilon\,\partial_\rho[\rho^k/(1-\rho
 The determinant of its three rows at lags 0, 1, and 2 is
 $\sigma^2_\varepsilon/(1+\rho)^2$, so $G$ has full column rank whenever
 $\sigma^2_\varepsilon > 0$ and $|\rho| < 1$. In the parameterization
-$(\sigma^2_\eta, \sigma^2_v, \rho)$, which holds the variance of the
-transitory component fixed, the same three rows have determinant
+$(\sigma^2_\eta, \sigma^2_v, \rho)$, with the transitory variance as a parameter, the same three rows have determinant
 $\sigma^2_v(1-\rho)^2 = \omega_0 - 2\omega_1 + \omega_2$, the second
 difference of the autocovariance function, which vanishes at the same
 quadratic rate as the leverage of Proposition~\ref{fr:prop:ridge}
@@ -458,7 +458,7 @@ draws for advantaged children spread along it
 (Figure~\ref{oafig:ridge}). The following result describes
 that curve and shows why it flattens as persistence rises.
 
-\begin{proposition}[Leverage of the higher-order autocorrelations along the level set of the first-order autocorrelation]
+\begin{proposition}[Leverage along the ridge]
 \label{fr:prop:ridge}
 Write the model in autocorrelation form,
 $r_k = \omega_k/\omega_0 = s + (1-s)\rho^k$. Fix $r_1$ and move along the
@@ -497,7 +497,7 @@ $\hat\rho = 0.33$, $h_2 = 0.45$ and $h_3 = 0.75$. The leverage of the second-ord
 factor of about 2.2 on sample size alone. Weaker leverage and noisier
 moments together produce the elongated cloud of bootstrap draws in
 Figure~\ref{oafig:ridge}. Proposition~\ref{fr:prop:ridge}
-shows that the elongation is a property of the model at high $\rho$ and
+shows that the elongation is a property of the model as $\rho$ rises and
 not of the estimator: any method that identifies the permanent share
 from the decay of the autocovariance function faces the same
 $(1-\rho)^2$ factor.
@@ -506,7 +506,7 @@ $(1-\rho)^2$ factor.
 
 \begin{proposition}[Asymptotics of the estimator with fixed weights]
 \label{fr:prop:asy}
-Under Assumption~\ref{fr:ass:sampling}, if $\theta_0$ is the unique minimizer of the population criterion on $\Theta$ (Proposition~\ref{fr:prop:ident}), $G$ has full column rank (shown above), $\theta_0$ is interior to $\Theta$, $\Omega$ is positive definite, and the weight matrix converges to a positive definite $W$,
+Under Assumption~\ref{fr:ass:sampling}, if the model holds at $\theta_0$, every $\pi_{ts} > 0$, $\theta_0$ is the unique minimizer of the population criterion on $\Theta$ (Proposition~\ref{fr:prop:ident}), $G$ has full column rank (shown above), $\theta_0$ is interior to $\Theta$, $\Omega$ is positive definite, and the weight matrix converges to a positive definite $W$,
 \begin{equation}
 \sqrt{n}(\hat\theta - \theta_0) \Rightarrow N\!\big(0,\ (G'WG)^{-1}G'W\Omega WG(G'WG)^{-1}\big),
 \label{fr:eq:asy}
@@ -516,7 +516,7 @@ $\sum_{j=1}^{K-p}\nu_j\chi^2_{1,j}$, a weighted sum of independent
 $\chi^2_1$ variables whose weights $\nu_j$ are the nonzero
 eigenvalues of $\Omega^{1/2}\big(W - WG(G'WG)^{-1}G'W\big)\Omega^{1/2}$
 multiplied by the limit of $N/n$. For the optimally weighted criterion
-$n\,(\hat\omega - \omega(\theta))'\hat\Omega^{-1}(\hat\omega - \omega(\theta))$
+$n\,(\hat\omega - \omega(\tilde\theta))'\hat\Omega^{-1}(\hat\omega - \omega(\tilde\theta))$, with $\tilde\theta$ its minimizer,
 the weights all equal one and the limit is $\chi^2_{K-p}$
 \citep{Hansen1982}. For the fixed weights of \eqref{fr:eq:md} the weights
 $\nu_j$ depend on $\Omega$, and the $\chi^2_{K-p}$ reference
@@ -530,9 +530,9 @@ give \eqref{fr:eq:asy}. For the criterion, the minimized residual is
 $(I - G(G'WG)^{-1}G'W)(\hat\omega - \omega(\theta_0)) + o_p(n^{-1/2})$,
 a linear map of an asymptotically normal vector, so
 $J = (N/n)\,z'\,\Omega^{1/2}\big(W - WG(G'WG)^{-1}G'W\big)\Omega^{1/2}z + o_p(1)$
-with $z$ asymptotically standard normal. A quadratic form $z'Az$ in a
-standard normal vector with $A$ symmetric is distributed as
-$\sum_j \nu_j\chi^2_{1,j}$ with $\nu_j$ the eigenvalues of $A$,
+with $z$ asymptotically standard normal. A quadratic form $z'Bz$ in a
+standard normal vector with $B$ symmetric is distributed as
+$\sum_j \nu_j\chi^2_{1,j}$ with $\nu_j$ the eigenvalues of $B$,
 and the matrix here has rank $K - p$. With $W = \Omega^{-1}$ it is a
 projection, whose nonzero eigenvalues equal one.
 \end{proof}
@@ -653,9 +653,7 @@ Figure~\ref{oafig:ridge} is this boundary. With
 $\hat\sigma^2_\eta = 0.083$ and a bootstrap standard error of 0.028, the
 estimate for advantaged children is about three standard errors from the
 boundary, and the bootstrap draws reach it; this is the situation of
-Remark~\ref{fr:prop:boundary}. The bootstrap standard
-errors that Table~\ref{P-tab:md} of the paper reports for that group
-carry this qualification, which is the reason the note to that table gives for printing no significance marks. The paper does not read the separate fit for advantaged children as a difference between the groups and rests the comparison on the joint fits of Section~\ref{oa:jointfit} and on the fifteen raw moments (Figure~\ref{P-fig:autocov} of the paper, Table~\ref{oatab:autocov}, and the
+Remark~\ref{fr:prop:boundary}. This is why Table~\ref{P-tab:md} of the paper prints no significance marks. The paper does not read the separate fit for advantaged children as a difference between the groups and rests the comparison on the joint fits of Section~\ref{oa:jointfit} and on the fifteen raw moments (Figure~\ref{P-fig:autocov} of the paper, Table~\ref{oatab:autocov}, and the
 joint test of Section~\ref{oa:jointtest}). Their
 estimators are unconstrained sample means, to which the bootstrap applies
 without qualification.
@@ -674,7 +672,7 @@ It is the probability limit of the pooled least squares coefficient of
 $\tilde y_{it}$ on $\tilde y_{i,t-1}$ without individual effects, which converges
 to the ratio of these two moments, and it exceeds $\rho$ whenever $s > 0$.
 
-Section~\ref{P-sec:abb} of the paper states \eqref{fr:eq:rhoobs} in words, under stationarity. In the population it is exact; applied to a pooled regression on an unbalanced panel whose waves have unequal variances (Table~\ref{oatab:autocov}) it holds approximately. At the
+Section~\ref{P-sec:abb} of the paper states \eqref{fr:eq:rhoobs} in words, under stationarity. Applied to a pooled regression on an unbalanced panel whose waves have unequal variances (Table~\ref{oatab:autocov}) it holds approximately. At the
 pooled estimates, $\rho_{\mathrm{obs}} = 0.27 + 0.73 \times 0.16 = 0.39$,
 the value near 0.4 in Section~\ref{P-sec:abb} of the paper.
 
@@ -686,9 +684,8 @@ shows that the autoregression in equation~\eqref{P-eq:ab} of the paper
 has individual effect $\alpha_i = (1-\rho)\eta_i$ and idiosyncratic error
 $\varepsilon_{it}$, which is serially uncorrelated, so lagged levels dated
 $t-2$ and earlier are valid instruments for the first-differenced
-equation \citep{ArellanoBond1991}. The two estimators share a target, as
-the paper says, so the gap between the minimum-distance estimate and the
-Arellano--Bond estimate is not a difference of definitions; the paper notes that the minimum-distance estimate for less advantaged children, 0.12, lies inside the 95 percent interval of the Arellano--Bond estimate for that group, $[-0.01, 0.13]$.
+equation \citep{ArellanoBond1991}. The two estimators share a target, so the gap between the minimum-distance estimate and the
+Arellano--Bond estimate is not a difference of definitions; the minimum-distance estimate for less advantaged children, 0.12, lies inside the 95 percent interval of the Arellano--Bond estimate for that group, $[-0.01, 0.13]$.
 
 \section{The accounting identity for the premium}
 \label{fr:sec:identity}

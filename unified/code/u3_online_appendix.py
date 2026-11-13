@@ -1,6 +1,5 @@
-"""Numbers for the online appendix that the paper's producers do not already
-write (expansion design under birth-year fixed effects, and the
-decomposition).
+"""Numbers for the online appendix that no other script writes (expansion
+design under birth-year fixed effects, and the decomposition).
 
 Sample: the children of the paper's sample (sample_mature_age.py: ages 22 to 55,
 at least two waves of positive labor income) who have a level of earnings at
@@ -33,8 +32,6 @@ WS = os.path.abspath(os.path.join(ROOT, ".."))
 sys.path.insert(0, HERE)
 from _locate import sibling
 P = sibling("college_expansion", __file__)
-sys.path.insert(0, os.path.join(P, "code"))
-import ws_07c_iv_robustness as R
 
 OUT = os.path.join(ROOT, "output")
 EXT = os.path.join(P, "data", "external")
@@ -43,7 +40,7 @@ rng = np.random.default_rng(20260929)
 REPS = int(os.environ.get("U3_REPS", "9999"))
 DEMO = ["HP14", "ParentInc", "female", "urban"]
 _eb = pd.read_csv(os.path.join(OUT, "u8_entropy_balancing.csv")).iloc[0]
-DM, TAU = float(_eb.gap_hat), float(_eb.tau_hat)   # entropy-balanced gap in college completion and premium (Section 5 of the paper)
+DM, TAU = float(_eb.gap_hat), float(_eb.tau_hat)   # entropy-balanced gap in college completion and premium (Section 3 of the paper)
 
 from sample_mature_age import build_sample, child_waves
 c = build_sample().reset_index(drop=True)                      # children with a level of earnings at 30 and over
@@ -117,7 +114,7 @@ canon = pd.read_csv(os.path.join(EXT, "expansion_intensity_canonical.csv"))
 stock = pd.read_csv(os.path.join(EXT, "census_hs_stock.csv"))
 C = canon[["provcd", "province_en", "int_placebo_log_1998_1997"]].merge(
     prov[["provcd", "pro_predict_growth", "flow_per_worker", "log_growth_implied"]], on="provcd", how="left")
-stock = stock.copy(); stock.loc[stock.provcd == 51, "provcd"] = 51
+stock = stock.copy()
 C = C.merge(stock[["provcd", "hs2000"]], on="provcd", how="left")
 C = C[C.provcd.isin(c_all.provcd.unique())].sort_values("pro_predict_growth", ascending=False)
 C.to_csv(os.path.join(OUT, "u3_C_intensity_by_province.csv"), index=False)

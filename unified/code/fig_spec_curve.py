@@ -1,4 +1,5 @@
-"""The premium in fifteen specifications (Figure 2 of the paper).
+"""The premium across specifications: fifteen in the figure of the Online Appendix,
+thirteen in Figure 1 of the paper.
 
 Reads the estimates and 95 percent intervals written by
 u8_premium_specifications.py (the rows marked as belonging to the figure).
@@ -45,7 +46,7 @@ FEATS = [("Baseline specification", "base"),
          ("Income deflated by provincial CPI", "cpi")]
 
 d = pd.read_csv(os.path.join(ROOT, "output", "u8_premium_specifications.csv"))
-d = d[d.in_figure_2].copy()
+d = d[d.in_figures_of_specifications].copy()
 assert set(d.specification) == set(CHANGES), set(d.specification) ^ set(CHANGES)
 PAPER = os.environ.get("SPEC_PAPER") == "1"
 if PAPER:

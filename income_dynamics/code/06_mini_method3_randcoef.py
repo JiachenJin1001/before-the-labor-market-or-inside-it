@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Random-coefficient model of residual log income: child-specific intercept and
 child-specific linear trend, related to family background by a correlated
@@ -37,6 +35,8 @@ Output:
   data/intermediate/method3_mini_results.csv
   data/intermediate/method3_mini_betahat_panel.csv
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os, json
 import numpy as np
 import pandas as pd

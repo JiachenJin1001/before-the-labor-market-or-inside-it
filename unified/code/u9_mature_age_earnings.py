@@ -1,4 +1,4 @@
-"""The expansion design: earnings at ages 30 and over (Section 6 of the paper).
+"""The expansion design: earnings at ages 30 and over (Section 5 of the paper).
 
 Sample: the children of the paper's sample (sample_mature_age.py: ages 22 to 55, at least two waves of positive
 labor income in 2014 to 2022).
@@ -18,7 +18,7 @@ estimated only on cohorts born after the reform (nobody born before it is observ
 not identified by the reform and is written to the output for completeness only.
 Rows at 30 and over only: the same regression without the rows below 30 (one row per child).
 Weights: unweighted in the main specification. With E_WEIGHTS=process each row is weighted by the precision implied
-by the earnings process of Section 3 (the inverse of sigma_eta^2 + sigma_v^2 / n for a mean of n waves) and the output
+by the earnings process of Section 4 (the inverse of sigma_eta^2 + sigma_v^2 / n for a mean of n waves) and the output
 files carry the suffix _weighted.
 Inference: standard errors clustered on province; wild cluster bootstrap p-values (Rademacher weights by province,
 null imposed, 9,999 replications); Anderson-Rubin set by grid inversion. The columns ar_lo and ar_hi of u9_B_main.csv use a
@@ -35,6 +35,8 @@ Outputs (output/, with the suffix _weighted for the weighted run):
                         the cohorts born 1973 to 1976 left out
   u9_D_cohort_bins.csv  coefficients on intensity by birth-cohort bin for college completion and earnings
   paper/figures/fig_mature_age.png   the cohort-bin coefficients (main run only)
+Block C needs the 2010 adult file of the survey (data/raw/CFPS2010) for the instrument assigned by the province at
+age twelve; without it the block is skipped and u9_C_checks.csv is left as it is.
 Blocks A to D can be run separately with U9_BLOCKS; block G (the Anderson-Rubin p-value of the return for all
 children at every grid point) runs only when asked for, U9_BLOCKS=G.
 Block R (randomization inference: provincial intensity reassigned among all provinces, u9_R_randomization_inference.csv;
@@ -273,7 +275,11 @@ if "R" in BLOCKS:
     pd.DataFrame({"b": grid_r, "permutation_p": p_b}).to_csv(os.path.join(OUT, f"u9_R_randomization_p_by_return{SFX}.csv"), index=False)
 
 # ------------------------------------------------------------------ C. checks (main intensity)
-if "C" in BLOCKS:
+# one check assigns the instrument by the province at age twelve, which only the 2010 adult file of the survey records
+RAW2010 = next((f for f in (os.path.join(p, "data", "raw", "CFPS2010", "ecfps2010adult_201906.dta") for p in (P, M)) if os.path.exists(f)), None)
+if "C" in BLOCKS and RAW2010 is None:
+    print(f"block C skipped: the 2010 adult file of the survey (data/raw/CFPS2010) was not found; u9_C_checks{SFX}.csv is left as it is")
+if "C" in BLOCKS and RAW2010 is not None:
     rng = np.random.default_rng(SEED + 2); rows = []; so = occ_rows(c)
     def add(lab, T, ss, extra=None, **kw):
         e = T.rf(ss.y.values); f = T.fs(ss.college.values, wild=False); rows.append(dict(check=lab, n=int(ss.pid.nunique()), rows_old=int(ss.old.sum()), coef=e["coef"], se=e["se"], p_wild=e["p_wild"], F=f["t"] ** 2, iv=T.iv(ss.y.values, ss.college.values), **kw))
@@ -314,7 +320,7 @@ if "C" in BLOCKS:
     rows.append(dict(check="leave one province out: instrumented return, smallest and largest", coef=min(x[1] for x in loo), se=max(x[1] for x in loo)))
     # instrument by the province at age twelve where the 2010 survey records it
     import pyreadstat
-    raw = next(os.path.join(p, "data", "raw", "CFPS2010", "ecfps2010adult_201906.dta") for p in (P, M) if os.path.exists(os.path.join(p, "data", "raw", "CFPS2010", "ecfps2010adult_201906.dta")))
+    raw = RAW2010
     a, _ = pyreadstat.read_dta(raw, usecols=["pid", "qa4", "qa401acode", "qa102acode"]); a = a.dropna(subset=["pid"]); a["pid"] = a.pid.astype(np.int64)
     num = lambda v: pd.to_numeric(v, errors="coerce").where(lambda x: x > 0); p12 = num(a.qa401acode).where(num(a.qa401acode).notna(), num(a.qa102acode).where(num(a.qa4) == 1))
     p12 = pd.Series(p12.values, index=a.pid).loc[lambda x: x.between(11, 82)]; p12 = p12[~p12.index.duplicated()]

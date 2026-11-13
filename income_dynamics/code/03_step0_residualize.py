@@ -1,9 +1,7 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Residual log income: remove age, gender, residence, province and year effects
 from the log income of the child sample in panel_analysis (children aged 22 to
-45, waves 2014 to 2022, at least three waves with positive income).
+55, waves 2014 to 2022, at least three waves with positive income).
 
   Pooled specification (residual y_tilde):
     log_income_it = age polynomial of order 4
@@ -34,6 +32,8 @@ Output: panel_resid.pkl and panel_resid.dta with columns
   HighParentOcc, HighParentOcc14, has_qv14,
   ParentInc_bar, eduy
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os
 import numpy as np
 import pandas as pd

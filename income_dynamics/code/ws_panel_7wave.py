@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Seven-wave panel 2010 to 2022.
 
@@ -21,13 +19,23 @@ Steps:
      attach their family-background variables.
   5. On the combined panel: age 22 to 55, positive income, log income at
      least ln(1000) and at most the 99th percentile of its wave, at least
-     three waves per child.
+     three waves per child. The floor and the cut at the 99th percentile are
+     applied to every wave, including 2014 to 2022, whose rows already passed
+     the same cuts in the sample of the paper. There the percentile is taken
+     over all children of the sample; here it is taken over the children of
+     this panel only, so the cut drops the top one percent of their rows in
+     each of the waves 2014 to 2022 a second time (84 of the 8,649 rows of
+     panel_resid.pkl), and a child left with fewer than three waves is dropped.
+     The estimates on the reconstructed seven-wave panel use the panel after
+     this second cut.
   6. Residual of log income from the regression on a quartic in age, female,
      their interactions, urban, province indicators and year indicators
      (y_tilde), and its winsorized version (y_tilde_w).
   7. Write ws/panel_resid_7w.pkl and ws/panel_resid_7w.dta; print the number
      of rows and the variance of log income by wave.
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os
 import numpy as np
 import pandas as pd
@@ -142,8 +150,6 @@ df12s = df12s.dropna(subset=["pid"]).astype({"pid": np.int64})
 # ----------------------------------------------------------------------
 # female, urban and provcd are taken from the 2010 or 2012 wave when
 # reported there, and from the five-wave panel otherwise.
-for src in [df10s, df12s]:
-    src["female"] = src["female"]
 # female, urban and provcd are dropped from the child-level table before the
 # merge, so that the values reported in the 2010 or 2012 wave are kept
 ci_drop = child_invariant.drop(columns=["female","urban","provcd"]).copy()
@@ -188,7 +194,9 @@ print(f"\n  After age filter 22-55: {len(panel7):,} rows  (dropped {n_before_age
 panel7 = panel7.dropna(subset=["log_income"]).copy()
 print(f"  With valid log_income: {len(panel7):,}")
 
-# Trimming: drop log income below ln(1000) and above the 99th percentile of the wave
+# Trimming: drop log income below ln(1000) and above the 99th percentile of the wave. The percentile is computed
+# among the children of this panel, so in the waves 2014 to 2022, whose rows were already cut at the 99th
+# percentile of the full sample, this drops the top percentile of these children's rows a second time
 LO = np.log(1000)
 mask_lo = panel7["log_income"] >= LO
 top1pct = panel7.groupby("year")["log_income"].transform(lambda s: s.quantile(0.99))

@@ -1,7 +1,7 @@
 """Income process of the parents.
 
 The attenuation schedule of the paper is estimated from children aged 22 to
-45 and is applied to income measures of parents. This script estimates the
+55 and is applied to income measures of parents. This script estimates the
 same variance decomposition on the parents' own earnings.
 
 Sample: every parent linked to a child of the analysis sample (pid_father and

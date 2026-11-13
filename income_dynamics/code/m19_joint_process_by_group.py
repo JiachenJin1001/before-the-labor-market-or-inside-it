@@ -1,4 +1,4 @@
-"""m19: the two groups' earnings processes fitted jointly, with cross-group restrictions.
+"""The two groups' earnings processes fitted jointly, with cross-group restrictions.
 
 The paper's minimum-distance estimator (04_method1_md.py, m7_md_cellweighted_boot.py) fits the
 permanent-AR(1) process separately to the fifteen autocovariances of each group. This script

@@ -1,5 +1,5 @@
 """Variances and autocovariances of residual log earnings by family background
-(the figure next to the autocovariance table of Section 3).
+(Figure 2 of the paper, Section 4.2).
 
 Left panel: the variance of residual log earnings in each wave, advantaged
 against less advantaged children. Right panel: the autocovariance at each lag,

@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Minimum-distance estimation of the income process, by family background.
 
@@ -26,7 +24,8 @@ Steps:
               parameters (sigma_eta0^2, sigma_u^2, rho, sigma_eps^2)
      Each model is fitted by minimum distance in two steps: equal weights
      first, then weights proportional to the number of children behind each
-     autocovariance. The overidentification statistic J is reported.
+     autocovariance. The weighted criterion J is reported; with these fixed
+     weights it is not distributed as chi-squared.
   4. Hall-Mishkin ratio of differenced autocovariances
         rho_v = (cov_1 - cov_2) / (cov_0 - cov_1)
   5. Share of the permanent effect in the variance of the residual,
@@ -45,6 +44,8 @@ Output:
   data/intermediate/method1_drop2016_results.csv  (four-wave panel without 2016)
   and a summary printed to the console
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os, math, time
 import numpy as np
 import pandas as pd
@@ -188,8 +189,6 @@ def run_panel(d, waves, label):
     """Run the minimum-distance fits on the panel of the given waves; return the fits and the autocovariance tables."""
     sub = d[d["year"].isin(waves)].copy()
     sub_g = add_demean(sub, "HP14")
-    cov_pooled = pairwise_cov(add_demean(sub, group_col="HP14")[["pid","year","yc"]]
-                                 if False else sub_g, waves)
     # Pooled sample: demeaned by year only
     sub_p = sub.copy()
     sub_p["yc"] = sub_p["y_tilde_w"] - sub_p.groupby("year")["y_tilde_w"].transform("mean")
@@ -221,7 +220,7 @@ def run_panel(d, waves, label):
 print("\n" + "="*72)
 print("Five-wave panel 2014-2022 (HighParentOcc14, y_tilde_w)")
 print("="*72)
-res5 = run_panel(df, WAVES, "5-WAVE HEADLINE")
+res5 = run_panel(df, WAVES, "five-wave panel")
 for lab in ["pooled", "H", "L"]:
     f = res5["fits_FE"][lab]
     print(f"  FE {lab:>6s}: σ²_η={f['sigma_eta2']:.4f}, ρ={f['rho']:+.4f}, "

@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Build the person-year panel from the seven CFPS waves (2010, 2012, 2014, 2016,
 2018, 2020, 2022).
@@ -17,6 +15,8 @@ retrospective questions, and selects the analysis sample;
 03_step0_residualize.py removes age, gender, residence, year and province
 effects from log income.
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os, sys
 import numpy as np
 import pandas as pd
@@ -119,7 +119,7 @@ FAMCONF_PIDM = {yr: ("pid_a_m" if yr in (2018, 2020) else "pid_m") for yr in WAV
 
 
 # ======================================================================
-# Part 1: person-year panel
+# Person-year panel
 # ======================================================================
 def build_long_panel() -> pd.DataFrame:
     rows = []
@@ -174,11 +174,6 @@ def build_long_panel() -> pd.DataFrame:
 
     print(f"[01] panel_long: {len(long):,} rows, {long['pid'].nunique():,} unique pids")
     return long
-
-
-# ======================================================================
-# Part 2: parents and child sample
-# ======================================================================
 
 
 def main():

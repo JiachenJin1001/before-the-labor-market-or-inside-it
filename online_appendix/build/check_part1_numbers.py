@@ -88,7 +88,7 @@ check("richer transitory structures leave the criterion within one unit",
 
 O = pd.read_csv(os.path.join(U, "output", "u3_A_occupation_definitions.csv"))
 check("occupation reduced form positive under every definition", (O.rf > 0).all())
-check("smallest under 'ever'", O.sort_values("rf").definition.iloc[0] == "ever" and "it is smallest for an occupation held in any single wave" in TEXN, str(O.sort_values("rf").definition.tolist()))
+check("smallest under 'ever'", O.sort_values("rf").definition.iloc[0] == "ever" and "it is smallest for having held such an occupation in any single wave" in TEXN, str(O.sort_values("rf").definition.tolist()))
 
 paper = open(os.path.join(U, "paper", "main.tex"), encoding="utf-8").read()
 # 3. linked files exist

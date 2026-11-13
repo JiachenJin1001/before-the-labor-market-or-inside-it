@@ -1,4 +1,4 @@
-"""The decomposition of the premium (Section 7 of the paper) and facts about the design.
+"""The decomposition of the premium (Section 6 of the paper) and facts about the design.
 
 Reads the premium and the gap in college completion from the entropy balancing of u8_premium_specifications.py
 (children with at least two waves at 30 and over), the instrumented return from u9_mature_age_earnings.py and the

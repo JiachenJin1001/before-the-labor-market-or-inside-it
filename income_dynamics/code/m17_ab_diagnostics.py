@@ -24,9 +24,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
-BASE_INT = _os.path.join(_WSROOT, "data", "intermediate")
+_WSROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+BASE_INT = os.path.join(_WSROOT, "data", "intermediate")
 
 
 def load_panel(path):

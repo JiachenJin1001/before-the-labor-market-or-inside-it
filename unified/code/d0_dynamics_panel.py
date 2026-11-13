@@ -1,6 +1,6 @@
-"""Write the child-wave panel for the income-dynamics pipeline (Sections 3 and 4 of the paper).
+"""Write the child-wave panel for the income-dynamics pipeline (Section 4 of the paper).
 
-Sections 3 and 4 use the children of the paper's sample (sample_mature_age.py: ages 22 to 55, at least two waves of
+Section 4 uses the children of the paper's sample (sample_mature_age.py: ages 22 to 55, at least two waves of
 positive labor income in 2014 to 2022) who have at least three waves, because the dynamic panel estimators need
 three. This script saves their child-wave rows in the layout that income_dynamics/code/03_step0_residualize.py reads
 (data/intermediate/panel_analysis.pkl of the income-dynamics pipeline).

@@ -1,4 +1,4 @@
-"""The premium across specifications (Section 5 and Figure 2 of the paper).
+"""The premium across specifications (Section 3 and Figure 1 of the paper).
 
 Children: those of the paper's sample (sample_mature_age.py: ages 22 to 55, at
 least two waves of positive labor income in 2014 to 2022, a linked parent, a
@@ -30,7 +30,7 @@ element:
       recorded as rural in most of their waves).
 Cross-section rows: one observation per child (the mean, across the child's
 waves at 30 and over, of log income net of survey-year effects, as in the
-entropy balancing and in Sections 6 and 7), controls gender, urban residence, age at first
+entropy balancing and in Sections 5 and 6), controls gender, urban residence, age at first
 observation and its square, province effects, parental income;
 heteroskedasticity-robust standard errors. One row adds parental party
 membership when the child was fourteen, one adds the parents' state-sector
@@ -48,7 +48,8 @@ the survey files are not present, those rows are copied from the existing
 output file.
 
 Outputs: output/u8_premium_specifications.csv, output/u8_indicator_agreement.csv (and the same
-agreement on the analysis sample of Sections 3 and 4, output/u8_indicator_agreement_analysis_sample.csv),
+agreement for the children with at least three waves of Section 4, output/u8_indicator_agreement_analysis_sample.csv,
+which the paper does not print),
 output/u8_income_measure_waves.csv (number of waves behind the family income
 measure and behind the parents' own labor income, per linked parent),
 output/u8_entropy_balancing.csv, output/u8_level_sample.csv (the sample: counts,
@@ -207,8 +208,7 @@ parent_labor = np.log(pl["income"].where(pl["income"] > 0)).groupby(pl["pid"]).m
 lab = panel.copy()
 lab["ParentInc_labor"] = pd.concat([lab["pid_father"].map(parent_labor), lab["pid_mother"].map(parent_labor)], axis=1).mean(axis=1)
 rows.append(cre(lab, "parents' own labor income as the income control", "Correlated random effects", inc="ParentInc_labor"))
-panel["no_income_control"] = 0.0
-r0 = cre(panel.assign(ParentInc_none=panel["ParentInc_bar"] * 0.0), "no income control (not in Figure 2)", "Correlated random effects", inc="ParentInc_none")
+r0 = cre(panel.assign(ParentInc_none=panel["ParentInc_bar"] * 0.0), "no income control (not in the figures of specifications)", "Correlated random effects", inc="ParentInc_none")
 r0.update(income_coef=np.nan, income_se=np.nan, income_p=np.nan); rows.append(r0)
 
 # --- income deflated by the provincial consumer price index
@@ -225,7 +225,7 @@ share = panel.groupby("pid")["urban"].transform("mean")
 rows.append(cre(panel[share > 0.5], "children recorded as urban in most of their waves", "Correlated random effects"))
 rows.append(cre(panel[share <= 0.5], "children recorded as rural in most of their waves", "Correlated random effects"))
 rows.append(cre(panel[panel["HighParentOcc14"].notna()],
-                "indicator from the occupations the parents hold during 2010 to 2022 (not in Figure 2)",
+                "indicator from the occupations the parents hold during 2010 to 2022 (not in the figures of specifications)",
                 "Correlated random effects", treat="HighParentOcc"))
 
 # --- the family income of the parental household from a restricted set of waves (needs the survey files):
@@ -244,13 +244,13 @@ NEED_RAW = ["most frequent retrospective report of parental occupation",
             "indicator widened to CSCO major groups 1 to 3",
             "indicator narrowed to CSCO major group 1",
             "parental party membership added (cross-section)",
-            "parental party membership in place of the occupation indicator (not in Figure 2)",
+            "parental party membership in place of the occupation indicator (not in the figures of specifications)",
             "parental state-sector employment added (cross-section)",
-            "parental state-sector employment alone (not in Figure 2)",
-            "state-sector employment coefficient with occupation and income (not in Figure 2)",
-            "party membership coefficient with occupation and income (not in Figure 2)",
-            "occupation indicator before party membership is added (not in Figure 2)"] + list(WINDOW_ROWS.values())
-STATE_OCC_ALONE = "occupation indicator alone, children with a parent working in 2012 (not in Figure 2)"
+            "parental state-sector employment alone (not in the figures of specifications)",
+            "state-sector employment coefficient with occupation and income (not in the figures of specifications)",
+            "party membership coefficient with occupation and income (not in the figures of specifications)",
+            "occupation indicator before party membership is added (not in the figures of specifications)"] + list(WINDOW_ROWS.values())
+STATE_OCC_ALONE = "occupation indicator alone, children with a parent working in 2012 (not in the figures of specifications)"
 NEED_RAW.append(STATE_OCC_ALONE)
 if RAW is None:
     old = pd.read_csv(OUT)
@@ -267,7 +267,8 @@ else:
         w = fam[sel].groupby(["child", "parent"])["log_family_income"].mean().groupby("child").mean().rename(col)
         rows.append(cre(panel.merge(w, left_on="pid", right_index=True, how="left"), WINDOW_ROWS[key],
                         "Correlated random effects", inc=col))
-    # number of waves behind each of the two income measures of Table 6, per linked parent, averaged within
+    # number of waves behind each of the two income measures (family income of the parental household and the parents'
+    # own labor income), per linked parent, averaged within
     # child and then over the children of each regression
     lab_children = lab.dropna(subset=["log_income", "HighParentOcc14", "ParentInc_labor"])["pid"].unique()
     fam_children = panel.dropna(subset=["log_income", "HighParentOcc14", "ParentInc_bar"])["pid"].unique()
@@ -327,8 +328,11 @@ agreement = dict(children_with_both_indicators=len(one),
                  share_current_only=((one.HighParentOcc14 == 0) & (one.HighParentOcc == 1)).mean())
 pd.DataFrame([agreement]).to_csv(os.path.join(ROOT, "output", "u8_indicator_agreement.csv"), index=False)
 print(agreement)
-# the same agreement on the analysis sample of Sections 3 and 4 (reported where Section 2.2 introduces the two indicators)
-pa = pd.read_pickle(os.path.join(INT, "panel_analysis.pkl"))
+# the same agreement for the children with at least three waves of Section 4 (not printed in the paper). Their child-wave
+# rows are taken from sample_mature_age.py, which keeps the current-occupation indicator as observed; the copy that
+# d0_dynamics_panel.py writes for the income-dynamics pipeline fills its missing values with the retrospective indicator
+from sample_mature_age import DYNAMICS
+pa = child_waves(*DYNAMICS, level_from=None)
 one_a = pa.dropna(subset=["HighParentOcc14", "HighParentOcc"]).drop_duplicates("pid")
 one_a = one_a[one_a.pid.isin(pa.dropna(subset=["log_income", "HighParentOcc14", "ParentInc_bar"]).pid)]
 pd.DataFrame([dict(children_with_both_indicators=len(one_a), share_agree=(one_a.HighParentOcc14 == one_a.HighParentOcc).mean(),
@@ -382,7 +386,7 @@ kk = kid.merge(panel.groupby("pid")[["age"]].mean().rename(columns={"age": "age_
 for h, labh in [(1, "advantaged"), (0, "less advantaged")]:
     g = kk[kk.HP14 == h]
     for col, name in [("log_y", "mean log labor income"), ("ParentInc", "log family income of the parental household"), ("eduy_max", "years of schooling"),
-                      ("college", "college completion"), ("female", "female"), ("urban", "urban residence"), ("age_mean", "age over the waves in the window"),
+                      ("college", "college completion"), ("female",), ("urban", "urban residence"), ("age_mean", "age over the waves in the window"),
                       ("birth_year", "birth year"), ("waves", "waves in the window")]:
         S.append(dict(item=f"{name}, {labh} children", value=g[col].mean(), sd=g[col].std()))
 fam_id = kids.assign(f=kids.pid_father.fillna(-1).astype(np.int64).astype(str) + "_" + kids.pid_mother.fillna(-1).astype(np.int64).astype(str)).set_index("pid")["f"]
@@ -400,8 +404,8 @@ S += [dict(item="baseline standard error clustered on child", value=se_child), d
 pd.DataFrame(S).to_csv(os.path.join(ROOT, "output", "u8_level_sample.csv"), index=False)
 
 out = pd.DataFrame(rows)
-out["in_figure_2"] = ~out.specification.str.contains("not in Figure 2")
+out["in_figures_of_specifications"] = ~out.specification.str.contains("not in the figures of specifications")
 out.to_csv(OUT, index=False)
 pd.set_option("display.width", 250); pd.set_option("display.max_colwidth", 80)
 print(out[["specification", "estimate", "se", "p", "lo", "hi", "children", "advantaged"]].round(4).to_string())
-print("rows in Figure 2:", int(out.in_figure_2.sum()))
+print("rows in the figures of specifications:", int(out.in_figures_of_specifications.sum()))

@@ -28,6 +28,14 @@ The minimum-distance estimator is the one of m7_md_cellweighted_boot.py
 (pooled sample: residuals demeaned within year; weights equal to the number of
 children behind each moment; Nelder-Mead from three starting values), so the
 point estimates reproduce the table of the paper to the printed digit.
+
+Names of the parameters in the code:
+  se2   sigma^2_eta, the variance of the permanent effect
+  r, rho  the persistence of the transitory component between waves
+  sg2   sigma^2_eps, the variance of the transitory innovation
+  th    the parameter vector (sigma^2_eta, rho, sigma^2_eps)
+  eta() the attenuation factor lambda_T of the paper (the share of the
+        coefficient recovered by an average of T waves)
 """
 import os
 import time
@@ -38,7 +46,7 @@ from scipy.optimize import minimize
 HERE = os.path.dirname(os.path.abspath(__file__))
 APP = os.path.abspath(os.path.join(HERE, ".."))
 WS = os.path.abspath(os.path.join(APP, ".."))
-WSM = next(os.path.join(WS, n) for n in ("income_dynamics", "income_dynamics") if os.path.isdir(os.path.join(WS, n)))
+WSM = next(os.path.join(WS, n) for n in ("income_dynamics",) if os.path.isdir(os.path.join(WS, n)))
 OUT = os.path.join(APP, "output")
 os.makedirs(OUT, exist_ok=True)
 
@@ -46,7 +54,7 @@ rng = np.random.default_rng(20260908)
 B = 1000
 
 # --------------------------------------------------------------------------
-# Data: residual panel, five waves 2014-2022, locked sample
+# Data: residual panel, five waves 2014-2022, children with at least three waves
 # --------------------------------------------------------------------------
 d = pd.read_pickle(os.path.join(WSM, "data/intermediate/panel_resid.pkl"))
 d = d.dropna(subset=["y_tilde_w", "HighParentOcc14"]).copy()

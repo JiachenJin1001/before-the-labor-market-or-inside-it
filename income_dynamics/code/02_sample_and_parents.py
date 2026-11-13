@@ -1,8 +1,7 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
-Link children to their parents, classify family background, measure parental
-income, and select the child sample of the income-dynamics analysis.
+Link children to their parents, classify family background, and measure
+parental income: the child-wave frame from which the sample of the paper is
+drawn.
 
 Variables built here (all constant within child):
   - HighParentOcc14  1 if the father or the mother worked in an official,
@@ -24,15 +23,19 @@ Variables built here (all constant within child):
                      family income across the waves in which the parent's
                      family is observed.
 
-Sample written to panel_analysis.pkl and panel_analysis.dta (one row per child
-and wave): waves 2014 to 2022, age 22 to 55, positive income, HighParentOcc
+The script builds the child-wave frame `df` (one row per child and wave,
+before any sample filter) and writes no file. unified/code/sample_mature_age.py
+(prefilter_frame) executes it up to the comment "# Sample filter", caches `df`
+as data/intermediate/ws/child_waves_before_sample_filter.pkl, and applies the
+sample rule of the paper there: waves 2014 to 2022, ages 22 to 55, positive
+labor income, HighParentOcc14, parental income, gender, residence and province
 non-missing, log income at least ln(1000) and at most the 99th percentile of
-its wave, and at least three such rows for the child.
-
-Because the filter requires HighParentOcc to be non-missing, about 420 children
-with a valid HighParentOcc14 and no occupation code from the parents' own adult
-records are not in the sample.
+its wave, and at least two such waves (at least three for the earnings process).
+unified/code/d0_dynamics_panel.py writes the child-wave rows of the children
+with at least three waves to data/intermediate/panel_analysis.pkl.
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os, sys
 import numpy as np
 import pandas as pd
@@ -278,7 +281,7 @@ print(f"  ParentInc_bar non-null on full df: "
       f"({df.loc[df['ParentInc_bar'].notna(),'pid'].nunique():,} unique children)")
 
 # Sample filter
-# The children with at least three waves at ages 22 to 55 (Sections 3 and 4 of the paper) are selected by
-# unified/code/d0_dynamics_panel.py with the rule of unified/code/sample_mature_age.py,
-# which reads the child-wave frame `df` built above and writes
-# data/intermediate/panel_analysis.pkl. Nothing is filtered here.
+# Nothing is filtered here and no file is written. unified/code/sample_mature_age.py executes this script up to
+# the line above and applies the sample rule of the paper to the child-wave frame `df`; for the earnings process
+# of Section 4, unified/code/d0_dynamics_panel.py writes the rows of the children with at least three waves to
+# data/intermediate/panel_analysis.pkl.

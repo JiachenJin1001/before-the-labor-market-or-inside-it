@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Entropy balancing estimate (Hainmueller 2012) of the premium: the earnings
 difference between advantaged and less advantaged children after the less advantaged
@@ -37,14 +35,13 @@ Reports:
 
 Output: data/intermediate/ws/ws_07b_ebal_results.csv
 """
-
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os
 import numpy as np
 import pandas as pd
 
-_MAC = _WSROOT + "/data/intermediate"
-_LIN = _WSROOT + "/data/intermediate"
-BASE_INT = _MAC if os.path.isdir(_MAC) else _LIN
+BASE_INT = _WSROOT + "/data/intermediate"
 WS_DIR = os.path.join(BASE_INT, "ws")
 os.makedirs(WS_DIR, exist_ok=True)
 
@@ -131,8 +128,8 @@ def main():
 
     # Covariate matrix: means and variances of the continuous covariates,
     # means of the indicators. The child's own years of schooling are
-    # determined after family background and are the mediator in
-    # ws_07c_iv_robustness.py, so they do not enter the balancing constraints.
+    # determined after family background and are the mediator of the
+    # decomposition, so they do not enter the balancing constraints.
     cont_vars = ["ParentInc", "age_first"]
     child[cont_vars] = child[cont_vars].fillna(child[cont_vars].median())
 

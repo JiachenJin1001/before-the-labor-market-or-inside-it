@@ -12,17 +12,18 @@ the mean exposure ratio of the cohorts born 1964 to 1980, all of whom were of
 college age before the reform.
 
 What each section takes from the sample:
-  Sections 3 and 4   the children with at least three waves, because the dynamic
-                     panel estimators need three (DYNAMICS = (22, 55, 3))
-  Section 5          the level of earnings at ages 30 and over: the mean, over a
+  Section 3          the level of earnings at ages 30 and over: the mean, over a
                      child's waves at 30 and over, of log labor income net of
                      survey-year effects, for the children with at least two
                      such waves (build_sample(), child_waves())
-  Sections 6 and 7   the two rows per child of two_row(): that mean, and the
+  Section 4          the children with at least three waves, because the dynamic
+                     panel estimators need three (DYNAMICS = (22, 55, 3))
+  Sections 5 and 6   the two rows per child of two_row(): that mean, and the
                      same mean over the waves below 30
 
   prefilter_frame()              child-wave rows of income_dynamics/code/02_sample_and_parents.py
-                                 before any sample filter (needs the survey files; cached)
+                                 before any sample filter (built from the survey files and cached
+                                 as a person-level file; without the survey files the cached file is read)
   build_sample(level_from=None)  all children of the sample, one row each (log_y: mean log income over all waves)
   build_sample()                 children with at least two waves at 30 and over; log_y is the level of earnings at
                                  30 and over defined above; age_first and waves refer to the waves at 30 and over
@@ -41,20 +42,23 @@ EXT = os.path.join(P, "data", "external")
 LO, HI, MIN_WAVES = 22, 55, 2          # the sample: lowest age, highest age, minimum number of waves
 LEVEL_FROM = 30                        # the level of earnings is measured at ages 30 and over
 OLD_MIN, YOUNG_MIN = 2, 1              # waves behind the mean at 30 and over (a multi-year average) and behind the mean below 30
-DYNAMICS = (LO, HI, 3)                 # children with at least three waves (Sections 3 and 4)
+DYNAMICS = (LO, HI, 3)                 # children with at least three waves (Section 4)
 
 
 def prefilter_frame():
-    """The child-wave frame of 02_sample_and_parents.py up to its sample filter (needs the survey files).
-    Cached as a person-level file next to the panels of the pipeline that holds the survey files."""
-    for pipe in (P, M):
-        if os.path.isdir(os.path.join(pipe, "data", "raw", "CFPS2012")):
-            break
-    else:
-        sys.exit("the survey files (data/raw/CFPS2012 and so on) were not found in either pipeline folder")
-    cache = os.path.join(pipe, "data", "intermediate", "ws", "child_waves_before_sample_filter.pkl")
-    if os.path.exists(cache):
-        return pd.read_pickle(cache)
+    """The child-wave frame of 02_sample_and_parents.py up to its sample filter.
+    Built from the survey files and cached as a person-level file
+    (data/intermediate/ws/child_waves_before_sample_filter.pkl) in the pipeline folder that holds the survey files.
+    When neither pipeline folder holds the survey files, the cached file is read from whichever folder has it."""
+    raw = [p for p in (P, M) if os.path.isdir(os.path.join(p, "data", "raw", "CFPS2012"))]
+    caches = [os.path.join(p, "data", "intermediate", "ws", "child_waves_before_sample_filter.pkl") for p in (raw[:1] or [P, M])]
+    for cache in caches:
+        if os.path.exists(cache):
+            return pd.read_pickle(cache)
+    if not raw:
+        sys.exit("neither the survey files (data/raw/CFPS2012 and so on) nor the cached child-wave frame "
+                 "(data/intermediate/ws/child_waves_before_sample_filter.pkl) were found in either pipeline folder")
+    pipe, cache = raw[0], caches[0]
     script = os.path.join(pipe, "code", "02_sample_and_parents.py")
     src = open(script, encoding="utf-8").read()
     src = src[:src.index("# Sample filter")]
@@ -134,19 +138,19 @@ def child_waves(lo=LO, hi=HI, min_waves=MIN_WAVES, level_from=LEVEL_FROM):
 
 
 def process_parameters(group="pooled"):
-    """Permanent variance, transitory innovation variance and transitory persistence of the Section 3 earnings process
+    """Permanent variance, transitory innovation variance and transitory persistence of the Section 4 earnings process
     (minimum distance, income_dynamics/output/tables/m7_md_cellw_boot.csv)."""
     m7 = pd.read_csv(os.path.join(M, "output", "tables", "m7_md_cellw_boot.csv")).set_index("group").loc[group]
     return float(m7.eta2), float(m7.eps2), float(m7.rho)
 
 
 def two_row(A=LEVEL_FROM, weights="none", outcome="log_income", c=None, d=None, old_min=OLD_MIN, young_min=YOUNG_MIN):
-    """The rows of the Section 6 design: for each child of c, the mean of the outcome net of survey-year effects over
+    """The rows of the Section 5 design: for each child of c, the mean of the outcome net of survey-year effects over
     the child's waves below age A and over the waves at A and over. The row at A and over is kept if it averages at
     least old_min waves, the row below A if it averages at least young_min waves.
     Columns: the child-level variables of build_sample(level_from=None); old (1 for the row at A and over); n (waves
     behind the mean); y (the mean); w (weight). weights='none' gives every row weight one; weights='process' gives the
-    precision implied by the pooled earnings process of Section 3: a mean of n waves has variance
+    precision implied by the pooled earnings process of Section 4: a mean of n waves has variance
     sigma_eta^2 + sigma_v^2 / n with sigma_v^2 = sigma_eps^2 / (1 - rho^2), and the weight is its inverse."""
     old_min = OLD_MIN if old_min is None else old_min; young_min = YOUNG_MIN if young_min is None else young_min
     c = build_sample(level_from=None) if c is None else c

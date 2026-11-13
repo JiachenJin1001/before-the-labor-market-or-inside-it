@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Dynamic panel model of residual log income, estimated by Arellano-Bond GMM.
 
@@ -36,6 +34,8 @@ Output:
 The GMM estimator is coded here directly. The Stata version of the same
 specification is in stata/05_method2_abgmm.do.
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os, json
 import numpy as np
 import pandas as pd

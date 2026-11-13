@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Minimum-distance estimation of the income process with an ARMA(1,1)
 transitory component, for comparison with the AR(1) transitory component.
@@ -27,15 +25,14 @@ criterion, and the difference between the two values of J is reported.
 Output:
     data/intermediate/ws/ws_method1_arma11.csv
 """
-
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
-_MAC = _WSROOT + "/data/intermediate"
-_LIN = _WSROOT + "/data/intermediate"
-BASE_INT = _MAC if os.path.isdir(_MAC) else _LIN
+BASE_INT = _WSROOT + "/data/intermediate"
 OUT_DIR  = os.path.join(BASE_INT, "ws")
 os.makedirs(OUT_DIR, exist_ok=True)
 

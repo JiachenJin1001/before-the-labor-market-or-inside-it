@@ -1,6 +1,6 @@
 """The premium under alternative age controls.
 
-Correlated random-effects regression of Section 5 of the paper (family-income
+Correlated random-effects regression of Section 3 of the paper (family-income
 control) on the child-waves at ages 30 and over of the children with a level of
 earnings at those ages (sample_mature_age.child_waves()), with the age
 control linear (the paper's specification), quadratic, cubic, and a full set

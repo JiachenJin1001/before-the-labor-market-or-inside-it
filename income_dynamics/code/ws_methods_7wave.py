@@ -1,5 +1,3 @@
-import os as _os
-_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 """
 Estimates of the income process and of the premium on the seven-wave panel.
 
@@ -16,11 +14,16 @@ Estimators, as in the scripts for the five-wave panel 2014 to 2022:
      waves, with bootstrap standard errors (05_method2_abgmm.py).
   3. Random-coefficient model with child-specific trends and the regression
      of the trends on HP14 and ParentInc_bar (06_mini_method3_randcoef.py).
-  4. Correlated random effects regression of log income (07_cre.py).
+  4. Correlated random effects regression of log income on HP14 and
+     ParentInc_bar, with age, its square, urban, their within-child means,
+     female, province and year indicators, standard errors clustered by
+     child, with and without ParentInc_bar.
 
 Output (data/intermediate/ws/): ws_method1_7wave.csv, ws_method2_7wave.csv,
 ws_method3_7wave.csv, ws_cre_7wave.csv
 """
+import os as _os
+_WSROOT = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 import os, math, time
 import numpy as np
 import pandas as pd

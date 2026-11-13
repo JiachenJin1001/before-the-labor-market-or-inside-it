@@ -1,6 +1,7 @@
 """Attenuation of rank-rank slopes, simulated from the fitted income process.
 
-The attenuation schedule eta_T of the paper gives the fraction of a
+The attenuation schedule (the factor lambda_T of the paper, eta_T in this
+script) gives the fraction of a
 coefficient in levels that is recovered when parental income is measured by
 an average over T waves. It depends only on the ratio of variances. Rank-rank
 slopes are attenuated as well, by a factor that depends on the whole
@@ -8,10 +9,13 @@ distribution. This script simulates that factor from the fitted process
 (permanent effect plus AR(1) transitory component, pooled minimum-distance
 estimates written by m7_md_cellweighted_boot.py):
 
-    sigma2_eta   variance of the permanent effect (0.125 in the pooled sample)
+    sigma2_eta   variance of the permanent effect
     rho          AR(1) coefficient of the transitory component between waves
-                 two years apart (0.16)
-    share        permanent share (0.27), so sigma2_v = sigma2_eta*(1/share - 1)
+                 two years apart
+    share        permanent share, so sigma2_v = sigma2_eta*(1/share - 1)
+
+The three values are the pooled estimates read from
+output/tables/m7_md_cellw_boot.csv.
 
 Design: the parent's permanent log income alpha is normal with variance
 sigma2_eta. The child's permanent income is b * alpha + e with b = 0.30 and
@@ -40,8 +44,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "output", "tables",
                    "m8_rank_attenuation.csv")
 
-import pandas as _pd, os as _os2
-_m7 = _pd.read_csv(_os2.path.join(_os2.path.dirname(_os2.path.abspath(__file__)), "..", "output", "tables", "m7_md_cellw_boot.csv")).set_index("group").loc["pooled"]
+_m7 = pd.read_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "output", "tables", "m7_md_cellw_boot.csv")).set_index("group").loc["pooled"]
 S2_ETA, RHO, SHARE = float(_m7["eta2"]), float(_m7["rho"]), float(_m7["sperm"])   # pooled minimum-distance estimates of this run
 S2_V = S2_ETA * (1.0 / SHARE - 1.0)
 N = 400_000

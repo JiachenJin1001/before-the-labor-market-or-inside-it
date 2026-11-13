@@ -9,8 +9,8 @@ runnable from any clone of the repository.
 Resolution order:
 1. Environment variable IGM_PROJECT_ROOT (highest priority; IGM is the
    project's earlier name).
-2. Auto-detect: walk up from this file's directory until we see a sibling
-   `data/` directory.
+2. Auto-detect: walk up from this file's directory until a directory that
+   holds both `data/` and `code/` is found.
 3. Fallback: assume `code/` is one level below project root.
 """
 import os

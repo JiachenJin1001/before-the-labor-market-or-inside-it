@@ -1,4 +1,4 @@
-"""Variation of the grid-averaged nonlinear persistence across runs of the stochastic EM (Section 3.5 of the paper).
+"""Variation of the grid-averaged nonlinear persistence across runs of the stochastic EM (Section 4.4 of the paper).
 
 The paper prints the grid-averaged local persistence of one run of
 income_dynamics/code/ws_05b_abb_stochastic_em.py (pooled sample, advantaged children, less advantaged children). This

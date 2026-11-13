@@ -3,12 +3,12 @@
 One sample (sample_mature_age.py): children aged 22 to 55 with at least two waves of positive labor income in 2014
 to 2022. Three groups of children are described, each defined by what an analysis needs:
   'all children'            every child of the sample
-  'three waves'             the children with at least three waves (Sections 3 and 4)
+  'three waves'             the children with at least three waves (Section 4)
   'level at 30 and over'    the children with at least two waves at ages 30 and over, for whom the level of earnings
-                            is measured (Section 5; the rows at 30 and over of Sections 6 and 7)
+                            is measured (Section 3; the rows at 30 and over of Sections 5 and 6)
 
   A  means and standard deviations by family background for all children and for the children with a level at 30 and
-     over (Table 2); for the latter, log labor income is the level of earnings at 30 and over (net of survey-year
+     over (Table 1); for the latter, log labor income is the level of earnings at 30 and over (net of survey-year
      effects) and age and waves refer to the waves at 30 and over
   B  facts: counts, child-waves, birth years, provinces; children with a row below 30 and with both rows; children
      born before 1964; among children with a retrospective report observed at ages 22 to 55, the share who enter
@@ -19,7 +19,7 @@ to 2022. Three groups of children are described, each defined by what an analysi
      assigned, by family background; survey-year means of log income at 30 and over
   C  first stages at the child level on all children: each intensity measure, the placebo, and by family background
      in the specification of u12_returns_by_family_background.py (wild cluster bootstrap, 9,999 draws). These include
-     the children observed only below 30 and are not the first stages of the returns of Section 6
+     the children observed only below 30 and are not the first stages of the returns of Section 5
   D  least squares return to college by age band on the child-waves of all children (family background, parental
      income, gender, urban residence, province, survey-year and age effects; standard errors clustered on child)
 The rows of B that read the survey files are copied from the existing output if the files are not present.

@@ -24,10 +24,8 @@ What is asserted
   6. Style: no em dash, no preamble.
 
 Folder layout. The script walks up from its own location to the directory
-that contains both the unified paper folder ("unified" or "unified")
-and the formal-results folder ("formal_results" or
-"formal_results"), so it runs unchanged in the working project and in the
-public package.
+that contains both the folder of the paper and the folder of the formal
+results, so it runs unchanged in the folder layout of the public package.
 
     python3 build/check_part2_numbers.py [path to an alternative tex file]
 
@@ -42,9 +40,9 @@ import numpy as np
 import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-UNIFIED_NAMES = ("unified", "unified")
-THEORY_NAMES = ("formal_results", "formal_results")
-INCOME_DYNAMICS_NAMES = ("income_dynamics", "income_dynamics")
+UNIFIED_NAMES = ("unified",)
+THEORY_NAMES = ("formal_results",)
+INCOME_DYNAMICS_NAMES = ("income_dynamics",)
 
 
 def first_existing(parent, names):
@@ -225,7 +223,7 @@ check("f_2", f"$f_2 = {f_sum(r2, 2):.2f}$")
 check("f_5", f"$f_5 = {f_sum(r2, 5):.2f}$")
 check("f_9", f"$f_9 = {f_sum(r2, 9):.2f}$")
 check("f_inf", f"$f_\\infty = {(1 + r2) / (1 - r2):.2f}$")
-check("f_inf excess in percent", f"is up to {100 * ((1 + r2) / (1 - r2) - 1):.0f} percent larger")
+check("f_inf excess in percent", f"keep up to {100 * ((1 + r2) / (1 - r2) - 1):.0f} percent more variance")
 
 # closed forms
 worst = 0.0
@@ -246,7 +244,7 @@ for rho in np.linspace(0.01, 0.99, 50):
 check_true("f_T increasing in T and rho, f_T/T decreasing in T", mono)
 
 # ------------------------------------------------ Table of eta_T
-for t in [1, 2, 3, 4, 5, 6, 7, 9]:
+for t in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
     a = eta[(eta["T"] == t) & (eta["formula"] == "approx")].iloc[0]
     e = eta[(eta["T"] == t) & (eta["formula"] == "exact")].iloc[0]
     check(f"eta table row T={t}",
@@ -341,7 +339,7 @@ maxdev = max((rk["arcsin_one_sided"] - rk["sim_one_sided"]).abs().max(),
 check("largest gap, closed form against simulation (notes)", f"simulation is {maxdev:.3f}")
 check("largest gap, closed form against simulation (text)", f"to within {maxdev:.3f}")
 corr = (rk["sqrt_eta"] - rk["arcsin_one_sided"]).max()
-check("size of the correction to the square root", "of at most 0.002 at $r = 0.30$")
+check("size of the correction to the square root", "at $r = 0.30$ the gap is at most 0.002")
 check_true("correction to the square root is below 0.002", corr < 0.002, f"{corr:.4f}")
 exact_col = np.array([eta[(eta["T"] == t) & (eta["formula"] == "exact")].iloc[0]["eta"] for t in rk["T"]])
 dev_eta = np.abs(rk["eta_T"].values - exact_col).max()
@@ -404,7 +402,7 @@ else:
 check_paper("paper: bootstrap replications", "1,000-replication bootstrap")
 _f14 = pd.read_csv(os.path.join(UNIFIED, "output", "u14_B_sample_facts.csv")).set_index("item")["value"]
 _pa, _pl = 100 * _f14["share of them in the sample, advantaged"], 100 * _f14["share of them in the sample, less advantaged"]
-check("sample screens", f"pass {_pa:.1f} percent of advantaged and {_pl:.1f} percent of less advantaged children")
+check("sample screens", f"keep {_pa:.1f} percent of advantaged and {_pl:.1f} percent of less advantaged children")
 check_paper("paper: sample screens", f"{_pa:.0f} percent of advantaged children enter the sample, against {_pl:.0f} percent of less advantaged children")
 
 # identification and the Jacobian

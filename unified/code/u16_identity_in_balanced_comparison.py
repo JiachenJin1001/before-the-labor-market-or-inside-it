@@ -1,4 +1,4 @@
-"""The accounting identity of Section 7 inside the entropy-balanced comparison of Section 5.3.
+"""The accounting identity of Section 6 inside the entropy-balanced comparison of Section 3.2.
 
 Children: the 2,774 children with a level of earnings. Comparison: advantaged children against less advantaged
 children reweighted by entropy balancing to the parental income and demographics of advantaged children (the weights

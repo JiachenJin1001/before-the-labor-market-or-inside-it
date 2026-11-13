@@ -470,7 +470,7 @@ chk("growth interval over a decade", f"the 95 percent interval runs from about $
 chk("first stage bins", "20 bins of less advantaged and 10 bins of advantaged children")
 chk("the set for advantaged children (Section 5.3)", "the set for advantaged children is unbounded on both sides.")
 need(abs(gL["fs"] - gH["fs"]) < 2 * (gL["fs_se"] ** 2 + gH["fs_se"] ** 2) ** 0.5, "group first stages on the rows at 30 and over not distinguishable (values in the online appendix)")
-_full = B(rows["Return at which college explains all of the premium"], "return_to_college"); chk("Table 8 note: the direct effect is zero at the full-explanation return", f"the Anderson--Rubin sets of both instrumented returns contain {_full:.3f}, the return at which the direct effect is zero")
+_full = B(rows["Return at which college explains all of the premium"], "return_to_college"); chk("Table 8 note: the direct effect is zero at the full-explanation return", f"the 95 percent Anderson--Rubin sets of both instrumented returns contain {_full:.3f}, the return at which the direct effect is zero")
 need(sA95[0][0] < _full < sA95[0][1] and _full >= sH95[1][0], "the Anderson-Rubin sets of both instrumented returns contain the full-explanation return")
 print("=== appendix of formal results (numbers recomputed here from the files of estimates)")
 _r, _se, _eps = float(P7["rho"]), float(P7["eta2"]), float(P7["eps2"]); _sv = _eps / (1 - _r ** 2); _s = _se / (_se + _sv)

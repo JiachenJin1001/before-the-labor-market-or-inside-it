@@ -274,7 +274,7 @@ check_paper("paper's schedule, approximation row", f"independence approximation 
 _ts = pd.read_csv(os.path.join(OUT, "A_eta_Tstar.csv")).set_index("formula")
 _W = {5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
 check_paper("paper's footnote: crossing of two thirds under the two formulas",
-            f"from {_W[int(_ts.loc['approx', 'T_star'])]} waves to {_W[int(_ts.loc['exact', 'T_star'])]}")
+            f"takes about {_W[int(_ts.loc['approx', 'T_star'])]} biennial waves ({_W[int(_ts.loc['exact', 'T_star'])]} under the exact calculation)")
 check("crossing of two thirds, Part II", f"statement that {_W[int(_ts.loc['approx', 'T_star'])]} biennial waves reach two thirds uses the independence approximation; under the exact formula the crossing is at {_W[int(_ts.loc['exact', 'T_star'])]} waves")
 
 # ------------------------------------------------ waves needed
@@ -405,7 +405,7 @@ check_paper("paper: bootstrap replications", "1,000-replication bootstrap")
 _f14 = pd.read_csv(os.path.join(UNIFIED, "output", "u14_B_sample_facts.csv")).set_index("item")["value"]
 _pa, _pl = 100 * _f14["share of them in the sample, advantaged"], 100 * _f14["share of them in the sample, less advantaged"]
 check("sample screens", f"pass {_pa:.1f} percent of advantaged and {_pl:.1f} percent of less advantaged children")
-check_paper("paper: sample screens", f"{_pa:.0f} percent of advantaged children satisfy every screen and enter the sample, against {_pl:.0f} percent of less advantaged children")
+check_paper("paper: sample screens", f"{_pa:.0f} percent of advantaged children enter the sample, against {_pl:.0f} percent of less advantaged children")
 
 # identification and the Jacobian
 ident_gap, det_gap = 0.0, 0.0
@@ -511,7 +511,7 @@ check("consistency by Newey and McFadden", "their Theorem 2.1")
 rho_obs = round(share, 2) + (1 - round(share, 2)) * r2
 check("rho_obs", f"$\\rho_{{\\mathrm{{obs}}}} = {share:.2f} + {1 - round(share, 2):.2f} \\times {r2:.2f} = {rho_obs:.2f}$")
 check("rho_obs in words", f"the value near {round(rho_obs, 1):.1f} in Section")
-check_paper("paper: rho_obs", f"is near {round(rho_obs, 1):.1f} at the pooled estimates, more than twice the transitory parameter")
+check_paper("paper: rho_obs", f"the autocorrelation of observed residual earnings, near {round(rho_obs, 1):.1f} at the pooled estimates")
 check_true("rho_obs at unrounded parameters", f"{share + (1 - share) * rho_hat:.2f}" == f"{rho_obs:.2f}")
 check("two estimates of persistence", "gap between the minimum-distance estimate and the Arellano--Bond estimate")
 _m10 = pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES), "output", "tables", "m10_abgmm_table3.csv")).set_index("panel")
@@ -534,7 +534,7 @@ _eb = _uo("u8_entropy_balancing.csv")[0]; _ls = {r["item"]: r for r in _uo("u13_
 tau, dm, b_ls = float(_eb["tau_hat"]), float(_eb["gap_hat"]), float(_ls["least squares return, all children"]["coef"])
 check("premium", f"$\\tau = {tau:.3f}$")
 check("college gap", f"$\\Delta M = {dm:.3f}$")
-check_paper_re("paper: premium", rf"the remaining {tau:.3f} \(\d+ percent\) is the premium \$\\tau\$")
+check_paper("paper: premium", f"supplies $\\tau = {tau:.3f}$")
 check_paper("paper: college gap", f"$\\Delta M = {dm:.3f}$")
 # instrumented returns for advantaged children (unified/code/u12_returns_by_family_background.py) and for all children
 # (unified/code/u9_mature_age_earnings.py), two-row regression, row at 30 and over

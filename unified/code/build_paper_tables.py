@@ -97,7 +97,7 @@ L = {  # labels by language
                       "Common parameters against separate fits (distance test)", "Three parameter gaps of the separate fits (Wald test)",
                       "Scale of advantaged autocovariances, $\\kappa$",
                       "Gap with one parameter free: permanent variance $\\sigma^2_\\eta$", "Gap with one parameter free: transitory persistence $\\rho_v$",
-                      "Gap with one parameter free: innovation variance $\\sigma^2_\\varepsilon$"],
+                      "Gap with one parameter free: shock variance $\\sigma^2_\\varepsilon$"],
             cre_head=["& (1) & (2) & (3) \\\\", "Estimator & Correlated & Correlated & Entropy \\\\",
                       "& random effects & random effects & balancing \\\\",
                       "Parental income measure & Family income & Parental labor income & Family income \\\\"],

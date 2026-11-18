@@ -43,15 +43,20 @@ license to registered users and do not allow to be redistributed. A
 registered user who places the files in the folders named below can run
 the pipeline from the raw data.
 
-\begin{table}[H]
-\centering
-\small
+{\small
+\begin{longtable}{@{}L{4.3cm}L{3.0cm}L{7.6cm}@{}}
 \caption{Data sources and access.}
-\label{oatab:dataaccess}
-\begin{tabular}{@{}L{4.3cm}L{3.0cm}L{7.6cm}@{}}
+\label{oatab:dataaccess} \\
 \toprule
 Data & In the repository & Access \\
 \midrule
+\endfirsthead
+\toprule
+Data & In the repository & Access \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
 China Family Panel Studies, waves 2010 to 2022 (individual, family
 roster, and family economy files) & No & Institute of Social Science
 Survey, Peking University. Registration and download at
@@ -78,9 +83,7 @@ Yes & Province-level shares computed from the census samples and carried as an i
 \code{college_expansion/data/external/census_hs_stock.csv}. \\
 Consumer prices by province and year & Yes &
 \code{college_expansion/data/external/cpi_province_year.csv}. \\
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}}
 
 \subsection{Software}
 

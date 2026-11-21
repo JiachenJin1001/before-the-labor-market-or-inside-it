@@ -73,7 +73,7 @@ provincial series of \citet{Ma2024IER} and carried as an input file (no script o
 National admissions and the exposure ratio & Yes &
 \code{college_expansion/data/external/cohort_exposure.csv}. \\
 Registrations for the college entrance examination by province, 1990s &
-Yes & \emph{China Education Statistical Yearbook}:
+Yes & \emph{Educational Statistics Yearbook of China}:
 \code{college_expansion/data/external/cee_registrants_province.csv}. To rebuild it, \code{college_expansion/code/ws_extract_cnki_cee.py} reads the yearbook tables of 1997 to 2000 and 2002, downloaded from CNKI as protected \texttt{.xls} files, from \texttt{college\_expansion/data/raw}; the file names are listed in the script. \\
 Exports and GDP by province, 2000 & Yes & \emph{China Statistical
 Yearbook for Regional Economy} 2001:
@@ -99,8 +99,7 @@ compile with pdfLaTeX and BibTeX.
 
 \begin{enumerate}
 \item \emph{Panel and samples} (\texttt{./run\_all.sh -{}-from-raw}). \code{income_dynamics/code/01_build_panel.py} reads the CFPS
-files; \code{unified/code/d0_dynamics_panel.py} links children to parents through \code{income_dynamics/code/02_sample_and_parents.py}, which \code{unified/code/sample_mature_age.py} runs and whose child-wave frame it stores, and
-writes the child-wave panel of the children with at least three waves;
+files; \code{unified/code/d0_dynamics_panel.py} writes the child-wave panel of the children with at least three waves from the linked frame (children are linked to parents by \code{income_dynamics/code/02_sample_and_parents.py}, which \code{unified/code/sample_mature_age.py} runs and whose child-wave frame it caches);
 \code{income_dynamics/code/03_step0_residualize.py} residualizes it, \code{income_dynamics/code/ws_panel_7wave.py} builds the reconstructed seven-wave panel, and \code{income_dynamics/code/m14_parent_process.py} estimates the earnings process of the linked parents.
 These steps need the licensed survey files; the later steps need only the person-level files that this step writes. The sample of the paper (children observed in at least two waves at ages 22 to 55), the level of earnings at ages 30 and over, and the two rows per child of the expansion design are built by \code{unified/code/sample_mature_age.py}, a module that the scripts of the later steps import.
 \item \emph{Earnings process and measurement.} The scripts of \folder{income_dynamics/code} that \code{run_all.sh} lists: the minimum-distance fits and their bootstrap, the joint fits by family background, the Arellano--Bond estimates and their diagnostics, the alternative error structures, the lead test, the simulation of rank-rank attenuation, and the stochastic estimator of nonlinear persistence; then \code{formal_results/code/appendix_theory_computations.py}, the computations of Part II.
@@ -129,15 +128,14 @@ and \code{online_appendix/build/check_part2_numbers.py} check the numbers of Par
 {\footnotesize
 \setlength{\tabcolsep}{4pt}
 \begin{longtable}{@{}L{4.6cm}L{6.0cm}L{4.6cm}@{}}
-\caption{The script and the output file behind each table and figure of
-the paper, and behind the numbers reported only in its text.}
+\caption{The script and the output file behind each table and figure of the paper, the exhibits of this appendix that it draws on, and the numbers reported only in the text.}
 \label{oatab:exhibits} \\
 \toprule
-Exhibit of the paper & Script & Output \\
+Exhibit & Script & Output \\
 \midrule
 \endfirsthead
 \toprule
-Exhibit of the paper & Script & Output \\
+Exhibit & Script & Output \\
 \midrule
 \endhead
 \bottomrule
@@ -266,14 +264,13 @@ Online Appendix Section~\ref{oa:nonlinear}. Nonlinear persistence, ten runs &
 \code{income_dynamics/code/ws_05b_abb_stochastic_em.py},
 \code{unified/code/u15_nonlinear_persistence_runs.py} &
 \code{unified/output/u15_nonlinear_persistence_summary.csv} \\
-Section~\ref{P-sec:design}. Randomization inference &
+Section~\ref{P-sec:design} and Table~\ref{oatab:randomization}. Randomization inference &
 \code{unified/code/u9_mature_age_earnings.py} (block R) &
 \code{unified/output/u9_R_randomization_inference.csv},
 \code{unified/output/u9_R_randomization_within_region.csv} \\
-Section~\ref{P-sec:earnings}. Three-year completion; set from randomization inference &
-\code{unified/code/u9_mature_age_earnings.py} (blocks G and R) &
-\code{unified/output/u9_G_three_year_completion.csv},
-\code{unified/output/u9_R_randomization_within_region.csv} \\
+Section~\ref{P-sec:earnings}. Three-year completion &
+\code{unified/code/u9_mature_age_earnings.py} (block G) &
+\code{unified/output/u9_G_three_year_completion.csv} \\
 \end{longtable}}
 
 \noindent The tables of this appendix name their scripts in their notes.
@@ -282,7 +279,7 @@ Section~\ref{P-sec:earnings}. Three-year completion; set from randomization infe
 
 The five tables of the paper that report means or estimates with standard errors
 (Tables~\ref{P-tab:desc}, \ref{P-tab:cre}, \ref{P-tab:md},
-\ref{P-tab:summary} and \ref{P-tab:groups}), and Tables~\ref{oatab:ab}, \ref{oatab:markers} and \ref{oatab:mature} of this appendix, are generated rather than typed. The script
+\ref{P-tab:summary} and \ref{P-tab:groups}), and Tables~\ref{oatab:markers}, \ref{oatab:ab} and \ref{oatab:mature} of this appendix, are generated rather than typed. The script
 \code{unified/code/build_paper_tables.py} reads the files of estimates
 named in its header, formats each coefficient with its significance stars
 and standard error, and writes the body of each table to

@@ -316,8 +316,7 @@ Simulation, child measured with 3 waves & 0.358 & 0.429 & 0.473 & 0.506 & 0.532 
 \end{tabular}
 \par\smallskip
 \begin{minipage}{0.95\textwidth}
-\footnotesize\emph{Notes:} The simulation rows are the factors of Online
-Appendix Table~\ref{oatab:rank}, printed to three decimals (400,000
+\footnotesize\emph{Notes:} The simulation rows are the factors of Table~\ref{oatab:rank}, printed to three decimals (400,000
 Gaussian draws, $r = 0.30$). The
 closed-form rows evaluate \eqref{fr:eq:rank} at the $\lambda_T$ of the first
 row, which is the value the simulation uses. That value is computed from the unrounded pooled estimates and is the exact column of Table~\ref{fr:tab:etaboot}. The largest discrepancy between closed form and simulation is
@@ -399,7 +398,7 @@ $\pi_{ts}$ is the probability that a child is observed in both waves $t$
 and $s$, and $\pi_{ts,t's'}$ is the probability that a child is observed
 in all of the waves $t$, $s$, $t'$, and $s'$. The independence part of the
 assumption is what lets pairwise deletion estimate population
-autocovariances. It is a missing-completely-at-random condition on wave participation. The sample restrictions keep 45.5 percent of advantaged and 42.0 percent of less advantaged children (Table~\ref{oatab:screens}); the assumption concerns which waves a child in the sample is observed in, which the restrictions do not test.
+autocovariances. It is a missing-completely-at-random condition on wave participation. The sample restrictions keep 45.5 percent of advantaged and 42.0 percent of less advantaged children (Table~\ref{oatab:screens}); those rates bear on who enters the sample, whereas the assumption concerns which waves a child in the sample is observed in.
 
 \subsection{Identification}
 
@@ -652,11 +651,8 @@ The row of draws for advantaged children at a permanent share of zero in
 Figure~\ref{oafig:ridge} is this boundary. With
 $\hat\sigma^2_\eta = 0.083$ and a bootstrap standard error of 0.028, the
 estimate for advantaged children is about three standard errors from the
-boundary, and the bootstrap draws reach it; this is the situation of
-Remark~\ref{fr:prop:boundary}. This is why Table~\ref{P-tab:md} of the paper prints no significance marks. The paper does not read the separate fit for advantaged children as a difference between the groups and rests the comparison on the joint fits of Section~\ref{oa:jointfit} and on the fifteen raw moments (Figure~\ref{P-fig:autocov} of the paper, Table~\ref{oatab:autocov}, and the
-joint test of Section~\ref{oa:jointtest}). Their
-estimators are unconstrained sample means, to which the bootstrap applies
-without qualification.
+boundary, and the bootstrap draws reach it, as in Remark~\ref{fr:prop:boundary}; for this reason Table~\ref{P-tab:md} of the paper prints no significance marks. The paper does not read the separate fit for advantaged children as a difference between the groups and rests the comparison on the joint fits of Section~\ref{oa:jointfit} and on the fifteen raw moments (Figure~\ref{P-fig:autocov} of the paper, Table~\ref{oatab:autocov}, and the
+joint test of Section~\ref{oa:jointtest}). The raw moments are unconstrained sample means, to which the bootstrap applies without qualification, and in the joint fit with every parameter common to the groups the permanent variance is 0.123 (SE 0.009), far from the boundary.
 
 \subsection{Observed and transitory persistence}
 

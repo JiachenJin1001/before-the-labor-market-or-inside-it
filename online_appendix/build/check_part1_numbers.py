@@ -175,7 +175,7 @@ for _f in ("oa_ridge.png", "oa_spec_curve.png"):
 
 # the first stage in percentage points, occupation and earnings by degree: numbers typed in notes
 _c14 = pd.read_csv(os.path.join(U, "output", "u14_C_first_stages_all_children.csv")).set_index("row")
-text("first-stage coefficients in the note on percentage points", f"({[v for k, v in _c14.fs.items() if k.startswith('all children')][0]:.3f} for all children, {_c14.loc['less advantaged children, instrument entering once for each group', 'fs']:.3f} for less advantaged and {_c14.loc['advantaged children, instrument entering once for each group', 'fs']:.3f} for advantaged children)")
+text("first-stage coefficients in the note on percentage points", f"({[v for k, v in _c14.fs.items() if k.startswith('all children')][0]:.3f} for the two groups together, {_c14.loc['less advantaged children, instrument entering once for each group', 'fs']:.3f} for less advantaged and {_c14.loc['advantaged children, instrument entering once for each group', 'fs']:.3f} for advantaged children)")
 _m20 = pd.read_csv(os.path.join(U, "output", "u20_first_stage_magnitudes.csv")).set_index("contrast")
 check("first stage in percentage points: the contrast the paper quotes is 18, 18 and 15", [round(_m20.loc["10th to 90th", k]) for k in ("pp_all", "pp_less advantaged", "pp_advantaged")] == [18, 18, 15])
 _g21 = pd.read_csv(os.path.join(U, "output", "u21_earnings_gap_by_degree.csv")).set_index("item")

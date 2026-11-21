@@ -502,6 +502,10 @@ _seH = float(pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES
 check("estimate and standard error, advantaged children",
       f"$\\hat\\sigma^2_\\eta = {advantaged['sigma_eta2']:.3f}$ and a bootstrap standard error of {_seH:.3f}")
 check("distance from the boundary", "is about three standard errors from the boundary")
+_jc = pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES), "output", "tables", "m19_joint_models.csv")).set_index("model").loc["all equal"]
+check("joint fit with every parameter common, permanent variance far from the boundary",
+      f"the permanent variance is {_jc.eta2_H:.3f} (SE {_jc.eta2_H_se:.3f}), far from the boundary")
+check_true("common fit: permanent variance more than ten standard errors from zero", _jc.eta2_H / _jc.eta2_H_se > 10, f"{_jc.eta2_H / _jc.eta2_H_se:.1f}")
 check_true("about three standard errors", abs(advantaged["sigma_eta2"] / _seH - 3) < 0.2, f"{advantaged['sigma_eta2'] / _seH:.2f}")
 check("consistency by Newey and McFadden", "their Theorem 2.1")
 

@@ -76,14 +76,14 @@ n1 = {g: F14[f"children with a retrospective report observed at ages 22 to 55 in
 n2 = {adv: F14["all children: advantaged children"], less: F14["all children: children"] - F14["all children: advantaged children"]}
 n3 = {adv: F14["three waves: advantaged children"], less: F14["three waves: children"] - F14["three waves: advantaged children"]}
 n4 = {adv: F14["level at 30 and over: advantaged children"], less: F14["level at 30 and over: children"] - F14["level at 30 and over: advantaged children"]}
-rows = [f"Retrospective report, family income of the parental household, observed at ages 22--55 in a 2014--2022 wave & {intc(n1[adv])} & {intc(n1[less])} & 100.0 & 100.0",
+rows = [f"Retrospective report of parental occupation and family income of the parental household; observed at ages 22--55 in a 2014--2022 wave & {intc(n1[adv])} & {intc(n1[less])} & 100.0 & 100.0",
         f"Trimming and at least two waves of positive labor income at ages 22--55 (the sample of the paper) & {intc(n2[adv])} & {intc(n2[less])} & {100 * F14[f'share of them in the sample, {adv}']:.1f} & {100 * F14[f'share of them in the sample, {less}']:.1f}",
         f"Of these, at least three waves (Section~\\ref{{P-sec:process}} of the paper) & {intc(n3[adv])} & {intc(n3[less])} & {100 * F14[f'share of them with three waves, {adv}']:.1f} & {100 * F14[f'share of them with three waves, {less}']:.1f}",
         f"Of the sample, at least two waves at ages 30 and over (level of earnings, Sections~\\ref{{P-sec:premium}}, \\ref{{P-sec:expansion}} and \\ref{{P-sec:mediation}} of the paper) & {intc(n4[adv])} & {intc(n4[less])} & {100 * n4[adv] / n1[adv]:.1f} & {100 * n4[less] / n1[less]:.1f}"]
 write("oa_screens", " & \\multicolumn{2}{c}{Children} & \\multicolumn{2}{c}{Percent of first row} \\\\\n\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\nScreen & Advantaged & Less advantaged & Advantaged & Less advantaged",
       rows, "@{}p{6.0cm}cccc@{}")
 frag("oa_employment",
-    f"{100 * F14[f'share of their person-waves with positive labor income, {adv}']:.1f} percent of the person-waves of advantaged and {100 * F14[f'share of their person-waves with positive labor income, {less}']:.1f} percent of the person-waves of less advantaged children")
+    f"{100 * F14[f'share of their person-waves with positive labor income, {adv}']:.1f} percent of the child-waves of advantaged and {100 * F14[f'share of their person-waves with positive labor income, {less}']:.1f} percent of those of less advantaged children")
 
 # ------------------------------------------------------------ B. earnings process
 j = m("data", "intermediate", "m16_joint_moment_test.csv").iloc[0]
@@ -102,9 +102,10 @@ open(os.path.join(TAB, "oa_autocov.tex"), "w", encoding="utf-8").write("\n".join
 _z = {(a, b): abs(M5[("H", a, b)][0] - M5[("L", a, b)][0]) / math.hypot(M5[("H", a, b)][1], M5[("L", a, b)][1]) for (g, a, b) in M5 if g == "H"}
 _k = max(_z, key=_z.get); frag("oa_autocovmax", f"the largest standardized gap is {_z[_k]:.2f}, at the ({_k[0]},\\,{_k[1]}) covariance")
 mde = m("output", "tables", "m13_mde.csv")
+_abgap = float(m("output", "tables", "m10_abgmm_table3.csv").set_index("panel").loc["diff GMM, 2014-2022", "rho1"])   # the interaction of Table A13 is the gap
 rows = []
 for _, r in mde.iterrows():
-    gap = "---" if pd.isna(r.gap) else num(r.gap)
+    gap = num(_abgap) if (pd.isna(r.gap) and r.param == "AB persistence interaction") else ("---" if pd.isna(r.gap) else num(r.gap))
     lab = {"permanent variance": "Permanent variance", "transitory variance": "Variance of transitory shocks",
            "transitory persistence": "Transitory persistence", "permanent share": "Permanent share",
            "AB persistence interaction": "Arellano--Bond persistence interaction"}[r.param]
@@ -338,12 +339,12 @@ for src, dst in [("fig_ridge.png", "oa_ridge.png"), ("fig_spec_curve.png", "oa_s
 
 # the Arellano--Bond table note: children and equations behind each panel
 m10 = m("output", "tables", "m10_abgmm_table3.csv").set_index("panel"); ab5, ab7 = m10.loc["diff GMM, 2014-2022"], m10.loc["diff GMM, 2010-2022 reconstructed"]
-frag("oa_abnote", f"$N = {intc(F14['three waves: children'])}$ children in the five-wave panel ({intc(ab5.n_eq)} usable differenced equations from {intc(ab5.n_children)} children); the reconstructed seven-wave panel applies the same screens to seven waves ({intc(ab7.n_eq)} equations from {intc(ab7.n_children)} children).")
+frag("oa_abnote", f"The sample is {intc(F14['three waves: children'])} children in the five-wave panel ({intc(ab5.n_eq)} usable differenced equations from {intc(ab5.n_children)} children); the reconstructed seven-wave panel applies the same screens to seven waves ({intc(ab7.n_eq)} equations from {intc(ab7.n_children)} children).")
 
 # joint fits of the two groups (income_dynamics/code/m19_joint_process_by_group.py)
 jm = m("output", "tables", "m19_joint_models.csv").set_index("model"); jg = m("output", "tables", "m19_joint_gaps.csv"); jt = m("output", "tables", "m19_joint_tests.csv")
-JLAB = [("free", "Free (the separate fits)"), ("all equal", "All parameters common"), ("scale", "Scale: advantaged moments $\\kappa$ times less advantaged"),
-        ("eta2 differs", "Permanent variance differs"), ("rho differs", "Transitory persistence differs"), ("eps2 differs", "Innovation variance differs"), ("common eps2", "Common innovation variance")]
+JLAB = [("free", "Free (the separate fits)"), ("all equal", "All parameters common"), ("scale", "Scale ($\\kappa$)"),
+        ("eta2 differs", "Permanent variance differs"), ("rho differs", "Transitory persistence differs"), ("eps2 differs", "Shock variance differs"), ("common eps2", "Common shock variance")]
 def jcell(r, k, g, d=3):
     v, se = r[f"{k}_{g}"], r[f"{k}_{g}_se"]; return f"{v:.{d}f} ({se:.{d}f})"
 rows = []
@@ -351,7 +352,7 @@ for k, lab in JLAB:
     r = jm.loc[k]
     rows.append(f"{lab} & {int(r.parameters)} & {r.crit:.1f} & {r.eta2_H:.3f} & {r.rho_H:.2f} & {r.eps2_H:.3f} & {r.eta2_L:.3f} & {r.rho_L:.2f} & {r.eps2_L:.3f}")
     rows.append(f" & & & ({r.eta2_H_se:.3f}) & ({r.rho_H_se:.2f}) & ({r.eps2_H_se:.3f}) & ({r.eta2_L_se:.3f}) & ({r.rho_L_se:.2f}) & ({r.eps2_L_se:.3f})")
-write("oa_jointmodels", " & & & \\multicolumn{3}{c}{Advantaged children} & \\multicolumn{3}{c}{Less advantaged children} \\\\\n\\cmidrule(lr){4-6}\\cmidrule(lr){7-9}\nModel & Parameters & Criterion & $\\sigma^2_\\eta$ & $\\rho_v$ & $\\sigma^2_\\varepsilon$ & $\\sigma^2_\\eta$ & $\\rho_v$ & $\\sigma^2_\\varepsilon$", rows, "@{}p{4.3cm}cccccccc@{}")
+write("oa_jointmodels", " & & & \\multicolumn{3}{c}{Advantaged children} & \\multicolumn{3}{c}{Less advantaged children} \\\\\n\\cmidrule(lr){4-6}\\cmidrule(lr){7-9}\nModel & Parameters & Criterion & $\\sigma^2_\\eta$ & $\\rho_v$ & $\\sigma^2_\\varepsilon$ & $\\sigma^2_\\eta$ & $\\rho_v$ & $\\sigma^2_\\varepsilon$", rows, "@{}L{4.3cm}cccccccc@{}")
 TL = {k: lab for k, lab in JLAB}
 rows = []
 for _, r in jt.iterrows():
@@ -359,11 +360,11 @@ for _, r in jt.iterrows():
 w1 = jt[jt.test.str.startswith("Wald") & jt.test.str.contains("chi-squared")].iloc[0]; w2 = jt[jt.test.str.startswith("Wald") & jt.test.str.contains("percentile")].iloc[0]
 rows.append(f"Wald, chi-squared & {TL['all equal']} & {TL['free']} & 3 & {w1.statistic:.2f} & {w1.p:.2f}")
 rows.append(f"Wald, bootstrap percentile & {TL['all equal']} & {TL['free']} & 3 & {w2.statistic:.2f} & {w2.p:.2f}")
-write("oa_jointtests", "Test & Restricted model & Against & Restrictions & Statistic & $p$", rows, "@{}p{2.6cm}p{3.9cm}p{3.3cm}ccc@{}")
+write("oa_jointtests", "Test & Restricted model & Against & Restrictions & Statistic & $p$", rows, "@{}L{2.6cm}L{3.9cm}L{3.3cm}ccc@{}")
 _d = jt[(jt.test == "distance") & (jt.restricted == "all equal") & (jt.unrestricted == "free")].iloc[0]
 _k = jg[(jg.model == "scale") & (jg.quantity == "kappa")].iloc[0]
 _one = {q: jg[(jg.model == mdl) & (jg.quantity == q)].iloc[0] for mdl, q in [("eta2 differs", "eta2_gap"), ("rho differs", "rho_gap"), ("eps2 differs", "eps2_gap")]}
-frag("oa_jointsummary", f"One process for both groups raises the criterion by {_d.statistic:.1f} over the free model ($p = {_d.p:.2f}$), the Wald test on the three gaps of the free model gives $p = {w1.p:.2f}$ (chi-squared) and $p = {w2.p:.2f}$ (bootstrap percentile), and the scale parameter is $\\kappa = {_k.point:.2f}$ with a 90 percent bootstrap interval of $[{_k.ci90_lo:.2f}, {_k.ci90_hi:.2f}]$. Allowed to differ in one parameter at a time, the groups differ by {abs(_one['eta2_gap'].point):.3f} in the permanent variance (SE {_one['eta2_gap'].se:.3f}), {abs(_one['rho_gap'].point):.2f} in transitory persistence (SE {_one['rho_gap'].se:.2f}), and {abs(_one['eps2_gap'].point):.2f} in the innovation variance (SE {_one['eps2_gap'].se:.2f}).")
+frag("oa_jointsummary", f"One process for both groups raises the criterion by {_d.statistic:.1f} over the free model ($p = {_d.p:.2f}$), the Wald test on the three gaps of the free model gives $p = {w1.p:.2f}$ (chi-squared) and $p = {w2.p:.2f}$ (bootstrap percentile), and the scale parameter is $\\kappa = {_k.point:.2f}$ with a 90 percent bootstrap interval of $[{_k.ci90_lo:.2f}, {_k.ci90_hi:.2f}]$. Allowed to differ in one parameter at a time, the groups differ by {abs(_one['eta2_gap'].point):.3f} in the permanent variance (SE {_one['eta2_gap'].se:.3f}), {abs(_one['rho_gap'].point):.2f} in transitory persistence (SE {_one['rho_gap'].se:.2f}), and {abs(_one['eps2_gap'].point):.2f} in the shock variance (SE {_one['eps2_gap'].se:.2f}).")
 
 # inverse-variance reweighting of the moments and its parametric bootstrap (income_dynamics/code/m5_md_weighted_and_ridge.py)
 mw = m("output", "tables", "m5_weighted_md.csv").set_index("group"); m7p = m("output", "tables", "m7_md_cellw_boot.csv").set_index("group").loc["pooled"]
@@ -372,7 +373,7 @@ frag("oa_reweight", f"Reweighting the fifteen moments by the inverse of their bo
 
 # the strict-exogeneity lead test of the growth regression
 le = m("data", "intermediate", "ws", "ws_m3_strict_exogeneity.csv").iloc[0]
-frag("oa_lead", f"on the five-wave panel of {intc(le.n_pid)} children ({intc(le.n_obs)} child-waves whose following wave is observed), the lead enters with coefficient {le.lead_coef:.3f} and a $t$-statistic of {le.lead_t:.2f} ($p = {le.lead_p:.2f}$), and the coefficient on the group trend is {le.gamma_no_lead:.3f} without the lead and {le.gamma_with_lead:.3f} with it (this regression omits the other covariates, so the coefficient is not that of the paper).")
+frag("oa_lead", f"on the five-wave panel of {intc(le.n_pid)} children ({intc(le.n_obs)} child-waves whose following wave is observed), the lead enters with coefficient {le.lead_coef:.3f} and a $t$-statistic of {le.lead_t:.2f} ($p = {le.lead_p:.2f}$), and the coefficient on the group trend is {le.gamma_no_lead:.3f} without the lead (SE {le.gamma_no_lead_se:.3f}) and {le.gamma_with_lead:.3f} with it. The coefficient differs from the 0.018 of the paper because this regression keeps urban status as its only covariate and leaves out every wave whose following wave is not observed, the last wave of each child among them.")
 
 # the published study corrected with the schedule (unified/code/u2_recovery_by_process.py)
 rc = u("u2_recovery_by_process.csv").set_index("process"); par = m("output", "tables", "m14_parent_process.csv").iloc[0]
@@ -381,14 +382,14 @@ rows = [f"Children's process (permanent share {rc.loc['children', 'share']:.2f})
 write("oa_recovery", "Earnings process used for the correction & Share recovered & Implied coefficient & Authors' preferred", rows, "@{}lccc@{}")
 frag("oa_parentrho", f"{par.rho:.2f},")
 rk1 = m("output", "tables", "m8_rank_attenuation.csv").set_index("T").loc[1]
-frag("oa_rankone", f"{rk1.rank_factor:.2f}, roughly $\\sqrt{{\\lambda_1}}$, when the child's rank is measured without error, and at {rk1.rank_factor_2sided:.2f} when the child's rank is measured from three waves,")
+frag("oa_rankone", f"{rk1.rank_factor:.2f}, roughly $\\sqrt{{\\lambda_1}}$, when the child's rank is measured without error, and at {rk1.rank_factor_2sided:.2f} when the child's rank is measured from three waves:")
 
 # the four-measure table note and the first stages by family background on all children
 B9m = u("u9_B_main.csv").set_index("intensity").loc["predicted provincial growth (main measure)"]
 frag("oa_maturenote", f"All {intc(F14['all children: children'])} children in the sample ({intc(F14['all children: advantaged children'])} advantaged), two-row specification of the paper; every entry except the column headed One observation per child is the estimate for the row at 30 and over ({intc(F14['level at 30 and over: children'])} rows). That column is the first-stage $F$ of the regression of college completion on the instrument with one observation per child. The instrumented effect of college on the occupation share under the main measure is {B9m.occ_maj_iv:.2f}.")
 C14 = u("u14_C_first_stages_all_children.csv").set_index("row"); fL, fH = C14.loc["less advantaged children, instrument entering once for each group"], C14.loc["advantaged children, instrument entering once for each group"]
 E13 = u("u13_E_added_degrees.csv").set_index("item").loc["difference (advantaged minus less advantaged)"]
-frag("oa_fsmde", f"The two first stages, {fL.fs:.3f} (SE {fL.fs_se:.3f}) for less advantaged and {fH.fs:.3f} (SE {fH.fs_se:.3f}) for advantaged children, differ by {num(E13.value)} (SE {E13.se:.3f}). The smallest difference the design detects with 80 percent power at the 5 percent level is {2.8 * E13.se:.3f}, about {100 * 2.8 * E13.se / fL.fs:.0f} percent of the first stage of less advantaged children, so larger differences are ruled out.")
+frag("oa_fsmde", f"The smallest difference that the design detects with 80 percent power at the 5 percent level is {2.8 * E13.se:.3f}, about {100 * 2.8 * E13.se / fL.fs:.0f} percent of the first stage of less advantaged children (\code{{unified/code/u14_sample_facts.py}}, \code{{unified/code/u13_decomposition_mature_age.py}}).")
 
 
 # ------------------------------------------------------------ material behind statements of the paper that its text gives in words

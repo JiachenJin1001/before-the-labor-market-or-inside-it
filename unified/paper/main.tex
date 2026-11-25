@@ -1,0 +1,766 @@
+\documentclass[11pt]{article}
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{graphicx}
+\usepackage[section]{placeins}
+\usepackage[sort]{natbib}
+\setlength{\bibsep}{4pt}
+\bibliographystyle{apalike}
+\usepackage{caption}
+\captionsetup{font=small}
+\usepackage[hidelinks]{hyperref}
+\usepackage{setspace}
+\usepackage{multicol}
+\setstretch{1.13}
+\widowpenalty=10000
+\clubpenalty=10000
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.8}
+\newcommand{\pinc}{\overline{\mathrm{ParentInc}}}
+
+\title{Before the Labor Market or Inside It?\\
+Family Background, Earnings Dynamics, and the Return to College}
+% The one place to set the address of the public repository (Online Appendix and replication files).
+\newcommand{\repourl}{https://github.com/JiachenJin1001/before-the-labor-market-or-inside-it}
+\author{Jiachen Jin\thanks{New York University, \texttt{jj4608@stern.nyu.edu}.
+The Online Appendix (supplementary results, further proofs, and a replication guide) and the replication files are available at \href{\repourl}{\nolinkurl{github.com/JiachenJin1001/before-the-labor-market-or-inside-it}}.
+All errors are mine.}}
+\date{November 2026}
+
+\hypersetup{pdftitle={Before the Labor Market or Inside It? Family Background, Earnings Dynamics, and the Return to College}, pdfauthor={Jiachen Jin}}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent In the China Family Panel Studies, the children of officials, managers, and
+professionals (advantaged children) earn 22 percent more than other
+children (less advantaged children). I ask whether this advantage is
+built inside the labor market, through smaller earnings shocks or
+faster earnings growth, or before work begins, through access to college, and find the latter.
+Covariance-structure and panel estimates show that the two groups' earnings processes do not differ: shocks have the same size and persistence, and earnings grow at the same rate. Holding parental income and demographics fixed by correlated random-effects regressions and entropy balancing leaves a premium of 7 to 17 percent. To learn whether the premium runs through college, I estimate the return to college from the 1999 university expansion, with an instrument that interacts provincial growth in seats with each cohort's exposure to it. The added seats raised the chance of completing college by a similar amount in both groups, and for children who completed college because of them, college raised earnings by 0.68 log points, or 19 percent per year of college. A degree also closes the occupational gap between the groups; the point estimates suggest that college raises earnings more for advantaged children and the chance of holding an advantaged occupation more for less advantaged children. Valued at the return to college, the gap in college completion accounts for three quarters to all of the premium, so what parental occupation passes on beyond income is mostly a four-year degree.\\[4pt]
+\textbf{JEL:} J62, J31, I23, I24, C23. \quad \textbf{Keywords:}
+intergenerational mobility; earnings dynamics;
+attenuation bias; higher
+education expansion; shift-share instrument; China.
+\end{abstract}
+
+\newpage
+
+\section{Introduction}
+\label{sec:intro}
+
+In the China Family Panel Studies (CFPS), children with a parent in an official, managerial, or professional occupation (advantaged children) earn 22 percent more than other children (less advantaged children). Holding parental income and demographics fixed removes one fifth to three fifths of that gap and leaves a premium of 7 to 17 percent. The question is what these parents pass on beyond income. The advantage could accumulate over a career: their children might face smaller earnings shocks, recover from bad years faster, or have steeper earnings profiles. Or it could be in place before work begins, if these families secure more schooling, above all a place at university. The data support the second. Once the children are at work, the earnings of the two groups behave alike: shocks have the same size and persistence, and earnings grow at the same rate. Most of the premium instead runs through college.
+
+This premium raises the question of social mobility: whether less advantaged children can move up, in earnings and in occupation. Mobility bears on how a society uses its talent and on how its members view redistribution \citep{AlesinaStantchevaTeso2018, BellEtAl2019, HsiehHurstJonesKlenow2019}. Where the advantage arises also determines which policies can change it: an advantage inside the labor market would operate throughout a career, and no single reform at the start of adult life could undo it, whereas an advantage settled at university admission depends on the rules that allocate seats.
+
+I measure the premium (Section~\ref{sec:premium}) on the level of earnings at ages 30 and over, holding parental income fixed by correlated random-effects regressions and by entropy balancing, which reweights less advantaged children to match advantaged children in parental income and demographics. The two ends of its range come from two measures of parental income: family income, which over-controls (it includes the earnings of children who live with their parents), and the parents' own labor income, which under-controls (it leaves out their other income). Parental Communist Party membership and state-sector employment, two other markers of position, add little beyond parental occupation.
+
+The first place to look for the source of the premium is the labor market (Section~\ref{sec:process}), where an advantage built over a career would show up in the earnings process. For the 2,523 children observed in at least three waves, I estimate the process of residual earnings, net of demographics and of year and province effects, for each group and for both together: a permanent--transitory model fitted by minimum distance, an Arellano--Bond dynamic panel regression for the persistence of shocks, and a fixed-effects regression for growth. The two groups share one process. When I restrict the permanent variance, the variance of transitory shocks, and their persistence to be equal across the groups and relax each restriction in turn, no parameter differs by more than one standard error. A joint distance test does not reject the three restrictions, and the earnings gap between the groups does not widen over the panel. The errors-in-variables problem that \citet{Solon1992} identified in U.S. panels is at least as severe here. The permanent component is about a quarter of the variance of residual earnings, so a regression on a single wave of such earnings recovers only about a quarter of the coefficient on permanent earnings, and recovering two thirds, as short averages do in U.S. data \citep{Mazumder2005}, takes about six biennial waves, or eight under the exact formula (Section~\ref{sec:measurement}). The estimated process also gives the attenuation factor for every comparison that holds parental income fixed and, through the precision of each child's average earnings, the weights for a precision-weighted estimate of the return to college.
+
+Since the premium does not arise in the earnings process, the second place to look is college (Sections~\ref{sec:expansion} and \ref{sec:mediation}). The premium runs through college to the extent that advantaged children more often complete a four-year degree and that the degree raises earnings. Least squares does not identify this return to college, because college completion is endogenous: graduates differ from children without a degree in ability, preparation, and family resources that raise earnings on their own. The 1999 expansion is a change in access to college that no family chose: university admissions rose by more than 40 percent in a single year and kept growing for a decade, at rates that differed across provinces. To separate the reform from the national trend in admissions, I use a shift-share instrument for college completion, the product of provincial intensity (how much university seats grew in the province) and cohort exposure (national admissions in the year the cohort reached college age, relative to the pre-reform trend). With province and birth-year fixed effects, the comparison is a difference-in-differences between provinces that added more and fewer seats and between cohorts that were more and less exposed.
+
+Two-stage least squares identifies the return for children who completed college because of the added seats: 0.68 log points over a four-year degree, or 19 percent per year, and about the same with the precision weights. College also opens the way to official, managerial, or professional occupations (advantaged occupations); by the instrumented estimate, it raises the chance of holding one by 50 percentage points. Advantaged children are twice as likely as less advantaged children to hold one (0.33 against 0.17), and the same is true among children without a degree (0.19 against 0.10); among graduates, the two groups are equally likely to hold one (0.60). Among the children who completed college because of the reform, the point estimates suggest a higher earnings return for advantaged children (1.14 against 0.62 log points) and a larger rise in the chance of holding an advantaged occupation for less advantaged children (0.55 against 0.13).
+
+The design rests on parallel trends (provinces that added more seats were not already on different trends) and exclusion (the instrument affects the outcomes only through college), and four checks in Section~\ref{sec:expansion} support them. On parallel trends, replacing provincial intensity with a predetermined measure, the pre-reform census share of adults with senior secondary schooling, reproduces the earnings results, and a placebo instrument built from pre-reform growth in examination registrations has no first stage. On exclusion, children with nine or fewer years of schooling, who were never candidates for college, did not move into advantaged occupations where seats grew faster, and controls for the export boom that followed WTO accession leave the results unchanged.
+
+The other half of the college channel is the gap in college completion. Between the cohorts born in 1980 or earlier and those born later, completion rose from 17.3 to 50.5 percent among advantaged children and from 4.6 to 24.2 percent among less advantaged children. The first stage shows that the added seats raised the chance of completing college by a similar amount in both groups: in the most exposed cohorts, moving from the 10th to the 90th percentile of provincial intensity raises it by 18 percentage points for less advantaged children and by 15 for advantaged children.
+
+Section~\ref{sec:mediation} puts the return and the gap together. The premium $\tau$ equals the completion gap between children of the two groups with the same parental income, $\Delta M$, valued at the return to college for advantaged children, $\beta^{H}$, plus a direct effect:
+\begin{equation}
+\tau \;=\; \beta^{H} \cdot \Delta M \;+\; \mathrm{Direct}.
+\label{eq:hp-intro}
+\end{equation}
+The direct effect is the part of the premium that does not pass through college completion: information, connections, and any higher value that the same degree carries for an advantaged child. In the entropy-balanced comparison the premium is 0.072 log points (7 percent) and the completion gap 12.2 percentage points; valued at returns to college from the least squares to the instrumented estimates, the gap accounts for between three quarters and all of the premium. What parental occupation passes on beyond income is, for the most part, a four-year degree.
+
+The completion gap can be read in two ways. Admission was decided entirely by examination score, and the score may have ranked applicants by ability alone or by preparation under unequal conditions: city schools, selective (key-point) high schools, and the material security to devote oneself to the examination. If it ranked only ability (the ability reading), children admitted from below the old cutoff would earn less from a degree than earlier graduates, and the instrumented return would fall below the least squares return; if it ranked preparation (the preparation reading), they would earn as much or more. The instrumented return of 0.68 is above the least squares return of 0.45, which is consistent with the preparation reading.
+
+A natural explanation of the premium itself is that advantaged parents pass on their ability. If so, their children should out-earn less advantaged children with the same schooling and, among graduates, reach advantaged occupations more often. Yet with parental income held fixed, children without a degree earn the same in the two groups, the earnings gap among graduates is small (Section~\ref{sec:mediation}), and graduates of the two groups are equally likely to hold advantaged occupations (Section~\ref{sec:earnings}), so most of the premium comes through access to college rather than through ability rewarded outside it.
+
+The paper draws on three literatures. It applies the covariance-structure methods of the earnings-dynamics literature \citep{LillardWillis1978, MaCurdy1982, HallMishkin1982, AbowdCard1989, MeghirPistaferri2004, ArellanoBlundellBonhomme2017} to the CFPS panel and finds no measurable role for earnings risk as a channel of intergenerational transmission. I also extend the literature on measurement error in intergenerational persistence \citep{Solon1992, Zimmerman1992, Mazumder2005, HaiderSolon2006} with attenuation factors estimated on Chinese earnings, which the debate over persistence in China \citep{GongLeighMeng2012, DengGustafssonLi2013, FanYiZhang2021, YuanLin2013} has lacked. Work on China's college expansion has studied the graduate labor market, firms, and general-equilibrium effects \citep{CheZhang2018, KnightDengLi2017, Ma2024IER}, and college entry, where family background kept its hold \citep{Yeung2013}, as the maximally maintained inequality hypothesis of \citet{RafteryHout1993} predicts. I ask instead which children completed college because of the reform and what college returned to each group. 
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Panel and income concept}
+\label{sec:income}
+
+The CFPS is a biennial household panel run by Peking University since 2010 \citep{XieHu2014}. The baseline sample of 25 provinces represents about 95 percent of the national population; respondents who move are followed, so the sample of Section~\ref{sec:sample} spans 29 provinces. Because that sample conditions on panel participation, I do not use the sampling weights.
+
+Before 2014 the survey's headline income variable bundles labor earnings with transfers and asset income; from 2014 onward it covers labor income only. An estimator that pooled waves across the change would attribute it to earnings shocks, so the main analysis uses the five waves from 2014 to 2022. For the growth-rate tests I reconstruct a labor-income measure for 2010 and 2012 from its components (the reconstructed panel).
+
+\subsection{Sample and family background}
+\label{sec:sample}
+
+A child is a CFPS respondent linked to a father or mother through the family-relationship roster. The grouping variable $H_i$ equals one if either parent held an occupation in the top two major groups of China's Standard Classification of Occupations (CSCO): heads of state organs, party organizations, enterprises, and public institutions, or professionals and technical personnel, the counterparts of ISCO major groups 1 and 2. Parental occupation is the one held when the child was fourteen, reported in retrospective questions asked in the 2012, 2020, and 2022 waves, under the either-parent dominance convention of \citet{EriksonGoldthorpe1992}. Children with $H_i = 1$ are the advantaged children, and all others the less advantaged children. Occupation marks family position in these cohorts because the parents built their careers in the 1980s and 1990s, when state pay scales compressed wages and a parent's occupation determined the work unit, and with it housing, urban registration, and the connections that a post in government, management, or the professions carried \citep{BianLogan1996, WuTreiman2007}.
+
+The paper uses a single sample: the children with a retrospective report of parental occupation, the family income of the parental household, a province for which Section~\ref{sec:expansion} has a measure of the expansion, and positive labor income in at least two waves between 2014 and 2022 at ages 22 to 55 (22 is the age at which a four-year graduate enters the labor market, 55 the middle of the three statutory retirement ages). In each wave I drop incomes below 1,000 yuan and the top 1 percent. The sample has 4,536 children born 1961 to 1997 (755 advantaged, 16.6 percent) and 12,675 child-waves.
+
+Section~\ref{sec:process} uses the 2,523 children (420 advantaged) with at least three waves, which dynamic panel estimation requires. Sections~\ref{sec:premium}, \ref{sec:expansion}, and \ref{sec:mediation} study a child's \emph{level of earnings}: the mean, over at least two waves at ages 30 and over, of log labor income net of survey-year effects; 2,774 children (453 advantaged) have one. Section~\ref{sec:design} also uses the other 1,762 children.
+
+The definition of the level of earnings involves two choices. The first is the threshold at age 30. Earnings in the twenties are a poor measure of where a career settles \citep{HaiderSolon2006}, and especially so here: at ages 26 to 29 graduates are in their first years of work, while children of the same age without a degree have worked for about a decade. Consistent with this, the least squares return to college, controlling for survey-year and age effects, is 0.37 log points at ages 26 to 29 and 0.46 at 30 to 34. The second is the removal of survey-year effects before averaging: nominal incomes rose steeply over the panel, so an average of raw log income would depend on the years in which a child is observed; the effects are estimated on all child-waves and centered on the overall mean, so the result stays in log yuan.
+
+Selection into the sample is nearly the same in the two groups: of the children with a retrospective report and parental family income who are observed at least once at ages 22 to 55 in a 2014--2022 wave, 45 percent of advantaged children enter the sample, against 42 percent of less advantaged children. Employment does differ: before any earnings screen is applied, earnings are positive in 56 percent of the child-waves of advantaged children and in 50 percent of those of less advantaged children, so the comparison of earnings risk is conditional on having earnings.
+
+An indicator built from the occupations parents held in 2010 to 2022 agrees with the retrospective one for 86 percent of the children who have both, and it disagrees in the direction that retirement predicts: more parents had moved down by the observation window than up (10.2 against 4.0 percent of children). Because the current indicator misclassifies some advantaged families, the retrospective indicator is the baseline, and the current one is used in the robustness checks of Section~\ref{sec:premrobust}.
+
+In Table~\ref{tab:desc}, both among all children in the sample and among those with a level of earnings, advantaged children earn about 0.2 log points more, have parents with over 0.4 log points more family income, acquire more than two additional years of schooling, and complete college at more than twice the rate of less advantaged children. They are more urban and more often female; birth years and the number of waves are balanced.
+
+
+\begin{table}[t]
+\centering
+\small
+\caption{Sample means by family background.}
+\label{tab:desc}
+\input{tables/en/tab_desc}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Standard deviations in parentheses. CFPS
+2014--2022. All children: the 4,536 children with at least two waves of
+positive labor income at ages 22 to 55; their labor income is the mean
+of log nominal annual income in yuan over all their waves. Children with earnings at 30 and over: the 2,774 with at least two waves at those ages; their labor income is the level of earnings, and age and the number of waves refer to the waves
+at 30 and over.
+\end{minipage}
+\end{table}
+
+\subsection{Parental income and co-residence}
+\label{sec:parentinc}
+
+I measure parental resources by $\pinc_i$, the mean of log family income across all waves in which the parental household appears in the family-economy module. Family income covers more parents and more waves than the parents' labor income, since many parents are past working age, and it includes asset and business income. It has one defect: when an adult child appears on the same household roster as a linked parent (nearly two thirds of the child-waves in the sample), family income mechanically includes the child's own earnings, so a regression of child earnings on $\pinc_i$ partly regresses the child on herself. I therefore add a second measure, the linked parents' own labor income. 
+
+\subsection{The 1999 expansion and provincial intensity}
+\label{sec:background}
+
+Through the 1990s, admission to Chinese universities was rationed by score on the national college entrance examination under a centrally planned enrollment quota that grew slowly, from roughly 0.7 million admissions in 1988 to one million in 1997. Candidates far outnumbered seats: for most students the binding constraint was the number of seats, not the willingness to take the examination. The cost of competing for a seat also varied with family circumstance and with place: opportunity costs
+were high even where tuition was low, provincial admission cutoffs
+differed, and urban schools prepared students better for the
+examination.
+
+In June 1999, after registration for that year's entrance examination
+had closed, the central government announced a second increase in that year's admissions, larger than the one already planned \citep{LiWhalleyXing2014}; admissions grew by more than 40 percent in 1999 and passed five million by 2005. The motive was macroeconomic as much as educational, and the increase went from proposal to decision within months. By 1997 every institution charged tuition \citep{DongWan2012}, so the reform relaxed the seat constraint while prices stayed positive, and the marginal student it admitted had to clear a resource bar as well as the examination bar.
+
+Provinces had little time to fit seats to local demand for skill, and seats grew where existing institutions could add them, on a timetable set in Beijing. A national percentage increase thus translated into different seat growth across provinces, the source of the cross-province variation that the design uses. The intensity measure defined below counts the seats that institutions located in a province added, not those allotted to its own candidates; the two nearly coincide, because institutions plan admissions province by province and reserve the largest share for candidates in the institution's own province. The expansion grew the four-year (\emph{benke}) and three-year (\emph{dazhuan}) tiers of higher education at different provincial rates; college completion throughout means sixteen or more
+years of schooling, the four-year degree.
+
+Children born in 1981 or later reached age eighteen in the expansion
+era. The 1981 cohort, already registered when the reform was announced, was admitted under the enlarged quota without having planned for it; the first cohort able to plan around the policy took
+the examination in 2000. The cohort dimension of the instrument, cohort exposure, is the ratio of actual national admissions in the year a cohort turned
+eighteen to a linear projection of the pre-reform trend, both computed from the national admissions series in \citet{Ma2024IER}. The ratio lies between 0.9 and 1.6 for the cohorts born 1964 to 1976, because admissions rose above the linear trend in the mid-1980s and fell back below it around 1990, and between 1.02 and 1.05 for those born 1977 to 1980; it rises to 1.44 for the 1981 cohort and reaches 4 for the cohorts born around 1990. Exposure is a continuous variable, and the birth-year effects of the specification absorb the jump at the 1981 cohort together with every other common cohort movement.
+
+The main measure of provincial intensity follows \citet{Ma2024IER}: the number of college graduates of 2006 to 2010 that the province's institutions are predicted to produce, divided by the province's
+stock of college-educated workers in 2005. The prediction allots the national number of graduates to cities by their shares of national college enrollment in the 1982 census, because the expansion scaled up the institutions that already existed. Two other normalizations of the same predicted inflow, by total employment in 2005 and as the log of the implied growth of the college-educated stock, serve as checks.
+The enrollment shares were fixed long before the reform, but the denominators are measured in 2005, after it had begun. I therefore also use a measure predetermined in every component, the census share of each province's
+adults born 1956 to 1976 who had completed senior secondary school. The share describes the size of the province's education system at least five years before the reform, is stable
+across censuses (correlation 0.97 between the 1990 and 2000
+measurements), and correlates 0.44 with the main measure across provinces. Statistical yearbooks supply a placebo: the growth of college entrance examination (CEE) registrations before the reform,
+$\log(\mathrm{CEE}_{1998,p} / \mathrm{CEE}_{1997,p})$, which is upstream of admissions and predetermined.
+
+\section{The premium}
+\label{sec:premium}
+
+I measure the premium on the level of earnings of the 2,774 children who have one (Section~\ref{sec:sample}). Before any controls, advantaged children earn 0.195 log points (22 percent) more than less advantaged children. Parental income and the demographic controls, held fixed by regression (Section~\ref{sec:cre}) and by reweighting (Section~\ref{sec:ebal}), remove a fifth to three fifths of the earnings gap. The rest, 0.07 to 0.15 log points or 7 to 17 percent, is the premium: an association, net of current family resources, rather than a causal effect.
+
+I leave two variables out of the regressions because they would be bad controls \citep{AngristPischke2009, AcharyaBlackwellSen2016}. One is parental education: in these parental cohorts, born mostly between the late 1930s and the early 1970s, schooling was interrupted and reallocated on political criteria, so credentials were in large part consequences of political and occupational position. The other is the child's own education, the channel that Sections~\ref{sec:expansion} and \ref{sec:mediation} study.
+
+\subsection{Correlated random-effects estimates}
+\label{sec:cre}
+
+The main specification is a correlated random-effects (Mundlak)
+regression \citep{Mundlak1978},
+\begin{equation}
+\log y_{it} \;=\; \delta_1 H_i \;+\; \delta_2\, \pinc_i \;+\; x_{it}'\gamma \;+\; \bar x_i'\xi \;+\; z_i'\kappa \;+\; \phi_t \;+\; \mu_p \;+\; u_{it},
+\label{eq:cre}
+\end{equation}
+with $x_{it}$ the time-varying controls (age, urban status), $\bar x_i$
+their within-child means, $z_i$ the time-invariant controls (gender), $\phi_t$ and $\mu_p$ year and province effects, and standard errors clustered by child; $\delta_1$ estimates the premium
+$\tau$. Adding family income lowers the occupation coefficient by nearly half, from 0.163 with the demographic controls alone to 0.088 (column 1 of Table~\ref{tab:cre}; $p = 0.002$). Replacing the family measure with the parents' own labor income, on the 2,185 children whose parents report it, moves
+both coefficients in the direction that co-residence contamination predicts (column 2): the income coefficient falls from 0.222 to 0.031 and the occupation coefficient rises to 0.153 ($p < 0.001$). Column 1 over-controls, because family income contains the child's own earnings when the child lives with the parents, and column 2 under-controls: the parents' labor income leaves out asset and business income and is observed only in waves in which a parent works, so by the attenuation schedule of Section~\ref{sec:measurement} its coefficient is attenuated and it holds less of the family's resources fixed. The regression-based premium therefore lies between 0.088 and 0.153 log points (9 and 17 percent).
+
+\begin{table}[t]
+\centering
+\small
+\caption{The premium net of parental income: three estimates.}
+\label{tab:cre}
+\input{tables/en/tab_cre}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Dependent variable: log annual labor income
+by child and wave (columns 1 and 2) and the level of earnings (column
+3). Columns 1 and 2: correlated random-effects regressions on the child-waves at ages 30 and over of the 2,774 children with a level of earnings (column 2: the 2,185 of them whose parents report labor income), with the controls of equation~\eqref{eq:cre}. Clustering at the family level instead changes the column 1 standard error by 0.0002. Column 3: entropy balancing (equation~\eqref{eq:ebal}); the bracket is a 200-replication bootstrap percentile interval.
+*, **, and *** denote significance at the 10, 5, and 1 percent levels; the balancing estimate carries ** when its 95 percent bootstrap interval excludes zero.
+\end{minipage}
+\end{table}
+
+\subsection{Entropy balancing}
+\label{sec:ebal}
+
+Entropy balancing \citep{Hainmueller2012} estimates the same premium without fitting an earnings equation. It reweights the less advantaged children so that their weighted means and variances
+of parental income, gender, age, urban status, five-year birth cohort, and province (the fifteen largest separately)
+equal those of advantaged children exactly. The weights $w_i$ solve
+\begin{equation}
+\min_{w} \sum_{i:\, H_i = 0} w_i \log w_i
+\quad\text{subject to}\quad
+\sum_{i:\, H_i = 0} w_i\, g(x_i) = \frac{1}{N_1}\sum_{j:\, H_j = 1} g(x_j),
+\quad \sum_{i:\, H_i = 0} w_i = 1,
+\label{eq:ebal}
+\end{equation}
+where $g(x)$ collects the covariates and their squares and $N_1$ is the number of advantaged children; the premium is the difference between the mean log earnings of advantaged children and the weighted mean of less advantaged children: 0.072, or 7 percent, with a 95 percent bootstrap percentile interval of $[0.01, 0.13]$ (200 replications). Under the same weights the
+gap in college completion between the groups is 0.122, or 12.2 percentage points (interval $[0.08, 0.17]$). With the same income measure, regression and balancing give nearly the same premium, 0.088 and 0.072; they condition on the same observables, and neither addresses unobserved confounding.
+
+\subsection{Competing markers and robustness}
+\label{sec:class}
+\label{sec:premrobust}
+
+If parental occupation proxies for social position broadly, other markers of position should add little to it. Two natural competitors are parental party membership \citep{LiEtAl2007} and employment inside the state system. In regressions of the level of earnings that include parental income and the demographic controls (Online Appendix), each marker alone carries a coefficient a little over half that of parental occupation and is not distinguishable from zero. Once parental occupation is added, the marker coefficients fall by roughly a third while the occupation coefficient barely moves. A post in government, enterprise management, or the professions was usually a post inside the state system, and party membership was a common step in the career that led to one, so parental occupation already records what the two other markers measure.
+
+Figure~\ref{fig:spec} reports thirteen specifications, which vary the income control and the waves it covers, the definition of the indicator, the estimator, the sample, the province effects, the deflator, and whether the other markers are added. Ten of the thirteen estimates lie between 0.06 and 0.09, and ten intervals exclude zero; the range runs from 0.057, with CSCO major group 1 alone as the indicator, to 0.153, with the parents' own labor income as the income control. The Online Appendix adds the urban and rural subsamples.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.84\textwidth]{figures/fig_spec_curve_paper}
+\caption{The premium in thirteen specifications, sorted by point estimate. Vertical bars are 95 percent confidence intervals; the diamond marks the baseline; the lower panel marks the analytic choices in each specification.}
+\label{fig:spec}
+\end{figure}
+
+The indicator based on current occupations, measured after the formative years and not among the specifications of Figure~\ref{fig:spec}, gives a smaller estimate, 0.049 ($p = 0.27$), which is what misclassification predicts. If misclassification of a binary regressor is unrelated to the child's outcome and to the controls, it can only shrink the coefficient, in the simplest case by a factor of one minus the sum of the two misclassification rates \citep{Bollinger1996}; under that assumption any error in the retrospective indicator makes the baseline of 0.088 a lower bound.
+
+\section{Is the advantage built inside the labor market?}
+\label{sec:process}
+
+This section asks whether the premium of Section~\ref{sec:premium} is built inside the labor market, where advantaged parents might protect their children's earnings through smaller shocks, faster recovery from a bad year, or steeper earnings growth, and finds that it is not.
+
+\subsection{Framework}
+\label{sec:framework}
+
+Each estimator in this section recovers some of the moments of one equation: residual log earnings of child $i$ in wave $t$ follow
+\begin{equation}
+\tilde y_{it} \;=\; \eta_i \;+\; g_i t \;+\; v_{it} \;+\; m_{it},
+\qquad v_{it} = \rho_v\,v_{i,t-1} + \varepsilon_{it},
+\label{eq:unified}
+\end{equation}
+where $\eta_i$ is a permanent individual component, $g_i$ an
+individual growth slope, $v_{it}$ a persistent AR(1) component, and
+$m_{it}$ serially uncorrelated noise. Equation~\eqref{eq:unified} nests
+the classical permanent--transitory model \citep{HallMishkin1982,
+MaCurdy1982}, the heterogeneous-profiles specification of
+\citet{Guvenen2009}, and the linear special case of the latent-state
+model of \citet{ArellanoBlundellBonhomme2017}. The share of residual variance that is permanent governs attenuation bias in regressions of child outcomes on parental income, and the persistence of shocks governs how fast averaging removes the transitory part. The
+distribution of growth slopes $g_i$, and especially its dependence
+on family background, would capture any dynamic advantage that levels
+cannot.
+
+Throughout, $\tilde y_{it}$ is the residual from a pooled regression of log labor income on year, age, gender, urban status, and province effects (Online Appendix). Year effects are common to the groups, so between-group differences remain in $\tilde y$, where the growth regression of Section~\ref{sec:abb} can detect them; the second-moment estimation also demeans within group and year so that group means do not affect the autocovariances.
+
+\subsection{Permanent and transitory components}
+\label{sec:md}
+
+The baseline specification restricts \eqref{eq:unified} to a permanent
+effect plus an AR(1) transitory part,
+\begin{equation}
+\tilde y_{it} = \eta_i + v_{it}, \qquad
+v_{it} = \rho_v\, v_{i,t-1} + \varepsilon_{it}.
+\label{eq:feAR}
+\end{equation}
+I fit $(\sigma^2_\eta, \sigma^2_\varepsilon, \rho_v)$ by minimum
+distance to the empirical pairwise autocovariances, which
+under \eqref{eq:feAR} take the form
+\begin{equation}
+\mathrm{Cov}\left(\tilde y_{it}, \tilde y_{i,t+k}\right)
+\;=\; \sigma^2_\eta \;+\; \rho_v^{\,k}\,
+\frac{\sigma^2_\varepsilon}{1-\rho_v^2},
+\qquad k = 0, 1, 2, \dots,
+\label{eq:moments}
+\end{equation}
+so the long-lag asymptote of the autocovariance function identifies
+the permanent variance and the geometric decay toward it identifies
+the transitory pair. Each moment is weighted by the number of pairs of observations behind it; the weights are fixed in advance, not estimated, to avoid the small-sample bias of estimated optimal weights \citep{AltonjiSegal1996}; because they are not optimal, the minimized criterion $J$ is a fit statistic rather than a test (Appendix~\ref{app:md}). I estimate the model on all children together and on each group, with standard errors from a 1,000-replication bootstrap that resamples children, re-demeans, and re-solves the minimization in each draw.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Permanent--transitory decomposition of residual log earnings.}
+\label{tab:md}
+\input{tables/en/tab_md}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Minimum distance with cell-count weights on
+all fifteen pairwise autocovariances of demeaned residual log earnings
+(within group and year for the group rows; within year for the
+pooled row), 2,523 children with at least three waves, CFPS 2014--2022. Bootstrap standard errors in parentheses. The fixed-weight criterion $J$ has no chi-squared reference distribution (Appendix~\ref{app:md}) and, where the model misfits, grows with the number of children, so its small value for advantaged children partly reflects the group's size of 420 children. The permanent share is $\hat\sigma^2_\eta / (\hat\sigma^2_\eta + \hat\sigma^2_v)$, with $\hat\sigma^2_v = \hat\sigma^2_\varepsilon/(1 - \hat\rho_v^2)$ the stationary transitory variance. Fitted total variance is the fitted
+variance at a single wave.
+The last row fits one process to the moments of both groups (thirty moments, three parameters). The estimates carry no significance marks because a variance of zero lies on the boundary of the parameter space.
+\end{minipage}
+\end{table}
+
+In the pooled sample (Table~\ref{tab:md}), permanent
+differences account for a little over a quarter of the variance of residual earnings. Transitory shocks, which in survey data include reporting error, have a serial correlation of 0.16 at the biennial sampling interval. The two-component model is an approximation (a parametric bootstrap rejects it in the pooled sample), but richer error structures do not materially improve the fit, and inverse-variance reweighting of the moments moves the permanent share only from 0.271 to 0.264 (Online Appendix).
+
+Fitted together, the two groups share one process. Stacking the fifteen moments of each group and imposing one process on both (the last row of Table~\ref{tab:md}) raises the criterion over the separate fits by no more than its sampling variation: a bootstrap that recenters each group's moments on the common fit gives $p = 0.39$. In a scale model, in which every autocovariance of advantaged children is $\kappa$ times that of less advantaged children, the estimate is $\kappa = 0.96$, with a 90 percent bootstrap interval of $[0.85, 1.07]$. With one parameter at a time free to differ, no gap between the groups exceeds one standard error (Table~\ref{tab:summary}). The moments themselves agree (Figure~\ref{fig:autocov}): none of the fifteen pairwise autocovariance gaps exceeds two bootstrap standard errors, and a joint Wald test of all fifteen gaps does not reject equality ($p = 0.32$).
+
+The separate fits in the group rows of Table~\ref{tab:md} split the variance differently: a permanent share of 0.19 against 0.28 and transitory persistence of 0.33 against 0.12 (advantaged against less advantaged children); a Wald test on the three parameter gaps gives $p = 0.09$. The parameters are weakly identified, however: in a panel of five waves, a small permanent component with persistent shocks and a large one with fleeting shocks imply nearly the same fifteen autocovariances, so the criterion has a ridge along which $\sigma^2_\eta$ and $\rho_v$ trade off while the fit barely changes, and the two separate fits sit at two points of it. Fitting the groups jointly replaces a comparison of parameters, which the ridge makes unreliable, with a comparison of fit, which the ridge leaves intact; Appendix~\ref{app:ridge} shows how the leverage of the higher-order moments falls along the ridge, and the Online Appendix plots it. The difference that the separate fits suggest, shocks that fade more slowly for advantaged children, would be the opposite of protection, and it does not survive the joint fit.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.78\textwidth]{figures/fig_autocov}
+\caption{The second moments of residual log earnings by family background. Variance in each wave (panel a) and autocovariance by lag, averaged over waves (panel b), for advantaged and less advantaged children, with 95 percent bootstrap intervals (200 replications, clustered by child). The 2,523 children with at least three waves; residuals are demeaned within group and
+year. Averages over waves weight each wave pair by the inverse of its
+bootstrap variance. Intervals overlap at every lag; the longest lags decide the permanent--transitory split of Table~\ref{tab:md}.}
+\label{fig:autocov}
+\end{figure}
+
+\subsection{Persistence by dynamic panel GMM}
+\label{sec:abgmm}
+
+A dynamic panel regression gives a second estimate of transitory
+persistence. Both estimators target this parameter, not the persistence of observed residual earnings: the minimum-distance fit attributes part of the autocovariance to a permanent effect before fitting the decay, and the dynamic panel regression differences the permanent component away, so a disagreement between them would signal misspecification of the process rather than a difference in what is estimated. Residual earnings follow the autoregression
+\begin{equation}
+\tilde y_{it} = \rho_0\, \tilde y_{i,t-1}
+ + \rho_1\, (\tilde y_{i,t-1} \times H_i) + \alpha_i + u_{it},
+\label{eq:ab}
+\end{equation}
+in which the individual effect $\alpha_i$ absorbs the permanent component. I use the first-differenced estimator of \citet{ArellanoBond1991} in two-step GMM, with lags two and three of the level as instruments, collapsed \citep{Roodman2009}, and cluster-robust two-step sandwich standard errors. On the 2014--2022 panel the estimate for less advantaged children is
+$\hat\rho_0 = 0.058$ (SE 0.036). The moment set passes the Hansen test and the test for second-order serial correlation (Online Appendix).
+The two estimators agree: the minimum-distance estimate for less advantaged children, 0.12, lies inside the 95 percent interval of the Arellano--Bond estimate, $[-0.01, 0.13]$; for advantaged children the separate minimum-distance estimate lies on the ridge of Section~\ref{sec:md} and is not a reliable benchmark.
+
+The interaction of lagged earnings with family background is 0.009 (SE 0.094), with a Wald interval of $[-0.17, 0.19]$: persistence does not differ by family background.
+
+\subsection{Nonlinear persistence, growth, and the group comparison}
+\label{sec:abb}
+
+Linear autoregressions average over a feature that
+\citet{ArellanoBlundellBonhomme2017} document in American data: the
+persistence of the earnings state depends on the worker's position in
+the distribution and on the size of the shock. Their nonlinear state equation, fitted here by stochastic EM (Online Appendix), reproduces that pattern, and persistence averaged over a lattice of state and shock-rank quantiles is 0.46 in the pooled sample, 0.54 for advantaged children, and 0.44 for less advantaged children. The higher figure for advantaged children holds in each of ten runs of the estimator, which differ in their random draws, and has the same sign as the difference between the separate minimum-distance fits of Table~\ref{tab:md}; it too would be the opposite of protection. The state absorbs the permanent component, so these figures are comparable to the autocorrelation of observed residual earnings, near 0.4 at the pooled estimates (Section H.7 of the Online Appendix), not to the transitory parameter.
+
+Advantaged children might instead have steeper earnings paths. A fixed-effects regression of residual earnings on the interaction of the group indicator with a linear trend,
+\begin{equation}
+\tilde y_{it} = \alpha_i + \gamma\,(H_i \times t) + \delta' z_{it} + e_{it},
+\label{eq:fe}
+\end{equation}
+where $z_{it}$ collects the time-varying covariates, gives $\hat\gamma = 0.018$ per wave (cluster SE 0.014) on the five-wave panel and 0.015 (SE 0.008) on the reconstructed panel without the covariates. The point estimates imply a divergence of 0.09 and 0.08 log points over a decade, and neither differs from zero at the 5 percent level; on the five-wave panel the 95 percent interval runs from about $-0.05$ to 0.23 log points over a decade. A lead test of urban status \citep[Section~10.7.1]{Wooldridge2010} does not reject the strict exogeneity that the fixed-effects estimate requires (Online Appendix).
+
+\begin{table}[t]
+\centering
+\small
+\caption{Group comparison across process moments.}
+\label{tab:summary}
+\input{tables/en/tab_summary}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Compiled from Table~\ref{tab:md} and Sections~\ref{sec:abgmm} and \ref{sec:abb}; the first row is the joint Wald test of Section~\ref{sec:md}, and the last panel the joint fits of the two groups described there. The bracket in the $\kappa$ row is a 90 percent bootstrap interval. Standard errors in parentheses where available. Gaps, and the Arellano--Bond estimate for advantaged children, are computed from unrounded estimates.
+\end{minipage}
+\end{table}
+
+Although advantaged children more often hold degrees, their earnings do not grow faster, which fits the timing of the return to college: children are 31 on average in the first wave in which they are observed, and by then most of the return to college is already in the level of earnings (Section~\ref{sec:sample}), so it adds little to measured growth. Growth also bears on timing in another way: a premium measured on the level of earnings might be a starting gap that later growth would widen or close, but to the extent that earnings grow at the same rate in both groups after the ages at which the level is measured, it is also the long-run premium. As Table~\ref{tab:summary} summarizes, family background is associated with the level of earnings, not with the variance of earnings around that level or with its growth, so whatever advantage these families confer is already in the level that Section~\ref{sec:premium} measured.
+
+\subsection{What the process implies for measurement}
+\label{sec:measurement}
+
+The estimated process also shows how much a regression on a few waves of parental income understates its coefficient, and how many waves undo most of the bias. Let $y^*_i$ denote the permanent log income of the parents of child $i$
+and suppose the researcher
+observes $y_{iT} = y^*_i + \bar v_{iT}$, the average of $T$ waves of parental income. In a regression of a child
+outcome on $y_{iT}$, the probability limit of the coefficient is the
+true coefficient scaled by
+\begin{equation}
+\lambda_T \;\approx\; \lambda^\circ_T \;=\; \frac{\sigma^2_\eta}
+{\sigma^2_\eta + \sigma^2_\varepsilon / \big(T\,(1-\rho_v^2)\big)},
+\label{eq:eta}
+\end{equation}
+treating the transitory components of the $T$ observed waves as mutually uncorrelated.\footnote{With biennial persistence $\rho_v = 0.16$ the transitory components of nearby waves are correlated; the exact formula (Appendix~\ref{app:atten}, second row of Table~\ref{tab:eta}) gives $\lambda_5 = 0.59$ against $\lambda^\circ_5 = 0.65$, so the approximation understates the attenuation.} Evaluated at the children's pooled estimates (Table~\ref{tab:eta}), the reliability ratio $\lambda_T$ is 0.27 at $T = 1$: a single wave recovers about a quarter of the coefficient on permanent income. Averaging helps most in the first few waves: recovering two thirds of the coefficient, about the share that \citet{Mazumder2005} finds short averages recover in the United States, takes about six biennial waves (eight under the exact calculation), a decade or more of panel coverage. A separate life-cycle correction applies when income is observed far from mid-career
+\citep{HaiderSolon2006}; the schedule here concerns panel length, not
+observation age. Appendix~\ref{app:rank} gives the corresponding factor for rank-rank slopes.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The attenuation schedule at the estimated parameters.}
+\label{tab:eta}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular*}{0.98\textwidth}{@{\extracolsep{\fill}}lccccccc@{}}
+\toprule
+\multicolumn{8}{@{}l}{\emph{Share of the coefficient on permanent income recovered by an average of $T$ waves}} \\
+Waves averaged $T$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+\midrule
+Reliability ratio $\lambda^\circ_T$, independence approximation & 0.27 & 0.43 & 0.53 & 0.60 & 0.65 & 0.69 & 0.72 \\
+Reliability ratio $\lambda_T$, exact & 0.27 & 0.39 & 0.48 & 0.54 & 0.59 & 0.63 & 0.66 \\
+
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\begin{minipage}{0.98\textwidth}
+\footnotesize\emph{Notes:} Equation~\eqref{eq:eta} at the pooled
+estimates $\sigma^2_\eta = 0.125$, $\sigma^2_\varepsilon = 0.326$, $\rho_v = 0.16$. The exact row uses the formula of Appendix~\ref{app:atten}. 
+\end{minipage}
+\end{table}
+
+Applied to a published study that uses the same survey, the schedule closes part of the gap between its raw and its preferred estimates. \citet{FanYiZhang2021} use the 2010 to 2016 waves, with income averaged over two to four biennial waves. Divided by the shares that such averages recover under the children's process, their raw least squares estimates of the intergenerational income elasticity imply a true coefficient between 0.31 and 0.45, an interval that contains their preferred estimates. The regressor is parental income, however, and the linked parents have a permanent share of 0.43 against 0.27 for the children: a single wave of their income recovers a little over two fifths of the coefficient, the implied coefficient is $[0.22, 0.30]$, and the correction closes between a quarter and just under one half of the gap (Online Appendix).
+
+\section{The college channel: the 1999 expansion}
+\label{sec:expansion}
+
+Section~\ref{sec:premium} measured a premium in the level of earnings with parental income held fixed, and Section~\ref{sec:process} found no sign of it in the earnings process. This section estimates the return to college that identity~\eqref{eq:hp-intro} needs: Section~\ref{sec:design} sets out the design, Section~\ref{sec:firststage} shows which children completed college because of the added seats, by family background, and Section~\ref{sec:earnings} shows what a degree did to their earnings and occupations.
+
+\subsection{Design and threats}
+\label{sec:design}
+
+Following \citet{Duflo2001}, the design instruments college completion $M_i$ (sixteen or more years
+of schooling) with provincial intensity multiplied by cohort exposure,
+$Z_i = \mathrm{Intensity}_{p(i)} \times \mathrm{Exposure}_{c(i)}$. The outcome is the level of earnings (Section~\ref{sec:sample}), $\bar y_{io}$, where the subscript $o$ marks earnings at ages 30 and over, and the conventional regression has one observation for each of the 2,774 children with a level of earnings:
+\begin{equation}
+\begin{aligned}
+\bar y_{io} &= \beta_o M_i + \theta_1 H_i + \delta' X_i + \mu_{p(i)} + \mu_{c(i)} + e_{i}, \\
+M_i &= \pi_o Z_i + \psi_1 H_i + \gamma' X_i + \mu_{p(i)} + \mu_{c(i)} + u_i,
+\end{aligned}
+\label{eq:oldonly}
+\end{equation}
+where $X_i$ contains $\pinc_i$, gender, and urban residence, $\mu_{p(i)}$ are province
+effects, and $\mu_{c(i)}$ is one effect per birth year. The coefficient $\beta_o$ is the return to college in the level of earnings, and $\pi_o$ is its first-stage coefficient.
+
+The main specification gives each child up to two rows. Equation~\eqref{eq:oldonly} leaves out the 1,762 children who are not yet 30 or have fewer than two waves at 30 and over, although they carry information on the province effects, the birth-year effects, and the coefficients on the controls. The gain from using them is largest for the estimates by family background, whose birth-year effects are specific to each group and rest on few advantaged children. The row at 30 and over holds $\bar y_{io}$, a mean over at least two waves because transitory variance is three quarters of the variance of earnings in a single wave (Table~\ref{tab:md}). The row below 30 holds $\bar y_{ib}$, the same mean over the child's waves at ages 22 to 29, when the child has at least one such wave (2,774 rows at 30 and over, 2,343 below 30). Let $r \in \{o, b\}$ index the rows of child $i$ and let $O_r$
+equal one for the row at 30 and over. The two-row specification is
+\begin{align}
+\bar y_{ir} &= \beta_o\, M_i O_r + \beta_b\, M_i (1 - O_r) + \theta_1 H_i
++ \theta_2 H_i O_r + \theta_3 O_r + \delta' X_i + \mu_{p(i)} + \mu_{c(i)} +
+e_{ir}, \label{eq:twoband} \\
+M_i O_r &= \pi_o\, Z_i O_r + \pi_{b}\, Z_i (1 - O_r) + \psi_1 H_i
++ \psi_2 H_i O_r + \psi_3 O_r + \gamma' X_i + \mu_{p(i)} + \mu_{c(i)} +
+u_{ir}. \label{eq:fso}
+\end{align}
+Equation~\eqref{eq:twoband} has a separate college-completion term for each row, each with its own instrument ($M_i O_r$ is instrumented by $Z_i O_r$ and $M_i (1 - O_r)$ by $Z_i (1 - O_r)$); equation~\eqref{eq:fso} is the first stage for $M_i O_r$, and the one for $M_i (1 - O_r)$ has the same form. The coefficient $\theta_3$ lets mean earnings differ between the rows, and $\theta_2$ lets the premium differ between them; the province effects, the birth-year effects, and the coefficients on $X_i$ are common to the two rows.
+
+Three coefficients carry the results: the return $\beta_o$, its first-stage coefficient $\pi_o$, and its reduced form, the coefficient on $Z_i O_r$ in the regression of $\bar y_{ir}$ on the two instruments and the controls. I do not report or interpret $\beta_b$: every child observed below 30 between 2014 and 2022 was born in
+1985 or later and reached college age well after the expansion had begun, so the reform does not identify it.
+
+Two variants show what the second row and the equal weighting of rows contribute: the conventional regression of equation~\eqref{eq:oldonly}, and a regression that keeps both rows and weights them by precision. The rows are means of different numbers of waves; the variance of a mean of $n_{ir}$ waves is the denominator of equation~\eqref{eq:eta} with $n_{ir}$ in place of $T$, and the weight of a row is its inverse,
+\begin{equation}
+w_{ir} \;=\; \left( \hat\sigma^2_\eta +
+\frac{\hat\sigma^2_\varepsilon}{(1 - \hat\rho_v^2)\, n_{ir}}
+\right)^{-1},
+\label{eq:weights}
+\end{equation}
+evaluated at the pooled estimates of Table~\ref{tab:md}. I keep the unweighted regression as the main specification because it does not depend on the fitted process, and Section~\ref{sec:earnings} also reports the weighted one.
+
+Each child is assigned the birth year implied by the first wave observed at ages 22 to 55 and the province of residence in that wave, a proxy for the province of examination registration, which the CFPS does not record. A child who moved before that wave is assigned the wrong intensity, which attenuates provincial contrasts. Such moves are uncommon and no more common in one group than in the other: of the 2,578 children for whom the 2010 wave records the province of residence at age twelve, 8 percent of advantaged children and 7 percent of less advantaged children are assigned a different province. Section~\ref{sec:earnings} reports the estimates with the instrument assigned by the province at age twelve.
+
+The model is exactly identified, with one excluded instrument
+for each endogenous regressor, and
+two-stage least squares and LIML coincide. Intensity varies at
+the province level, so inference rests on 29 clusters. I report three procedures that do not need many clusters, and all three agree: wild cluster bootstrap $p$-values \citep[Rademacher weights by province, null imposed, 9,999 replications;][]{CameronGelbachMiller2008}; wild cluster Anderson--Rubin sets for the instrumented returns to college, which stay valid under a weak first stage; and randomization inference, which reassigns the 29 provincial values of intensity at random among the provinces and needs no asymptotic approximation. Randomization inference gives $p < 0.001$ for the earnings reduced form and for the first stage, whether intensity is reassigned among all provinces or only within regions (Online Appendix). The
+two rows of a child lie in the same province, so clustering on province
+allows for their correlation.
+
+I measure first-stage strength by the cluster-robust $F$ on $Z_i O_r$ in equation~\eqref{eq:fso}, the one instrument that is not zero on the rows at 30 and over (in the conventional regression it is the effective $F$ of \citet{OleaPflueger2013}). Birth-year effects absorb the national path of admissions; the estimates rest on the remaining 14 percent of the instrument's variance net of province effects, which comes from the interaction of provincial intensity with cohort exposure.
+
+Identification is that of an exposure design, the exogenous-shares case of
+\citet{GoldsmithPinkham2020} with provincial intensity as the single share and cohort exposure as the shift: provincial intensity must be unrelated to
+province-by-cohort shocks to the outcomes, conditional on province and
+cohort means. Province fixed effects absorb any time-invariant relation
+between intensity and outcome levels (high-intensity provinces are
+richer on average), so the remaining threats are trending confounders.
+Provinces with rapid pre-reform growth in examination demand might be on differential trends more generally. The placebo instrument built from pre-reform growth in examination registrations (Section~\ref{sec:background}), which picks up any provincial trend in the demand for college but not the reform, has no first stage (Table~\ref{tab:threats}): the instrument follows the seats that were added rather than a trend.
+
+Exclusion requires that the instrument move the outcomes only through
+college, conditional on the controls; the main
+competing shock of the period is WTO accession, whose provincial
+geography could correlate with provincial intensity. The expansion also enlarged the supply of graduates, which lowered the relative wages of graduates in the cohorts entering the labor market \citep{KnightDengLi2017}; to the extent that graduates work where they studied, this pushes the earnings reduced form toward zero, so the return estimated here is, if anything, understated. Table~\ref{tab:threats} lists each assumption with its main threat, the checks I run, and their results (Section~\ref{sec:earnings}).
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Identifying assumptions, threats, and diagnostics.}
+\label{tab:threats}
+\begin{tabular}{@{}L{2.8cm}L{3.9cm}L{8.0cm}@{}}
+\toprule
+Assumption & Principal threat & Diagnostic and result \\
+\midrule
+Instrument relevance & Weak first stage in a group or under another intensity measure
+& First-stage $F$ of 18.0 for all children, 16.9 and 12.3 for less advantaged and advantaged children, and 13.3 to 39.8 under the three other measures (Table~\ref{tab:groups} and the Online Appendix) \\
+\addlinespace
+Exclusion: the instrument reaches earnings only through college & A shock of the reform years, such as trade after WTO accession, that is correlated with intensity and reaches earnings outside college &
+Trade-exposure controls: reduced form 0.127 to 0.140, against 0.128. Children with nine or fewer years of schooling: occupation 0.017 (SE 0.019). Reduced form of the child's adult urban residence: 0.006 (SE 0.022) \\
+\addlinespace
+Parallel trends: provincial intensity unrelated to province-by-cohort shocks & Provinces that added more seats were already on different trends &
+Placebo from pre-reform registration growth: first-stage $F$ of 0.5. Predetermined census measure: return 0.67. Cohorts born in 1980 or earlier: no trend in earnings or completion ($p = 0.56$ and $0.75$). Linear cohort trends by region: return 0.72. Census cohorts before the reform \citep{IPUMSInternational}: under one percentage point of divergence over 20 cohorts \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{0.95\textwidth}
+\footnotesize\emph{Notes:} Estimates for the row at 30 and over of equation~\eqref{eq:twoband} under the main measure of intensity unless the entry names another measure or source; standard errors clustered on province; $p$-values are wild cluster bootstrap $p$-values; reduced forms are coefficients on the instrument in regressions of the named outcome on the instrument and the controls.
+\end{minipage}
+\end{table}
+
+\subsection{First stages and whom the reform moved}
+\label{sec:firststage}
+
+Panel (a) of Figure~\ref{fig:fs} plots the college completion rate by family background in five groups of birth cohorts: completion rose across the reform from 17.3 to 50.5 percent among advantaged children and from 4.6 to 24.2 percent among less advantaged children. The ratio of the two rates (printed in panel (a) for each of the five groups of cohorts) falls from 3.7 to 2.1 between the cohorts born in 1980 or earlier and those born later, while the gap in percentage points widens from 13 to 26. Both changes come with the national rise in admissions, which the birth-year effects absorb (Online Appendix). The first stage identifies the allocation of the seats that provinces added beyond that rise; panel (b) shows it as a binned scatter for each group.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.84\textwidth]{figures/fig_first_stage}
+\caption{College completion by family background and the first stage. Panel (a): college completion rate by family background in five groups of birth cohorts, with 95 percent intervals from the binomial standard error; the number under each group is
+the ratio of the rate of advantaged children to the rate of less
+advantaged children. Panel (b): binned scatter (20 bins of less advantaged and 10 bins of advantaged children) of college completion on the instrument by family background, in the
+regression with province effects common to the two groups and
+birth-year effects specific to each; both variables are residualized on
+the other group's instrument and the controls, and the lines have the group first-stage slopes with province-clustered standard errors. All 4,536 children in the sample, one observation per child.}
+\label{fig:fs}
+\end{figure}
+
+On all 4,536 children, one observation per child, the main intensity measure gives a first-stage coefficient of 0.136 ($F = 102.9$): relative to the cohorts born before 1981, moving from a province at the 10th percentile of intensity to one at the 90th raises the college completion of a cohort born in 1989 or later by 18 percentage points. The first stage behind the returns of Section~\ref{sec:earnings}, on the rows at 30 and over, is 0.186 (SE 0.044) with $F = 18.0$; its $F$ is lower because it rests on the 2,774 children already observed at those ages. The three other measures of intensity also have strong first stages (Online Appendix).
+
+To estimate the first stage by family background I give each group its own coefficient on the instrument in one regression, with birth-year effects specific to each group (so that each group's national rise in completion is removed separately) and province effects common to the groups, because the advantaged children, 755 in all and 453 with a level of earnings, are too few for a separate set (Online Appendix). On all children the first-stage coefficient is 0.137 for less advantaged children and 0.118 for advantaged children (Figure~\ref{fig:fs}), and the difference between them, $-0.019$ (SE 0.019), is not distinguishable from zero: the added seats raised the chance of completing college by a similar amount in both groups (18 and 15 percentage points for the same difference in intensity). Because the pre-reform ratio of completion rates was 3.7 to one in favor of advantaged children, an addition of similar size was a far larger proportional change for less advantaged children, so the seats that provinces added narrowed the gap as a ratio while leaving it roughly unchanged in percentage points. The first stages on the rows at 30 and over are again not distinguishable between the groups (Table~\ref{tab:groups}).
+
+
+
+\subsection{What college returned: earnings and occupation}
+\label{sec:earnings}
+
+Unless noted, every estimate below is for the row at 30 and over of the two-row regression of equation~\eqref{eq:twoband}; the cohorts born before 1981 supply the earnings
+gradient on provincial intensity in the absence of the reform.
+
+Under the main measure of intensity (Table~\ref{tab:groups}), moving from the 10th to the 90th percentile of intensity raises the completion of the most exposed cohorts in these rows by 24 percentage points and their level of earnings by about 18 percent. The instrumented return to college is 0.68 log points, against a least squares return of 0.45, and the 95 percent wild cluster Anderson--Rubin set, $[0.50, 4.20]$, excludes zero and the least squares return.
+
+The three other intensity measures give returns of 0.63 to 0.72 (Online Appendix). The census measure is fixed in every component before the reform, so its agreement with the main measure, whose denominators date from after it, addresses the concern that the expansion itself shaped the measure of intensity. Dropping one province at a time gives returns between 0.65 and 0.73, except for Shanghai, the province with the highest intensity: without it the reduced form stays at 0.125, the first stage falls to 0.112, and the return is 1.11, with an Anderson--Rubin set that starts at 0.55. Figure~\ref{fig:mature} reports the event study: the earnings gradient on provincial intensity is flat across the pre-reform cohort bins, the completion gradient is not distinguishable from zero at the 5 percent level in either bin, and both rise across the three post-reform bins with the exposure of the cohort.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.84\textwidth]{figures/fig_mature_age}
+\caption{Event study: completion and earnings gradients on provincial intensity by birth cohort. College completion (panel a) and the level of earnings (panel b) by cohort bin: coefficients on
+interactions of provincial intensity with the birth-cohort bins
+1972 or earlier, 1973--1976, 1981--1984, 1985--1988, and 1989 or later, with the reference bin 1977--1980 plotted at zero. Main intensity measure; the 2,774 children with a level of earnings, one observation per child on the rows at 30 and over, unweighted; demographic controls, birth-year effects, and province effects included; 95 percent intervals clustered on province. Coefficients are per unit
+of provincial intensity and are not comparable with the first-stage
+coefficient on $Z$. The dashed line marks the reform.}
+\label{fig:mature}
+\end{figure}
+
+The return changes little with regional cohort trends, with the instrument assigned by the province at age twelve, and with cohort exposure taken at age seventeen or nineteen instead of eighteen (0.64 to 0.74). A linear cohort trend for each province gives 0.77, with a reduced form of 0.100 (SE 0.065), and leaving out the cohorts born 1973 to 1976, whose completion has the largest pre-reform gradient on intensity in Figure~\ref{fig:mature}, gives 0.60. Dropping the second row (equation~\eqref{eq:oldonly}) gives a return of 0.70, and weighting the rows by the precision of equation~\eqref{eq:weights} gives 0.63. The Online Appendix reports these and further checks.
+
+\begin{table}[t]
+\centering
+\small
+\caption{First stages, earnings reduced forms, and returns to college, for all children and
+by family background.}
+\label{tab:groups}
+\input{tables/en/tab_groups_with_all_children}
+\par\smallskip
+\begin{minipage}{0.92\textwidth}
+\footnotesize\emph{Notes:} Two-row specification of equation~\eqref{eq:twoband} on all 4,536 children in the sample; every entry is the estimate for the row at 30 and over, and Children is the number of such rows, one per child with a level of earnings.  Rows by family background: one regression for each column of estimates, with the instrument entering separately for each group and row, province effects common to the groups, birth-year effects specific to each group, and the controls of equation~\eqref{eq:twoband}. Province-clustered standard errors in parentheses. Below each first-stage standard error is its cluster-robust $F$ statistic; below each reduced-form standard error, in brackets, is its wild cluster bootstrap $p$-value. The Anderson--Rubin sets invert the wild cluster bootstrap test over returns from $-6$ to 6 in steps of 0.05, and a set is reported as unbounded when the test does not reject at the end of the grid. Because province effects are common to the groups, the two returns by family background are estimated jointly, and neither equals the ratio of the group's reduced form to its first stage. Least squares: the coefficient on college completion in the same rows. *, **, and *** denote significance at the 10, 5, and 1 percent levels by the wild cluster bootstrap $p$-value (first-stage $p$-values are not printed).
+\end{minipage}
+\end{table}
+
+Counted over the four years of a degree, the instrumented return of 0.68 is about 0.17 log points (19 percent) per year of college. This return is in the range that other designs find for China: near 10 percent per year of schooling in urban China around 2000 \citep{ZhangZhaoParkSong2005, HeckmanLi2004}, 12 to 17 percent per year with an instrument that combines the expansion with childhood household registration \citep{HuangTaniWeiZhu2022}, and about 20 percent per year with the 1986 compulsory schooling law \citep{FangEtAl2012}.
+
+By family background (Table~\ref{tab:groups}), both groups have a first stage, and both earnings reduced forms are positive and significant at the 5 percent level by the wild cluster bootstrap. The instrumented return is 0.62
+for less advantaged children and 1.14 for advantaged children; the least squares returns are 0.44 and 0.51. For less advantaged children the 95 percent Anderson--Rubin set is $[0.45, 4.45]$; the set for advantaged children consists of two unbounded rays, $(-\infty, -0.50]$ and $[0.25, \infty)$. The point estimates suggest a higher earnings return to college for advantaged children, though the difference is within sampling error ($z = 1.41$, which accounts for the covariance of the two estimates), so Section~\ref{sec:mediation} evaluates the identity at both the return for all children and the return for advantaged children. Neither point estimate is below the least squares return.
+
+\label{sec:occupation}
+Because the premium is defined by parental occupation, I also ask whether the expansion moved
+children into official, managerial, or professional occupations of their own (advantaged occupations). The outcome
+is the share of the child's waves at ages 30 and over in which the
+reported occupation belongs to CSCO major groups 1 or 2, in the two-row regression of equation~\eqref{eq:twoband} with the share below 30 as the second row; it is the chance of holding such an occupation at a given wave. Its reduced form on the instrument is 0.092 (wild cluster $p = 0.016$), which implies that college raises the share of those waves spent in an advantaged occupation by 0.50, or 50 percentage points; the three other intensity measures give reduced forms of the same sign (Online Appendix).
+
+The occupational gap between the groups disappears among graduates. Among the 2,762 children with at least two waves at 30 and over that report an occupation, advantaged children spend twice the share of those waves in an advantaged occupation (0.33 against 0.17), and about twice the share among children without a degree (0.19 against 0.10); among graduates, the two groups spend the same share (0.60 each). With parental income and demographics held fixed by entropy balancing, the shares are 0.60 against 0.59 among graduates (95 percent bootstrap interval of the gap $[-0.08, 0.11]$) and 0.19 against 0.14 among children without a degree ($[0.01, 0.10]$).
+
+By family background, in the regression of Table~\ref{tab:groups}, the point estimates suggest a larger occupational gain for less advantaged children: college raises their share of waves in an advantaged occupation by 0.55 (SE 0.24), against 0.13 (SE 0.31) for advantaged children, whose reduced form is not distinguishable from zero. The difference is within sampling error ($z = 1.25$) and runs opposite to the difference in earnings returns.
+
+The completion indicator counts four-year degrees only. Completion of a three-year degree does not rise with the instrument (coefficient $-0.06$, SE 0.03, wild cluster $p = 0.29$), so the reduced form carries no earnings effect of added three-year degrees. If some of the children who completed a four-year degree because of the added seats would otherwise have held a three-year one, 0.68 compares a four-year degree with a mix of no college and a three-year degree.
+
+Under monotonicity (more seats in the province make no child less likely to complete college), the instrument recovers a local average treatment effect in the sense of \citet{ImbensAngrist1994}: a weighted average of the returns to college for compliers, the children who completed a four-year degree because of the added seats, drawn from the two groups roughly in proportion to their numbers in the sample, since a similar share of each group complied (Section~\ref{sec:firststage}).
+
+This return bears on the two readings of the completion gap set out in the introduction: the examination score that rationed seats may have ranked ability alone (the ability reading), or preparation under unequal conditions (the preparation reading). For all children, the point estimate (0.68) and the lower end of the 95 percent Anderson--Rubin set (0.50) lie above the least squares return (0.45, SE 0.04): the children whom the seat constraint had kept out earned at least as much from college as the earnings difference between graduates and children without a degree would suggest. If positive selection among the earlier graduates inflates the least squares return, as the ability reading itself asserts, their own return lies below 0.45, and the compliers earned at least as much from college as the earlier graduates did. An instrumented return above least squares is the usual finding when an instrument relaxes a constraint on schooling \citep{Card2001}, and the usual explanation, a higher return for the children whom the constraint had kept out, is the preparation reading rather than an alternative to it.
+
+\section{Decomposing the premium}
+\label{sec:mediation}
+
+The paper has measured three things on the level of earnings of the same 2,774 children: the premium ($\tau$), the gap in college completion between the two groups, measured in the same comparison as the premium ($\Delta M$), and the return to college. Identity~\eqref{eq:hp-intro} puts them together: $\tau$ equals $\Delta M$ valued at what a degree is worth to an advantaged child ($\beta^{H}$), plus a direct effect (Direct); the completion gap valued at that return is the college channel. With $\beta^{H}$ measured as the earnings difference between advantaged graduates and advantaged children without a degree, the equation holds exactly. Evaluated at a return estimated elsewhere, by least squares or by instrumental variables, the identity values the completion gap and leaves a remainder, which Table~\ref{tab:bounds} reports as the direct effect; it equals Direct when that return equals $\beta^{H}$ and otherwise also contains the difference between the two returns times $\Delta M$ (Section I of the Online Appendix). Direct itself is the premium that would remain if the completion rate of advantaged children were lowered to that of less advantaged children \citep{HeckmanPinto2015}. 
+
+Section~\ref{sec:premium} supplies $\tau = 0.072$ and $\Delta M = 0.122$. Both come from the entropy-balanced
+comparison of Section~\ref{sec:ebal} and not from the regressions,
+because the identity is an equality between the means of two groups and
+holds only if the earnings gap and the completion gap are taken against the same comparison group: the less advantaged children reweighted to match the parental income and demographics of advantaged children. $\Delta M$ is the gap among all 2,774
+children with a level of earnings, the cohorts before and after the reform together, because the
+premium it has to account for is the earnings gap among all of them.
+The expansion bears on the identity only as the source of the return. The Online Appendix gives the college share at the two regression estimates of the premium.
+
+The least squares return compares graduates with children without a degree; its difference between the groups is not distinguishable from zero (Table~\ref{tab:groups}). Evaluated at a least squares return, the identity is an accounting exercise without a causal interpretation, and it reproduces a familiar regression: when the child's college completion is added to a least squares regression of the level of earnings on family background and the controls of equation~\eqref{eq:oldonly}, the coefficient on family background falls from 0.076 to 0.022, a drop of about the share that the identity assigns to college at that return. The instrumented returns of Section~\ref{sec:earnings}, returns for children who completed college because seats were added, are the other benchmark. The identity calls for the return for advantaged children, and its causal counterpart is the $\beta_o$ of Section~\ref{sec:design} estimated for them. Table~\ref{tab:bounds} evaluates the identity at their two returns and at the two returns for all children, which rest on six times as many children.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The premium split into the college channel and the direct
+effect, at alternative values of the return to college.}
+\label{tab:bounds}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& & College & Direct & College \\
+Source of the return & Return to college & channel & effect & share \\
+\midrule
+Return at which college explains half of the premium & 0.294 & 0.036 & 0.036 & 0.50 \\
+Least squares, all children & 0.449 & 0.055 & 0.017 & 0.76 \\
+Least squares, advantaged children & 0.515 & 0.063 & 0.009 & 0.88 \\
+Return at which college explains all of the premium & 0.588 & 0.072 & 0.000 & 1.00 \\
+Instrumented, all children & 0.684 & 0.084 & $-0.012$ & 1.16 \\
+Instrumented, advantaged children & 1.143 & 0.140 & $-0.068$ & 1.94 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{0.9\textwidth}
+\footnotesize\emph{Notes:} Level of earnings (2,774 children). The premium with parental income held fixed is 0.072 and the completion gap 0.122, both from entropy balancing
+(Section~\ref{sec:ebal}). The college channel is the return times the completion gap, the direct effect is the premium minus the college channel, and the college share is the college channel divided
+by the premium. A negative direct effect means that the completion gap valued at that return exceeds the premium; the 95 percent Anderson--Rubin sets of both instrumented returns contain 0.588, the return at which the direct effect is zero. All entries are computed from unrounded values. Instrumented and least squares returns from Table~\ref{tab:groups}, printed here to three decimals.
+\end{minipage}
+\end{table}
+
+At the least squares returns the completion gap accounts for three quarters of the premium (the return for all children) and seven eighths (the return for advantaged children). College explains half of the premium at a return of 0.29 and all of it at 0.59 (Table~\ref{tab:bounds}); at 0.50, the lower end of the 95 percent Anderson--Rubin set for all children, it still explains 85 percent. Both instrumented returns lie above 0.59: valued at what college returned to the children who completed it because of the expansion, the completion gap accounts for all of the premium. This valuation treats the degrees that advantaged children hold in excess of less advantaged children as worth that return. Many of those degrees were completed before the reform; if their holders earned no more from college than the children who completed it because of the reform, as the preparation reading of Section~\ref{sec:earnings} implies, the instrumented return values the completion gap at or above its worth. Least squares, which positive selection into college pushes above what a degree returned to its holders, is not a lower bound on that worth; at lower returns the share falls below three quarters.
+
+With a separate return for each group, the identity is an Oaxaca--Blinder decomposition with college completion as the only covariate, evaluated at the coefficients of advantaged children \citep{Oaxaca1973, Blinder1973}. Inside the balanced comparison every term is a mean of the reweighted sample, so the parts add up to the premium by construction, with no regression and no residual. Graduates out-earn children without a degree by 0.541 log points among advantaged children and by 0.517 among reweighted less advantaged children; these are raw differences inside the balanced comparison, whereas the least squares returns of Table~\ref{tab:bounds} add the controls of equation~\eqref{eq:oldonly}. The premium of 0.072 has three parts, each given here with a 95 percent bootstrap interval (1,000 replications). The first, 0.066 ($[0.04, 0.09]$), comes from the degrees that advantaged children hold in excess
+of less advantaged children, valued at the return for advantaged children;
+it is the college channel, 92 percent of the premium. The second, 0.005 ($[-0.02, 0.04]$), comes from the degrees that both groups hold (up to the completion rate of less advantaged children, 21 percent), which are worth slightly more to advantaged children. The third, 0.001 ($[-0.08, 0.07]$), is the gap between children of the two groups without a degree. The second and third parts are also where ability rewarded outside college would appear: if advantaged children were the more able at each level of schooling, they would out-earn less advantaged children with the same schooling. With parental income held fixed, they do not among children without a degree and barely do among graduates, where the gap is 0.024 log points ($[-0.09, 0.13]$) and the chance of holding an advantaged occupation is the same (Section~\ref{sec:earnings}). Only the first part depends on who completes college; the second and the third make up the direct effect.
+
+College is measured by a binary completion indicator, so any advantage in college quality that is correlated with
+family background is counted in the direct effect and not in the
+college channel; if advantaged families, whose college completion was
+already high, responded to the expansion by seeking better institutions \citep{LiuWan2019, LiuYueZhu2025},
+the accounting understates the education system's role. The accounting measures how much of the premium is associated with completing college; whatever a degree carries with it (skills, credentials, the connections made in college, access to urban labor markets) is counted with the degree.
+
+The direct effect is also where an advantage built inside the labor market would have to appear, and Section~\ref{sec:process} found no sign of one in the earnings process. The decomposition thus reduces what parental occupation passes on beyond income largely to whether the child holds a four-year degree. 
+
+\section{Discussion and conclusion}
+\label{sec:conclusion}
+
+The earnings advantage of the children of officials, managers, and professionals is in place before they start work. I look for its source in their earnings dynamics and do not find it: a single earnings process fits both groups as well as separate processes do, and the variance of earnings, the persistence of shocks, and earnings growth do not differ between them. The estimated process also yields the attenuation factors that the literature on intergenerational persistence in China has lacked (Section~\ref{sec:measurement}).
+
+With parental income held fixed, advantaged children earn 7 to 17 percent more. At the entropy-balanced value of this premium, 7 percent, the gap in college completion, valued at the return to college, accounts for between three quarters and all of it. The alternative explanation, that advantaged parents pass on their ability, fails the tests of Sections~\ref{sec:earnings} and \ref{sec:mediation}: with parental income held fixed, children without a degree earn the same in the two groups; among graduates the earnings gap is small and the chance of holding an advantaged occupation is the same; and the children who completed college only because seats were added earned no less from it than earlier graduates. Most of the advantage these families pass on beyond their income runs through access to college rather than through ability rewarded outside it.
+
+The expansion widened access to college without narrowing the gap between the groups in percentage points. Completion among less advantaged children rose fivefold between the cohorts born in 1980 or earlier and those born later, the ratio of completion rates fell from 3.7 to 2.1, and the added seats raised the chance of completing college by a similar amount in both groups. Those seats also reached children who could benefit from them: the instrumented return for less advantaged children, 0.62, is above their least squares return, 0.44, which suggests that unequal preparation rather than lesser ability had kept them below the cutoff. In percentage points, however, a similar addition to unequal starting points left the gap roughly unchanged, and with the national rise in admissions the gap widened from 13 to 26 points across cohorts, as earlier work on the expansion reports \citep{Yeung2013}.
+
+Among graduates, occupation does not depend on family background, but the return to college may. Advantaged children are twice as likely to hold advantaged occupations, overall and among children without a degree; among graduates the two groups are equally likely to hold them. Among children who completed college because of the reform, the point estimates suggest a larger gain in that chance for less advantaged children but a higher earnings return for advantaged children, though both differences are within sampling error. If the earnings difference persists as more of the post-reform cohorts reach their thirties, part of the advantage of family background will shift from who completes college to what college returns. For the cohorts studied here, what parental occupation passes on beyond income is mostly a four-year degree. Family background shapes who holds one, and once children are at work, their earnings shocks and earnings growth do not depend on it.
+
+{\footnotesize
+\setstretch{1}
+\setlength{\bibsep}{0pt}
+\setlength{\columnsep}{18pt}
+\begin{multicols}{2}
+\bibliography{refs}
+\end{multicols}}
+
+\appendix
+\normalsize\setstretch{1.05}
+\renewcommand{\theequation}{A.\arabic{equation}}
+\setcounter{equation}{0}
+\newcommand{\resultskip}{\par\medskip}
+\newcommand{\proofskip}{\par\medskip}
+\newcommand{\partskip}{\par\vspace{2pt}}
+\section{Formal results}
+\label{app:formal}
+
+Throughout, $\rho$ stands for $\rho_v$, $\sigma^2_v = \sigma^2_\varepsilon/(1-\rho^2)$, $\omega_k = \sigma^2_\eta + \rho^{k}\sigma^2_v$ is the autocovariance of residual earnings at lag $k$ (equation~\eqref{eq:moments}), and $s = \sigma^2_\eta/(\sigma^2_\eta + \sigma^2_v)$ is the permanent share.
+
+\subsection{Attenuation with serially correlated transitory components}
+\label{app:atten}
+
+\noindent\textbf{Result 1.} \emph{Let $\bar v_{T}$ be the mean of a stationary AR(1) transitory component over $T$ consecutive waves. Then}
+\begin{equation}
+\mathrm{Var}(\bar v_{T}) = \frac{\sigma^2_v}{T}\, f_T(\rho), \qquad
+f_T(\rho) = 1 + 2\sum_{k=1}^{T-1}\Big(1 - \frac{k}{T}\Big)\rho^{k}
+= \frac{1+\rho}{1-\rho} - \frac{2\rho\,(1-\rho^{T})}{T\,(1-\rho)^{2}} .
+\label{eq:app-fT}
+\end{equation}
+\emph{For $\rho \in (0,1)$, $f_T$ is strictly increasing in $T$ with limit $(1+\rho)/(1-\rho)$, $f_T/T$ is strictly decreasing in $T$, and for $T \ge 2$, $f_T$ is strictly increasing in $\rho$.}
+\proofskip
+\noindent\emph{Proof.} $\mathrm{Var}(\bar v_{T}) = T^{-2}\sigma^2_v\sum_{t,t'}\rho^{|t-t'|} = T^{-2}\sigma^2_v\big[T + 2\sum_{k=1}^{T-1}(T-k)\rho^{k}\big]$, since $T-k$ pairs of waves lie $k$ apart; this is the sum form. The closed form follows from $\sum_{k=1}^{T-1}\rho^k = \rho(1-\rho^{T-1})/(1-\rho)$ and $\sum_{k=1}^{T-1}k\rho^k = \rho\big(1 - T\rho^{T-1} + (T-1)\rho^{T}\big)/(1-\rho)^2$. In the sum form each term $(1-k/T)\rho^k$ is positive and increasing in $T$ and in $\rho$, and the number of terms grows with $T$; the limit follows from the closed form.
+\partskip
+For $f_T/T$, let $u_1, \dots, u_{T+1}$ be the transitory components of $T+1$ consecutive waves and $\mu_j$ the mean of the $T$ of them other than $u_j$. Each $u$ enters $T$ of the $T+1$ means $\mu_j$, so $\bar v_{T+1} = (T+1)^{-1}\sum_j \mu_j$. Listed in time order, the $i$-th and $l$-th terms of $\mu_j$ lie at least $|i-l|$ waves apart, and $\rho^{d}$ falls with the distance $d$, so $\mathrm{Var}(\mu_j) \le \mathrm{Var}(\bar v_T)$. The variance of an average is below the largest variance of its terms unless all of them are perfectly correlated, and $\mu_1$ and $\mu_{T+1}$, which have equal variance and differ by $(u_{T+1} - u_1)/T \ne 0$, are not. Hence $\mathrm{Var}(\bar v_{T+1}) < \mathrm{Var}(\bar v_T)$. \hfill$\square$
+\resultskip
+\noindent\textbf{Result 2.} \emph{Let $c = a + b\,y^* + e$ with $\mathrm{Var}(y^*) = \sigma^2_\eta > 0$ and $\mathrm{Cov}(y^*, e) = 0$, and let the transitory components be uncorrelated with $y^*$ and $e$. The least squares slope of $c$ on $y_T = y^* + \bar v_T$ converges to $b\,\lambda_T$, where}
+\begin{equation}
+\lambda_T = \frac{\mathrm{Cov}(c, y_T)}{b\,\mathrm{Var}(y_T)} = \frac{\sigma^2_\eta}{\sigma^2_\eta + \sigma^2_v\, f_T(\rho)/T} .
+\label{eq:app-lambda}
+\end{equation}
+\emph{By Result~1, for $\rho \in (0,1)$ and $T \ge 2$, $\lambda_T$ lies below the approximation $\lambda^\circ_T$ of equation~\eqref{eq:eta}, which sets $f_T = 1$, and, for fixed variances, falls with $\rho$; it rises strictly with $T$, and $1 - \lambda_T = O(1/T)$. At $\rho = 0.16$, $f_5 = 1.29$, which gives $\lambda_5 = 0.59$ against $\lambda^\circ_5 = 0.65$.}
+
+\subsection{Identification, rank, and the ridge}
+\label{app:ridge}
+
+\noindent\textbf{Result 3.} \emph{Let $\theta = (\sigma^2_\eta, \sigma^2_\varepsilon, \rho)$ with $\sigma^2_\varepsilon > 0$ and $|\rho| < 1$. (a) The autocovariances at lags 0, 1, and 2 identify $\theta$:}
+\begin{equation}
+\rho = \frac{\omega_1 - \omega_2}{\omega_0 - \omega_1}, \qquad
+\sigma^2_v = \frac{\omega_0 - \omega_1}{1-\rho}, \qquad
+\sigma^2_\eta = \omega_0 - \sigma^2_v, \qquad \sigma^2_\varepsilon = (1-\rho^2)\,\sigma^2_v .
+\label{eq:app-ident}
+\end{equation}
+\noindent\emph{(b) The Jacobian of $(\omega_0, \omega_1, \omega_2)$ with respect to $\theta$ has determinant $\sigma^2_\varepsilon/(1+\rho)^2$, so it has full rank.}
+\proofskip
+\noindent\emph{Proof.} (a) $\omega_0 - \omega_1 = (1-\rho)\sigma^2_v \ne 0$ and $\omega_1 - \omega_2 = \rho(1-\rho)\sigma^2_v$. (b) Write $q_k = \rho^k \varphi$ with $\varphi = 1/(1-\rho^2)$, so that row $k$ of the Jacobian is $(1,\ q_k,\ \sigma^2_\varepsilon q_k')$ and the determinant is $\sigma^2_\varepsilon\big[(q_1 - q_0)(q_2' - q_0') - (q_2 - q_0)(q_1' - q_0')\big]$. Here $q_2 - q_0 = (\rho^2 - 1)\varphi = -1$, so $q_2' - q_0' = 0$, and $q_1' - q_0' = \varphi + (\rho - 1)\varphi'$ with $\varphi' = 2\rho \varphi^2$. The determinant is therefore $\sigma^2_\varepsilon\big[\varphi - 2\rho(1-\rho)\varphi^2\big] = \sigma^2_\varepsilon \varphi^2(1-\rho)^2 = \sigma^2_\varepsilon/(1+\rho)^2$. \hfill$\square$
+
+\resultskip
+\noindent\textbf{Result 4.} \emph{Write the model in autocorrelations, $r_k = \omega_k/\omega_0 = s + (1-s)\rho^{k}$, hold $r_1$ fixed, and move along the pairs $(s, \rho)$ consistent with it, $\rho(s) = (r_1 - s)/(1-s)$. For $k \ge 2$,}
+\begin{equation}
+\frac{d r_k}{d s}\Big|_{r_1} = h_k(\rho) \equiv 1 - \rho^{k} - k\rho^{k-1}(1-\rho)
+= (1-\rho)^2\sum_{j=0}^{k-2}(j+1)\rho^{j},
+\label{eq:app-hk}
+\end{equation}
+\emph{so every $h_k$ vanishes at the rate $(1-\rho)^2$ as $\rho \to 1$.}
+\proofskip
+\noindent\emph{Proof.} Since $1 - r_1 = (1-s)(1-\rho)$, $\rho'(s) = -(1-r_1)/(1-s)^2 = -(1-\rho)/(1-s)$, and differentiating $r_k = s + (1-s)\rho(s)^k$ gives $1 - \rho^{k} + (1-s)k\rho^{k-1}\rho'(s) = h_k(\rho)$. With $1 - \rho^m = (1-\rho)\sum_{i=0}^{m-1}\rho^i$, $h_k = (1-\rho)\sum_{j=0}^{k-2}(\rho^j - \rho^{k-1}) = (1-\rho)^2\sum_{j=0}^{k-2}\rho^j\sum_{i=0}^{k-2-j}\rho^i$, in which the power $\rho^m$ appears $m+1$ times. \hfill$\square$
+\partskip
+Only the higher-order autocorrelations separate $s$ from $\rho$, with leverage $h_k$: at the estimate for less advantaged children, $\hat\rho = 0.12$, $h_2 = 0.77$; at the estimate for advantaged children, $\hat\rho = 0.33$, $h_2 = 0.45$, with moments from 420 children rather than 2,103. This is the ridge of Section~\ref{sec:md}.
+
+\subsection{The minimum-distance estimator with fixed weights}
+\label{app:md}
+
+Index the $K = 15$ pairs of waves by $\ell = (t, t')$, $t \le t'$. Let $d_{i\ell}$ indicate that child $i$ is observed in both waves, $n_\ell = \sum_i d_{i\ell}$, $\hat\omega_\ell = n_\ell^{-1}\sum_i d_{i\ell}\,\tilde y_{it}\tilde y_{it'}$, and $m_\ell(\theta) = \omega_{t'-t}$. With $n$ children and $\hat W = \mathrm{diag}(n_\ell/n)$, the estimator minimizes
+\[
+\textstyle\sum_\ell n_\ell\big(\hat\omega_\ell - m_\ell(\theta)\big)^2 = n\,\big(\hat\omega - m(\theta)\big)'\hat W\big(\hat\omega - m(\theta)\big),
+\]
+and $J$ is its minimized value.
+Assume that children are independent draws, that the pattern of observed waves is independent of earnings (an approximation, since the sample restrictions of Section~\ref{sec:sample} depend on earnings), that $\tilde y$ has mean zero and finite fourth moments, that the model holds, $\omega^* = m(\theta_0)$, with $\theta_0$ interior to a compact parameter set on which $\sigma^2_\varepsilon > 0$ and $|\rho| < 1$, that $\pi_\ell = \Pr(d_{i\ell} = 1) > 0$, and that $\Omega$ below is positive definite. Write $W = \mathrm{diag}(\pi_\ell)$ and $G = \partial m(\theta_0)/\partial\theta'$.
+\resultskip
+\noindent\textbf{Result 5.} \emph{(a) $\sqrt{n}(\hat\omega - \omega^*) \Rightarrow N(0, \Omega)$, where for $\ell = (t,t')$, $\ell' = (u,u')$, and $\pi_{\ell\ell'}$ the probability of being observed in every wave of $\ell$ and $\ell'$,}
+\begin{equation}
+\Omega_{\ell\ell'} = \frac{\pi_{\ell\ell'}}{\pi_\ell\,\pi_{\ell'}}\Big(E[\tilde y_t\tilde y_{t'}\tilde y_u\tilde y_{u'}] - \omega_\ell\,\omega_{\ell'}\Big).
+\label{eq:app-omega}
+\end{equation}
+\noindent\emph{(b) $\sqrt{n}(\hat\theta - \theta_0) \Rightarrow N\big(0,\ (G'WG)^{-1}G'W\Omega WG(G'WG)^{-1}\big)$.}
+\partskip
+\noindent\emph{(c) With $A = W - WG(G'WG)^{-1}G'W$ and $\nu_1, \dots, \nu_{K-3}$ the nonzero eigenvalues of $\Omega^{1/2}A\,\Omega^{1/2}$,}
+\begin{equation}
+J \;\Rightarrow\; \sum_{j=1}^{K-3}\nu_j\,\chi^2_{1,j}, \qquad E\Big[\sum_{j}\nu_j\,\chi^2_{1,j}\Big] = \mathrm{tr}(A\,\Omega),
+\label{eq:app-J}
+\end{equation}
+\emph{with independent $\chi^2_1$ variables. If the weight matrix were $\Omega^{-1}$, the $\nu_j$ would all equal one and the limit would be $\chi^2_{K-3}$; in general they depend on $\Omega$.}
+\proofskip
+\noindent\emph{Proof.} (a) $\sqrt{n}(\hat\omega_\ell - \omega_\ell) = (n/n_\ell)\,n^{-1/2}\sum_i d_{i\ell}(\tilde y_{it}\tilde y_{it'} - \omega_\ell)$ with $n/n_\ell \to 1/\pi_\ell$. The summands are independent across children with mean zero, and by the independence of $d$ and $\tilde y$ the covariance of the terms for $\ell$ and $\ell'$ is $\pi_{\ell\ell'}\big(E[\tilde y_t\tilde y_{t'}\tilde y_u\tilde y_{u'}] - \omega_\ell\omega_{\ell'}\big)$; the multivariate central limit theorem and Slutsky's lemma give (a).
+\partskip
+(b) By Result~3(a) and $W$ positive definite, $\theta_0$ uniquely minimizes $(\omega^* - m(\theta))'W(\omega^* - m(\theta))$, so $\hat\theta$ is consistent \citep[Theorem~2.1]{NeweyMcFadden1994}. The first-order condition $G(\hat\theta)'\hat W\big(\hat\omega - m(\hat\theta)\big) = 0$ and a mean-value expansion $m(\hat\theta) = \omega^* + \bar G(\hat\theta - \theta_0)$, where $G$ has full rank by Result~3(b), give
+\[
+\sqrt{n}(\hat\theta - \theta_0) = (G'WG)^{-1}G'W\sqrt{n}(\hat\omega - \omega^*) + o_p(1).
+\]
+\partskip
+(c) The residual is $\hat\omega - m(\hat\theta) = P(\hat\omega - \omega^*) + o_p(n^{-1/2})$ with $P = I - G(G'WG)^{-1}G'W$, and expanding $P'WP$ gives $A$, so $J = n(\hat\omega - \omega^*)'A(\hat\omega - \omega^*) + o_p(1) \Rightarrow z'Bz$ with $z \sim N(0, I_K)$ and $B = \Omega^{1/2}A\,\Omega^{1/2}$. The spectral decomposition $B = \sum_j \nu_j e_je_j'$ gives $z'Bz = \sum_j \nu_j(e_j'z)^2$ with independent standard normal $e_j'z$. Since $A = W^{1/2}(I - \Pi)W^{1/2}$, where $\Pi$ projects onto the three-dimensional column space of $W^{1/2}G$, $B$ is positive semidefinite of rank $K - 3$. If $W = \Omega^{-1}$, $B = I - \Omega^{-1/2}G(G'\Omega^{-1}G)^{-1}G'\Omega^{-1/2}$ is idempotent, so its nonzero eigenvalues equal one \citep{Hansen1982}. The result treats $\tilde y$ as observed; demeaning by sample means changes $\hat\omega$ by $O_p(n^{-1})$ and leaves the limits unchanged. \hfill$\square$
+
+\subsection{Rank-rank slopes}
+\label{app:rank}
+
+\noindent\textbf{Result 6.} \emph{Let permanent parental income $y^*$ and the child outcome $c$ be jointly normal with correlation $\varrho \in (0,1]$, and let measured parental income be $y_T = y^* + \bar v_T$ with $\bar v_T$ normal and independent of $(y^*, c)$, so that $\mathrm{Var}(y^*)/\mathrm{Var}(y_T) = \lambda_T$. The population rank-rank slope of $c$ on $y_T$, relative to that on $y^*$, is}
+\begin{equation}
+R_T = \frac{\arcsin\!\big(\varrho\sqrt{\lambda_T}/2\big)}{\arcsin(\varrho/2)} \;\le\; \sqrt{\lambda_T}, \qquad R_T \to \sqrt{\lambda_T} \text{ as } \varrho \to 0 .
+\label{eq:app-rank}
+\end{equation}
+\emph{If the outcome is itself measured with independent normal error of reliability $\lambda_c$, $\sqrt{\lambda_T}$ is replaced by $\sqrt{\lambda_T\lambda_c}$ in the numerator.}
+\proofskip
+\noindent\emph{Proof.} Spearman's rank correlation of a bivariate normal pair with correlation $\varrho$ is $(6/\pi)\arcsin(\varrho/2)$ \citep{Pearson1907, Kruskal1958}. Population ranks are uniform on both sides, so the rank-rank slope equals the rank correlation. The pair $(y_T, c)$ is bivariate normal with $\mathrm{Cov}(y_T, c) = \mathrm{Cov}(y^*, c)$ and $\mathrm{Var}(y_T) = \mathrm{Var}(y^*)/\lambda_T$, so its correlation is $\varrho\sqrt{\lambda_T}$, and the ratio of the two rank correlations is $R_T$. Because $\arcsin(x)/x$ is increasing on $(0, 1]$ and $\varrho\sqrt{\lambda_T}/2 \le \varrho/2$, $\arcsin(\varrho\sqrt{\lambda_T}/2)/(\varrho\sqrt{\lambda_T}/2) \le \arcsin(\varrho/2)/(\varrho/2)$, which rearranges to $R_T \le \sqrt{\lambda_T}$; $\arcsin(x) \sim x$ gives the limit. Error in the outcome multiplies the correlation by $\sqrt{\lambda_c}$. \hfill$\square$
+
+\end{document}

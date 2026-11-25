@@ -1,0 +1,10 @@
+test,restricted,unrestricted,restrictions,statistic,p,B
+distance,all equal,free,3,1.78345857604468,0.39,500
+distance,all equal,scale,1,0.45530846172127326,0.598,500
+distance,all equal,common eps2,2,1.713812386118569,0.284,500
+distance,common eps2,free,1,0.06964618992611094,0.72,500
+distance,all equal,eta2 differs,1,0.276437968513072,0.644,500
+distance,all equal,rho differs,1,0.07456650189264025,0.788,500
+distance,all equal,eps2 differs,1,0.47277007143726024,0.572,500
+"Wald on the three gaps of the free model, chi-squared",all equal,free,3,6.440236428656991,0.09204946416852455,1000
+"Wald on the three gaps of the free model, bootstrap percentile",all equal,free,3,6.440236428656991,0.083,1000

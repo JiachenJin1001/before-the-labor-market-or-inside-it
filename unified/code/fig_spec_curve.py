@@ -40,7 +40,7 @@ CHANGES = {
 FEATS = [("Baseline specification", "base"),
          ("Parents\u2019 own labor income as the income control", "labor"),
          ("Alternative definition of the parental occupation indicator", "altdef"),
-         ("Family income from 2010\u201312 waves, or child at most 35/40", "window"),
+         ("Family income from 2010\u201312 waves, or child aged at most 35 or 40", "window"),
          ("Urban, rural, or parent-still-working subsample", "subsample"),
          ("Parental party membership or state-sector employment added", "marker"),
          ("Region effects in place of province effects", "region"),

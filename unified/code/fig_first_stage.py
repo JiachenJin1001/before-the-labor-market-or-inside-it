@@ -36,42 +36,44 @@ c = build_sample(level_from=None).reset_index(drop=True)
 canon = pd.read_csv(os.path.join(P, "data", "external", "expansion_intensity_canonical.csv"))
 names = dict(zip(canon.provcd, canon.province_en))
 
-from fig_style import fs, setup, tr, outpath, ADV, LESS, LANG
-setup()
-fig, axes = plt.subplots(1, 2, figsize=fs((11.0, 4.6)), gridspec_kw=dict(wspace=0.36, width_ratios=[1.2, 1]))
+from fig_style import setup, tr, ADV, LESS, LANG, stagger_xticks
+setup(size=9)   # drawn at 5.0 inches: the text prints at 7 points at 0.60 of the text width and at 9.8 points at 0.84
+fig, axes = plt.subplots(1, 2, figsize=(5.0, 2.6), layout="constrained", gridspec_kw=dict(width_ratios=[1.3, 1]))
+fig.get_layout_engine().set(w_pad=0.02, h_pad=0.02, wspace=0.05)
 
 # (a) college completion rate of each cohort group, by family background
 EDGES = [1940, 1972, 1980, 1984, 1988, 1997]
-LABS = ["1972 or earlier", "1973\u20131980", "1981\u20131984", "1985\u20131988", "1989\u20131997"]
+LABS = ["1972 or earlier", "1973\u20131980", "1981\u20131984", "1985\u20131988", "1989\u20131997"]   # the names in the output file
+TICKS = ["${\\leq}$1972", "1973\u201380", "1981\u201384", "1985\u201388", "${\\geq}$1989"]   # the tick labels, in the style of Figure 4 (the sample's last birth year is 1997)
 c["grp"] = pd.cut(c.by, EDGES, labels=False)
 n_cohort = c.groupby("grp").college.size()
 rows = []
 ax = axes[0]
-for h, lab, sty, col, dy in [(0, "Less advantaged children", "o-", LESS, -10), (1, "Advantaged children", "s--", ADV, 4)]:
+for h, lab, sty, col in [(0, "Less advantaged children", "o-", LESS), (1, "Advantaged children", "s--", ADV)]:
     g = c[c.HP14 == h].groupby("grp").college.agg(["sum", "count", "mean"]).reset_index()
     g["n_cohort"] = n_cohort.loc[g.grp].values
     p = g["mean"]
     se = np.sqrt(p * (1 - p) / g["count"])
-    ax.errorbar(g.grp, 100 * p, yerr=196 * se, fmt=sty, color=col, capsize=2.5, lw=1.3, ms=4, label=tr(lab))
+    ax.errorbar(g.grp, 100 * p, yerr=196 * se, fmt=sty, color=col, capsize=2, lw=1.1, ms=3.5, label=tr(lab))
     for x, y in zip(g.grp, 100 * p):
-        # offsets of the percent labels, chosen so that no label sits on a line, on the reform line or on the zero line
-        if h: dx, dy_, ha = {0: (-5, 4, "right"), 1: (-5, 4, "right"), 2: (6, -11, "left")}.get(x, (5, 4, "left"))
-        else: dx, dy_, ha = {0: (-6, -3, "right"), 1: (-4, 5, "right")}.get(x, (5, -10, "left"))
-        ax.annotate(f"{y:.0f}%", (x, y), xytext=(dx, dy_), textcoords="offset points", ha=ha, fontsize=7.5, color=col)
+        # offsets of the percent labels, chosen so that no label sits on a line, an interval, the reform line or the zero line
+        if h: dx, dy_, ha = {0: (-4, 3, "right"), 1: (-4, 3, "right"), 2: (4, -11, "left")}.get(x, (4, 3, "left"))
+        else: dx, dy_, ha = {0: (-4, 3, "right"), 1: (-4, 3, "right")}.get(x, (4, -10, "left"))
+        ax.annotate(f"{y:.0f}%", (x, y), xytext=(dx, dy_), textcoords="offset points", ha=ha, color=col)
     for _, r in g.iterrows():
         rows.append(dict(group=lab, cohort_group=LABS[int(r.grp)], graduates=int(r["sum"]), children_in_group=int(r["count"]),
                          children_in_cohort=int(r.n_cohort), graduates_per_100_children=100 * r["sum"] / r.n_cohort, completion_rate=r["mean"]))
 ax.axvline(1.5, color="grey", linestyle="--", lw=.9)
-ax.text(1.56, 0.115, tr("reform"), transform=ax.get_xaxis_transform(), fontsize=8, color="grey")   # below the lines, clear of the legend
+ax.text(1.56, 1.5, tr("reform"), color="grey")   # below the lines, clear of the legend
 # ratio of the completion rate of advantaged children to that of less advantaged children, under each cohort group
 rate = pd.DataFrame(rows).pivot(index="cohort_group", columns="group", values="completion_rate").loc[LABS]
 for x, r in enumerate(rate["Advantaged children"] / rate["Less advantaged children"]):
-    ax.text(x, -6.4, (tr("ratio ") if x == 0 else "") + f"{r:.1f}", ha="center", fontsize=7.5, color="#333")
+    ax.text(x, -7.2, (tr("ratio ") if x == 0 else "") + f"{r:.1f}", ha="center", color="#333")
 ax.axhline(0, color="k", lw=.6)
-ax.set_xticks(range(5)); ax.set_xticklabels([(l.replace(" or earlier", tr(" or\nearlier")) if "or earlier" in l else l.replace("\u201319", "\u2013")) for l in LABS], fontsize=7.5)   # "1973\u201380": the full years would run into each other   # two lines for the first label, which would otherwise run into the second
+stagger_xticks(ax, range(5), [tr(t) for t in TICKS])   # alternate rows, so that the labels do not run into each other
 ax.set_xlabel(tr("Birth cohort")); ax.set_ylabel(tr("College completion rate (percent)"))
-ax.set_ylim(-9, 82); ax.set_yticks(range(0, 81, 10)); ax.set_xlim(-0.75, 4.8)
-ax.set_title(tr("(a) College completion by birth cohort")); ax.legend(loc="upper left"); ax.grid(alpha=.25)
+ax.set_ylim(-11, 88); ax.set_yticks(range(0, 81, 20)); ax.set_xlim(-0.8, 4.85)
+ax.set_title(tr("(a) College completion by birth cohort")); ax.legend(loc="upper left", handlelength=2.0, borderpad=0.3, labelspacing=0.25, borderaxespad=0.3); ax.grid(alpha=.25)
 left = pd.DataFrame(rows)
 # pre- and post-reform summary of the same quantity (cohorts born 1980 or earlier against 1981 or later)
 for h, lab in [(0, "Less advantaged children"), (1, "Advantaged children")]:
@@ -103,15 +105,15 @@ for h, lab, col, mk, nb in [(0, "Less advantaged children", LESS, "o", 20), (1, 
     zr = sm.OLS(ZG[h], W).fit().resid; mr = sm.OLS(c.college.values.astype(float), W).fit().resid
     sel = np.where(H == h)[0]; order = sel[np.argsort(zr[sel])]; bins = np.array_split(order, nb)
     bx = [zr[b].mean() for b in bins]; bym = [mr[b].mean() for b in bins]
-    ax.scatter(bx, bym, color=col, s=20, marker=mk, zorder=3, alpha=.9)
+    ax.scatter(bx, bym, color=col, s=14, marker=mk, zorder=3, alpha=.9)
     xg = np.linspace(min(bx), max(bx), 50)
-    ax.plot(xg, np.mean(bym) + full.params[h] * (xg - np.mean(bx)), color=col, linewidth=1.5, linestyle="--" if h else "-", label=f"{tr(lab).replace(' children', '')}: {tr('slope')} {full.params[h]:.3f} (SE {full.bse[h]:.3f})")
+    ax.plot(xg, np.mean(bym) + full.params[h] * (xg - np.mean(bx)), color=col, linewidth=1.3, linestyle="--" if h else "-", label=f"{tr(lab).replace(' children', '')}:\n{tr('slope')} {full.params[h]:.3f} (SE {full.bse[h]:.3f})")
 ax.axhline(0, color="k", lw=.6); ax.axvline(0, color="k", lw=.6)
-ax.set_xlabel(tr("Instrument $Z$ of the group, residualized"))
+ax.set_xlabel(tr("Instrument $Z$, residualized"))
 ax.set_ylabel(tr("College completion, residualized"))
-ax.set_ylim(None, 0.22)
-ax.set_title(tr("(b) First stage by family background")); ax.legend(loc="upper left", fontsize=7.2, handlelength=1.6, borderpad=0.3); ax.grid(alpha=.25)
+ax.set_ylim(None, 0.245); ax.set_yticks([-0.05, 0, 0.05, 0.1, 0.15, 0.2])
+ax.set_title(tr("(b) First stage")); ax.legend(loc="upper left", handlelength=2.0, borderpad=0.3, labelspacing=0.3, borderaxespad=0.3); ax.grid(alpha=.25)
 
 from fig_style import save
-out = save(fig, "fig_first_stage.png")
+out = save(fig, "fig_first_stage.png", tight=False)
 print("wrote", out, "group slopes", round(full.params[0], 3), round(full.params[1], 3))

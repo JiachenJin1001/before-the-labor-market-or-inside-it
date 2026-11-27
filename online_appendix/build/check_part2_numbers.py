@@ -308,7 +308,7 @@ check_paper("paper: panel years 2010 to 2022", "2010--2022")
 _m14 = pd.read_csv(os.path.join(inc, "output", "tables", "m14_parent_process.csv")).iloc[0] if "inc" in dir() else pd.read_csv(os.path.join(first_existing(ROOT, INCOME_DYNAMICS_NAMES), "output", "tables", "m14_parent_process.csv")).iloc[0]
 check("parent and child permanent shares", f"permanent share is {_m14['share']:.2f} against the children's {share:.2f}")
 check_paper("paper: parents' and children's permanent shares",
-            f"permanent share of {_m14['share']:.2f} against {share:.2f}")
+            f"permanent share of {_m14['share']:.2f}, compared with {share:.2f}")
 check_host("appendix: row of the linked parents' process", f"permanent share {_m14['share']:.2f})")
 
 # ------------------------------------------------ rank-rank
@@ -403,7 +403,7 @@ check_paper("paper: bootstrap replications", "1,000-replication bootstrap")
 _f14 = pd.read_csv(os.path.join(UNIFIED, "output", "u14_B_sample_facts.csv")).set_index("item")["value"]
 _pa, _pl = 100 * _f14["share of them in the sample, advantaged"], 100 * _f14["share of them in the sample, less advantaged"]
 check("sample screens", f"keep {_pa:.1f} percent of advantaged and {_pl:.1f} percent of less advantaged children")
-check_paper("paper: sample screens", f"{_pa:.0f} percent of advantaged children enter the sample, against {_pl:.0f} percent of less advantaged children")
+check_paper("paper: sample screens", f"{_pa:.0f} percent of advantaged children enter the sample, compared with {_pl:.0f} percent of less advantaged children")
 
 # identification and the Jacobian
 ident_gap, det_gap = 0.0, 0.0

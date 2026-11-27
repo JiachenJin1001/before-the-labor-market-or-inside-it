@@ -34,7 +34,7 @@ Outputs (output/, with the suffix _weighted for the weighted run):
                         at age twelve; rows at 30 and over only; the exposure ratio of the year the cohort turned 17 or 19;
                         the cohorts born 1973 to 1976 left out
   u9_D_cohort_bins.csv  coefficients on intensity by birth-cohort bin for college completion and earnings
-  paper/figures/fig_mature_age.png   the cohort-bin coefficients (main run only)
+  paper/figures/fig_mature_age.png   the cohort-bin coefficients (main run only; drawn by fig_mature_age.py)
 Block C needs the 2010 adult file of the survey (data/raw/CFPS2010) for the instrument assigned by the province at
 age twelve; without it the block is skipped and u9_C_checks.csv is left as it is.
 Blocks A to D can be run separately with U9_BLOCKS; block G (the Anderson-Rubin p-value of the return for all
@@ -356,20 +356,6 @@ if "D" in BLOCKS:
         for j, k in enumerate(K.columns): rows.append(dict(outcome=lab_, bin=k, children=int((K[k] != 0).sum()), coef=r.params[j], se=r.bse[j], p=r.pvalues[j]))
     Dd = pd.DataFrame(rows); Dd.to_csv(os.path.join(OUT, f"u9_D_cohort_bins{SFX}.csv"), index=False); print(Dd.round(3).to_string(index=False))
     if SFX == "":
-        from fig_style import fs, setup, tr, outpath
-        setup()
-        fig, axes = plt.subplots(1, 2, figsize=fs((11.0, 4.2)), sharex=True)
-        labels = ["1972" + tr(" or\nearlier"), "1973\u201376", "1977\u201380", "1981\u201384", "1985\u201388", "1989" + tr(" or\nlater")]   # the short form of the figure of first stages
-        keys = [bins[0][2], bins[1][2], None, bins[2][2], bins[3][2], bins[4][2]]
-        for ax, (out_, title) in zip(axes, [("college completion (children with a row at 30 and over)", "(a) College completion"), ("mean log earnings at 30 and over", "(b) Level of earnings")]):
-            sd = Dd[Dd.outcome == out_].set_index("bin"); xs, ys, es = [], [], []
-            for i, k in enumerate(keys):
-                if k is None: ax.plot(i, 0, "D", mfc="none", mec="#08519c", ms=6)
-                else: xs.append(i); ys.append(sd.loc[k, "coef"]); es.append(1.96 * sd.loc[k, "se"])
-            ax.errorbar(xs, ys, yerr=es, fmt="o", color="#08519c", capsize=2.5, ms=4, lw=1.2)
-            ax.axhline(0, color="k", lw=.8); ax.axvline(2.5, color="grey", ls="--", lw=.8)
-            ax.set_xticks(range(len(labels))); ax.set_xticklabels(labels, fontsize=7.5); ax.set_title(tr(title)); ax.set_xlabel(tr("Birth cohort"))
-            ax.set_ylabel(tr("Interaction with provincial intensity") + "\n" + tr("(completion rate per unit)" if "completion" in out_ else "(log points per unit)"), fontsize=7.5)
-        axes[0].plot([], [], "D", mfc="none", mec="#08519c", ls="", label=tr("reference bin (omitted)")); axes[0].legend(fontsize=7.5, loc="upper left")
-        fig.tight_layout(); from fig_style import save; save(fig, "fig_mature_age.png")
+        from fig_mature_age import plot   # the figure is drawn by fig_mature_age.py, which can also redraw it from the saved file
+        plot(Dd)
 print("wrote u9_*.csv")
